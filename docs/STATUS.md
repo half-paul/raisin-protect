@@ -73,8 +73,8 @@
 | SA | 5/5 (100%) | ✅ DONE | All design work complete |
 | DBE | 6/6 (100%) | ✅ DONE | All migrations + seeds complete |
 | DEV-BE | 16/16 (100%) | ✅ DONE | All API code, tests, Docker complete |
-| DEV-FE | 0/10 (0%) | 🟢 UNBLOCKED | DEV-BE complete — can start |
-| CR | 0/7 (0%) | 🟢 UNBLOCKED | DEV-BE code ready for review |
+| DEV-FE | 0/10 (0%) | 🔴 STALLED | UNBLOCKED for 2h 50m — NO COMMITS |
+| CR | 0/7 (0%) | 🔴 STALLED | UNBLOCKED for 2h 50m — NO COMMITS |
 | QA | 0/5 (0%) | 🔴 BLOCKED | Waiting on DEV-FE + integration |
 
 **Overall Sprint Completion:** 27/59 tasks (46%)
@@ -86,13 +86,19 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 ```
 
 ## Blockers
-**CRITICAL PATH:** Frontend Developer (DEV-FE) — ⚠️ APPROACHING STALLED
-- DEV-BE completed all 16 tasks at 05:00 (1h 50m ago)
-- DEV-FE unblocked since 05:00 but **no commits yet** — approaching 2h idle
-- CR can review BE code immediately (7 tasks available)
-- QA blocked until DEV-FE completes for integration testing
+**CRITICAL PATH:** Frontend Developer (DEV-FE) — 🔴 STALLED
+- DEV-BE completed all 16 tasks at 05:00 (now 2h 50m ago)
+- DEV-FE unblocked since 05:00 but **ZERO commits** — STALLED for ~3 hours
+- **URGENT:** DEV-FE must begin Next.js scaffolding, auth pages, and auth context NOW
 
-**Recommendation:** DEV-FE should begin Next.js scaffolding, auth pages, and auth context immediately.
+**SECONDARY BLOCKER:** Code Reviewer (CR) — 🔴 STALLED
+- CR has 16 BE tasks available for review since 05:00
+- No review activity for 2h 50m — STALLED
+- **ACTION REQUIRED:** CR should review Go API code, migrations, security audit
+
+**QA Status:** Blocked on DEV-FE completion for integration testing
+
+**Sprint Risk:** At current pace, Sprint 1 will miss timeline. Need immediate action from DEV-FE and CR.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -105,4 +111,5 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 | 2026-02-20 04:50 | PM | Sprint 1 status check — 19% complete, DEV-BE still STALLED (>1h with no commits) |
 | 2026-02-20 05:00 | DEV-BE | All 16 tasks complete: Go API, auth, RBAC, org/user CRUD, audit, health, tests (30 pass), Dockerfile, docker-compose.yml |
 | 2026-02-20 05:50 | PM | Sprint 1 status update — 46% complete, DEV-FE and CR both UNBLOCKED and active |
-| 2026-02-20 06:50 | PM | Sprint 1 status check — 46% complete, DEV-FE approaching STALLED (~2h since unblock, no commits)
+| 2026-02-20 06:50 | PM | Sprint 1 status check — 46% complete, DEV-FE approaching STALLED (~2h since unblock, no commits) |
+| 2026-02-20 07:50 | PM | Sprint 1 status check — 46% complete, **DEV-FE and CR both STALLED** (~3h idle, zero commits) |
