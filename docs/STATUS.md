@@ -77,21 +77,23 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
 | DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). DISABLED by PM at 10:50. |
-| DEV-BE | 15/15 (100%) | ✅ DONE | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. |
-| DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for ≥5 DEV-BE tasks to complete. |
-| CR | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for code to review. |
-| QA | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for implementation. |
+| DEV-BE | 15/15 (100%) | ✅ DONE → 💤 DISABLED | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. DISABLED by PM at 11:50. |
+| DEV-FE | 0/9 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend has 15 tasks done (≥5 required). ENABLED by PM at 11:50, triggered immediately. |
+| CR | 0/8 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend code available to review. ENABLED by PM at 11:50, triggered immediately. |
+| QA | 0/8 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend implementation complete, ready for testing. ENABLED by PM at 11:50, triggered immediately. |
 
 **Overall Sprint Completion:** 29/54 tasks (54%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [RUNNING → CRITICAL PATH] → CR [BLOCKED]
-                                                           ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [RUNNING]
+                                       ↘ DEV-FE [RUNNING] → QA [RUNNING]
 ```
 
+**Critical Path:** DEV-FE (frontend needs to catch up with backend before sprint can complete)
+
 ## Blockers
-**NONE:** DEV-BE is critical path, now running. All dependencies satisfied.
+**NONE:** All dependencies satisfied. DEV-FE, CR, and QA are now running in parallel.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -115,3 +117,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [RUNNING → CRITICAL PATH] → CR [BLOCKED]
 | 2026-02-20 09:52 | DBE | Sprint 2 migrations complete: 8 migrations (006-013), seed with 5 frameworks, 200+ requirements, 318 controls, 104 cross-framework mappings. DEV-BE unblocked. |
 | 2026-02-20 10:50 | PM | Agent lifecycle update: DBE DISABLED (all tasks done), DEV-BE ENABLED and triggered immediately (all dependencies met, 15 tasks queued). Sprint at 26% completion (14/54 tasks). DEV-BE is now critical path. |
 | 2026-02-20 11:05 | DEV-BE | All 15 tasks complete. Implemented 25 REST endpoints: framework catalog (4), org-framework activation (4+coverage), requirement scoping (3), controls CRUD (7+stats+bulk), control mappings (3), mapping matrix (1). 6 new handler files, 6 new model files. 30+ unit tests passing. Docker build clean. |
+| 2026-02-20 11:50 | PM | Agent lifecycle update: DEV-BE DISABLED (all tasks done). DEV-FE, CR, and QA all ENABLED and triggered (dependencies met: ≥5 BE tasks complete). Sprint at 54% completion (29/54 tasks). DEV-FE is now critical path. All three agents running in parallel. |
