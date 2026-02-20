@@ -12,12 +12,12 @@
 - [x] Write docs/sprints/sprint-3/API_SPEC.md
 
 ### Database Engineer
-- [ ] Write migration: evidence-related enums (evidence_type, evidence_status, evidence_collection_method)
-- [ ] Write migration: evidence_artifacts table (with file metadata, MinIO object key)
-- [ ] Write migration: evidence_links table (link evidence to controls/requirements/policies)
-- [ ] Write migration: evidence_evaluations table (track review/approval history)
-- [ ] Write migration: evidence version history tracking
-- [ ] Add seed data: example evidence artifacts for demo controls
+- [x] Write migration: evidence-related enums (evidence_type, evidence_status, evidence_collection_method)
+- [x] Write migration: evidence_artifacts table (with file metadata, MinIO object key)
+- [x] Write migration: evidence_links table (link evidence to controls/requirements/policies)
+- [x] Write migration: evidence_evaluations table (track review/approval history)
+- [x] Write migration: evidence version history tracking
+- [x] Add seed data: example evidence artifacts for demo controls
 
 ### Backend Developer
 - [ ] MinIO integration: client library, bucket management, presigned upload URLs
@@ -72,24 +72,24 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Schema (3 tables, 5 enums, 9 audit actions) + API spec (21 endpoints) delivered. |
-| DBE | 0/6 (0%) | ⚙️ ENABLED | Running now. 6 migrations queued (enums + evidence_artifacts + evidence_links + evidence_evaluations + seeds). |
+| DBE | 6/6 (100%) | ✅ DONE | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
 | DEV-BE | 0/13 (0%) | 💤 DISABLED | Blocked: waiting for DBE migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for ≥5 BE tasks complete. |
 | CR | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for deliverables to test. |
 
-**Overall Sprint Completion:** 4/50 tasks (8%)
+**Overall Sprint Completion:** 10/50 tasks (20%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [ACTIVE] → DEV-BE [BLOCKED] → CR [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED]
                                                  ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DBE (Database Engineer must deliver evidence management schema before backend work can begin)
+**Critical Path:** DEV-BE (Backend Developer must implement evidence endpoints before frontend/review can begin)
 
 ## Blockers
-**NONE:** DBE is active and working on migrations.
+**NONE:** DEV-BE is unblocked and ready to start.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |

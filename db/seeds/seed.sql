@@ -1193,3 +1193,280 @@ VALUES
      'framework.activated', 'org_framework', 'd0000000-0000-0000-0000-000000000005',
      '{"framework": "ccpa", "version": "2023"}'::jsonb, '192.168.1.10'::inet)
 ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 3: EVIDENCE ARTIFACTS
+-- ============================================================================
+
+INSERT INTO evidence_artifacts (
+    id, org_id, title, description, evidence_type, status, collection_method,
+    file_name, file_size, mime_type, object_key, version, is_current,
+    collection_date, expires_at, freshness_period_days, source_system,
+    uploaded_by, tags
+) VALUES
+    -- 1. Okta MFA Configuration Export
+    (
+        'e0000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'Okta MFA Configuration Export',
+        'Export of MFA policy settings from Okta showing enforcement for all users in the production org.',
+        'configuration_export', 'approved', 'system_export',
+        'okta-mfa-config-2026-02.json', 15234, 'application/json',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000001/1/okta-mfa-config-2026-02.json',
+        1, TRUE,
+        '2026-02-15', '2026-05-15 00:00:00+00', 90, 'okta',
+        'b0000000-0000-0000-0000-000000000002',
+        ARRAY['mfa', 'okta', 'access-control', 'q1-2026']
+    ),
+    -- 2. Quarterly Access Review Report
+    (
+        'e0000000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'Quarterly Access Review Report - Q1 2026',
+        'Complete access review report covering all production systems. Reviews conducted by department managers.',
+        'access_list', 'approved', 'manual_upload',
+        'access-review-q1-2026.pdf', 2456789, 'application/pdf',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000002/1/access-review-q1-2026.pdf',
+        1, TRUE,
+        '2026-01-31', '2026-04-30 00:00:00+00', 90, 'manual',
+        'b0000000-0000-0000-0000-000000000001',
+        ARRAY['access-review', 'quarterly', 'q1-2026']
+    ),
+    -- 3. Vulnerability Scan Results (pending review)
+    (
+        'e0000000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'Vulnerability Scan Results - February 2026',
+        'Qualys vulnerability scan of production environment. No critical or high findings.',
+        'vulnerability_report', 'pending_review', 'automated_pull',
+        'qualys-scan-feb-2026.pdf', 892345, 'application/pdf',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000003/1/qualys-scan-feb-2026.pdf',
+        1, TRUE,
+        '2026-02-18', '2026-03-18 00:00:00+00', 30, 'qualys',
+        'b0000000-0000-0000-0000-000000000002',
+        ARRAY['vulnerability', 'qualys', 'scan', 'feb-2026']
+    ),
+    -- 4. Information Security Policy
+    (
+        'e0000000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'Information Security Policy v3.1',
+        'Current information security policy document. Approved by CISO, signed by all employees.',
+        'policy_document', 'approved', 'manual_upload',
+        'infosec-policy-v3.1.pdf', 345678, 'application/pdf',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000004/1/infosec-policy-v3.1.pdf',
+        1, TRUE,
+        '2026-01-15', '2027-01-15 00:00:00+00', 365, 'manual',
+        'b0000000-0000-0000-0000-000000000001',
+        ARRAY['policy', 'infosec', 'annual']
+    ),
+    -- 5. AWS CloudTrail Logging Config
+    (
+        'e0000000-0000-0000-0000-000000000005',
+        'a0000000-0000-0000-0000-000000000001',
+        'AWS CloudTrail Logging Configuration',
+        'Screenshot and config export showing CloudTrail enabled in all regions with S3 logging.',
+        'screenshot', 'approved', 'screenshot_capture',
+        'aws-cloudtrail-config.png', 456789, 'image/png',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000005/1/aws-cloudtrail-config.png',
+        1, TRUE,
+        '2026-02-10', '2026-05-10 00:00:00+00', 90, 'aws',
+        'b0000000-0000-0000-0000-000000000005',
+        ARRAY['aws', 'cloudtrail', 'logging', 'monitoring']
+    ),
+    -- 6. Security Awareness Training Completion
+    (
+        'e0000000-0000-0000-0000-000000000006',
+        'a0000000-0000-0000-0000-000000000001',
+        'Security Awareness Training Completion - 2026',
+        'KnowBe4 training completion report showing 100% employee participation.',
+        'training_record', 'approved', 'automated_pull',
+        'knowbe4-training-2026.csv', 89012, 'text/csv',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000006/1/knowbe4-training-2026.csv',
+        1, TRUE,
+        '2026-02-01', '2027-02-01 00:00:00+00', 365, 'knowbe4',
+        'b0000000-0000-0000-0000-000000000005',
+        ARRAY['training', 'knowbe4', 'annual', '2026']
+    ),
+    -- 7. Penetration Test Report (draft)
+    (
+        'e0000000-0000-0000-0000-000000000007',
+        'a0000000-0000-0000-0000-000000000001',
+        'Annual Penetration Test Report - 2026',
+        'External penetration test conducted by SecureTech Inc. 2 medium findings, 0 critical/high.',
+        'penetration_test', 'draft', 'manual_upload',
+        'pentest-report-2026.pdf', 1234567, 'application/pdf',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000007/1/pentest-report-2026.pdf',
+        1, TRUE,
+        '2026-02-12', '2027-02-12 00:00:00+00', 365, 'manual',
+        'b0000000-0000-0000-0000-000000000002',
+        ARRAY['pentest', 'annual', '2026']
+    ),
+    -- 8. SOC 2 Audit Report (previous year — for reference)
+    (
+        'e0000000-0000-0000-0000-000000000008',
+        'a0000000-0000-0000-0000-000000000001',
+        'SOC 2 Type II Audit Report - 2025',
+        'Previous year SOC 2 Type II audit report from Deloitte. Clean opinion.',
+        'audit_report', 'approved', 'manual_upload',
+        'soc2-audit-2025.pdf', 3456789, 'application/pdf',
+        'a0000000-0000-0000-0000-000000000001/e0000000-0000-0000-0000-000000000008/1/soc2-audit-2025.pdf',
+        1, TRUE,
+        '2025-12-15', '2026-12-15 00:00:00+00', 365, 'manual',
+        'b0000000-0000-0000-0000-000000000006',
+        ARRAY['soc2', 'audit', 'annual', '2025']
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 3: EVIDENCE LINKS (link evidence to controls)
+-- ============================================================================
+
+INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, strength, notes, linked_by) VALUES
+    -- MFA config → CTRL-AC-001 (Access Control: MFA)
+    (
+        'l0000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000001',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-001' LIMIT 1),
+        'primary',
+        'Okta MFA policy export directly demonstrates enforcement of multi-factor authentication for all users.',
+        'b0000000-0000-0000-0000-000000000002'
+    ),
+    -- Access review → CTRL-AC-003 (Access Review)
+    (
+        'l0000000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000002',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-003' LIMIT 1),
+        'primary',
+        'Quarterly access review report covers all production systems with department manager sign-off.',
+        'b0000000-0000-0000-0000-000000000001'
+    ),
+    -- CloudTrail config → CTRL-LM-001 (Logging & Monitoring)
+    (
+        'l0000000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000005',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-LM-001' LIMIT 1),
+        'primary',
+        'CloudTrail configuration screenshot shows all-region logging enabled with S3 archival.',
+        'b0000000-0000-0000-0000-000000000005'
+    ),
+    -- Training completion → CTRL-SA-001 (Security Awareness Training)
+    (
+        'l0000000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000006',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-SA-001' LIMIT 1),
+        'primary',
+        'KnowBe4 training completion report shows 100% participation for annual security awareness training.',
+        'b0000000-0000-0000-0000-000000000005'
+    ),
+    -- InfoSec policy → CTRL-PM-001 (Policy Management) as supporting evidence
+    (
+        'l0000000-0000-0000-0000-000000000005',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000004',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-PM-001' LIMIT 1),
+        'primary',
+        'Current information security policy document, CISO-approved, covering all organizational security requirements.',
+        'b0000000-0000-0000-0000-000000000001'
+    ),
+    -- Vuln scan → CTRL-VM-001 (Vulnerability Management)
+    (
+        'l0000000-0000-0000-0000-000000000006',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000003',
+        'control',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-VM-001' LIMIT 1),
+        'primary',
+        'Qualys vulnerability scan results for February 2026 production environment assessment.',
+        'b0000000-0000-0000-0000-000000000002'
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 3: EVIDENCE EVALUATIONS
+-- ============================================================================
+
+INSERT INTO evidence_evaluations (id, org_id, artifact_id, evidence_link_id, verdict, confidence, comments, evaluated_by) VALUES
+    -- MFA config evaluation: sufficient
+    (
+        'ev000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000001',
+        'l0000000-0000-0000-0000-000000000001',
+        'sufficient', 'high',
+        'MFA is enforced for all user types. Configuration export shows Okta MFA policy is set to "Always" with no exceptions. Meets PCI DSS 8.3 and SOC 2 CC6.1 requirements.',
+        'b0000000-0000-0000-0000-000000000001'
+    ),
+    -- Access review evaluation: sufficient
+    (
+        'ev000000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000002',
+        'l0000000-0000-0000-0000-000000000002',
+        'sufficient', 'high',
+        'Access review covers all production systems. Department managers signed off on all entries. Stale accounts identified and removed. Meets quarterly cadence requirement.',
+        'b0000000-0000-0000-0000-000000000004'
+    ),
+    -- Training completion evaluation: sufficient
+    (
+        'ev000000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000006',
+        'l0000000-0000-0000-0000-000000000004',
+        'sufficient', 'high',
+        '100% employee participation confirmed. Training content covers phishing, social engineering, data handling, and incident reporting. Annual cadence meets SOC 2 and ISO 27001 requirements.',
+        'b0000000-0000-0000-0000-000000000001'
+    ),
+    -- CloudTrail evaluation: sufficient
+    (
+        'ev000000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000005',
+        'l0000000-0000-0000-0000-000000000003',
+        'sufficient', 'medium',
+        'CloudTrail is enabled in all regions. S3 logging confirmed. However, screenshot alone does not show log retention policy — recommend supplementing with AWS Config export.',
+        'b0000000-0000-0000-0000-000000000001'
+    ),
+    -- Pentest report evaluation: needs_update (still in draft)
+    (
+        'ev000000-0000-0000-0000-000000000005',
+        'a0000000-0000-0000-0000-000000000001',
+        'e0000000-0000-0000-0000-000000000007',
+        NULL,
+        'needs_update', 'low',
+        'Report is still in draft status. Needs final version with remediation evidence for the 2 medium findings before it can be submitted for compliance.',
+        'b0000000-0000-0000-0000-000000000001'
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 3: AUDIT LOG ENTRIES (evidence activity)
+-- ============================================================================
+
+INSERT INTO audit_log (org_id, actor_id, action, resource_type, resource_id, metadata, ip_address)
+VALUES
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
+     'evidence.uploaded', 'evidence_artifact', 'e0000000-0000-0000-0000-000000000001',
+     '{"title": "Okta MFA Configuration Export", "type": "configuration_export", "file_size": 15234}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
+     'evidence.uploaded', 'evidence_artifact', 'e0000000-0000-0000-0000-000000000002',
+     '{"title": "Quarterly Access Review Report - Q1 2026", "type": "access_list", "file_size": 2456789}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
+     'evidence.linked', 'evidence_link', 'l0000000-0000-0000-0000-000000000001',
+     '{"artifact_title": "Okta MFA Configuration Export", "target_type": "control", "control": "CTRL-AC-001"}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
+     'evidence.evaluated', 'evidence_evaluation', 'ev000000-0000-0000-0000-000000000001',
+     '{"artifact_title": "Okta MFA Configuration Export", "verdict": "sufficient", "confidence": "high"}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
+     'evidence.evaluated', 'evidence_evaluation', 'ev000000-0000-0000-0000-000000000002',
+     '{"artifact_title": "Quarterly Access Review Report", "verdict": "sufficient", "confidence": "high"}'::jsonb, '192.168.1.10'::inet)
+ON CONFLICT DO NOTHING;
