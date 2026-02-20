@@ -24,6 +24,8 @@ import {
   LogOut,
   ChevronLeft,
   X,
+  Grid3X3,
+  BarChart3,
 } from 'lucide-react';
 
 interface NavItem {
@@ -75,6 +77,18 @@ const navigation: NavSection[] = [
         label: 'Controls',
         href: '/controls',
         icon: Shield,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Mapping Matrix',
+        href: '/mapping-matrix',
+        icon: Grid3X3,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Coverage',
+        href: '/coverage',
+        icon: BarChart3,
         roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
       },
       {

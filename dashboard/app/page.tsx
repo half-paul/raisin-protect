@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { getRoleLabel } from '@/lib/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +16,7 @@ import {
   Monitor,
   TrendingUp,
 } from 'lucide-react';
+import { ControlStats, OrgFramework, getControlStats, listOrgFrameworks } from '@/lib/api';
 
 interface StatCardProps {
   title: string;
@@ -43,6 +46,29 @@ function StatCard({ title, value, description, icon: Icon, trend }: StatCardProp
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [stats, setStats] = useState<ControlStats | null>(null);
+  const [orgFrameworks, setOrgFrameworks] = useState<OrgFramework[]>([]);
+
+  useEffect(() => {
+    async function fetchDashData() {
+      try {
+        const [statsRes, ofRes] = await Promise.all([
+          getControlStats(),
+          listOrgFrameworks({ status: 'active' }),
+        ]);
+        setStats(statsRes.data);
+        setOrgFrameworks(ofRes.data || []);
+      } catch {
+        // Dashboard loads with static defaults if API unavailable
+      }
+    }
+    fetchDashData();
+  }, []);
+
+  const overallCoverage = stats?.frameworks_coverage?.length
+    ? (stats.frameworks_coverage.reduce((s, f) => s + f.covered, 0) /
+        Math.max(stats.frameworks_coverage.reduce((s, f) => s + f.in_scope, 0), 1)) * 100
+    : 0;
 
   return (
     <div className="p-6 space-y-6">
@@ -60,28 +86,27 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Compliance Score"
-          value="78%"
+          value={`${overallCoverage.toFixed(0)}%`}
           description="across all frameworks"
           icon={Shield}
-          trend="+2.5%"
         />
         <StatCard
-          title="Open Risks"
-          value="12"
-          description="3 critical, 5 high"
-          icon={AlertTriangle}
-        />
-        <StatCard
-          title="Controls"
-          value="156"
-          description="142 passing, 14 failing"
+          title="Active Frameworks"
+          value={String(orgFrameworks.length)}
+          description="compliance frameworks tracked"
           icon={FileCheck}
         />
         <StatCard
-          title="Active Users"
-          value="24"
-          description="in your organization"
-          icon={Users}
+          title="Controls"
+          value={String(stats?.total || 0)}
+          description={`${stats?.by_status?.active || 0} active, ${stats?.by_status?.draft || 0} draft`}
+          icon={Shield}
+        />
+        <StatCard
+          title="Coverage Gaps"
+          value={String(stats?.unmapped_count || 0)}
+          description="controls without mappings"
+          icon={AlertTriangle}
         />
       </div>
 
@@ -152,25 +177,26 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {[
-                { name: 'SOC 2 Type II', progress: 82 },
-                { name: 'ISO 27001', progress: 71 },
-                { name: 'PCI DSS 4.0', progress: 45 },
-                { name: 'NIST CSF', progress: 63 },
-              ].map((fw, i) => (
-                <div key={i} className="space-y-1">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>{fw.name}</span>
-                    <span className="font-medium">{fw.progress}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-secondary">
-                    <div
-                      className="h-full rounded-full bg-primary transition-all"
-                      style={{ width: `${fw.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+              {orgFrameworks.length > 0 ? (
+                orgFrameworks.map((of) => (
+                  <Link key={of.id} href={`/frameworks/${of.id}`} className="block">
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-sm">
+                        <span>{of.framework.name}</span>
+                        <span className="font-medium">{of.stats.coverage_pct.toFixed(0)}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-secondary">
+                        <div
+                          className="h-full rounded-full bg-primary transition-all"
+                          style={{ width: `${of.stats.coverage_pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">No frameworks activated yet</p>
+              )}
             </div>
           </CardContent>
         </Card>

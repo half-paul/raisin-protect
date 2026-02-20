@@ -41,15 +41,15 @@
 - [x] Update audit_action enum migration to include framework/control actions
 
 ### Frontend Developer
-- [ ] Framework list page (activated + available frameworks)
-- [ ] Framework detail page (requirements, mapped controls, coverage %)
-- [ ] Framework activation modal
-- [ ] Control library browser (searchable/filterable table)
-- [ ] Control detail page (description, frameworks, requirements, mappings)
-- [ ] Control mapping matrix view (heatmap of shared controls)
-- [ ] Requirement scoping interface (include/exclude requirements)
-- [ ] Coverage dashboard (compliance posture per framework)
-- [ ] Bulk operations UI (multi-select + actions)
+- [x] Framework list page (activated + available frameworks)
+- [x] Framework detail page (requirements, mapped controls, coverage %)
+- [x] Framework activation modal
+- [x] Control library browser (searchable/filterable table)
+- [x] Control detail page (description, frameworks, requirements, mappings)
+- [x] Control mapping matrix view (heatmap of shared controls)
+- [x] Requirement scoping interface (include/exclude requirements)
+- [x] Coverage dashboard (compliance posture per framework)
+- [x] Bulk operations UI (multi-select + actions)
 
 ### Code Reviewer
 - [ ] Review Go API code (framework handlers, control handlers, business logic)
@@ -78,11 +78,11 @@
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
 | DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). DISABLED by PM at 10:50. |
 | DEV-BE | 15/15 (100%) | ✅ DONE → 💤 DISABLED | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. DISABLED by PM at 11:50. |
-| DEV-FE | 0/9 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend has 15 tasks done (≥5 required). ENABLED by PM at 11:50, triggered immediately. |
+| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: Framework list/detail/activation, Control library/detail, Mapping matrix, Requirement scoping, Coverage dashboard, Bulk ops. 6 new pages, API client lib. Build passes (12 routes). |
 | CR | 0/8 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend code available to review. ENABLED by PM at 11:50, triggered immediately. |
 | QA | 0/8 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend implementation complete, ready for testing. ENABLED by PM at 11:50, triggered immediately. |
 
-**Overall Sprint Completion:** 29/54 tasks (54%)
+**Overall Sprint Completion:** 38/54 tasks (70%)
 
 ## Dependency Chain Status
 ```
