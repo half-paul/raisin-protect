@@ -72,7 +72,7 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Schema (3 tables, 5 enums, 9 audit actions) + API spec (21 endpoints) delivered. |
-| DBE | 0/6 (0%) | 💤 DISABLED | Blocked: waiting for SA to deliver schema. |
+| DBE | 0/6 (0%) | ⚙️ ENABLED | Running now. 6 migrations queued (enums + evidence_artifacts + evidence_links + evidence_evaluations + seeds). |
 | DEV-BE | 0/13 (0%) | 💤 DISABLED | Blocked: waiting for DBE migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for ≥5 BE tasks complete. |
 | CR | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for code to review. |
@@ -82,14 +82,14 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [READY] → DEV-BE [BLOCKED] → CR [BLOCKED]
-                                                ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [ACTIVE] → DEV-BE [BLOCKED] → CR [BLOCKED]
+                                                 ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** SA (System Architect must deliver schema and API spec before anyone else can proceed)
+**Critical Path:** DBE (Database Engineer must deliver evidence management schema before backend work can begin)
 
 ## Blockers
-**NONE:** SA work complete. DBE unblocked and ready to start migrations.
+**NONE:** DBE is active and working on migrations.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -118,3 +118,4 @@ SA [DONE] → DBE [READY] → DEV-BE [BLOCKED] → CR [BLOCKED]
 | 2026-02-20 12:10 | QA | All 8 tasks complete. Sprint 2 testing PASSED: 64/64 unit tests passing, dashboard builds clean (12 routes), go vet clean, migrations idempotent. Security review: multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed (all parameterized queries), no hardcoded secrets, RBAC properly enforced. 0 critical/high issues. Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. Sprint 2 at 100% completion. |
 | 2026-02-20 12:50 | PM | **Sprint 2 COMPLETE (100%).** Sprint transition: advanced to Sprint 3 (Evidence Management). ALL agents disabled. SA enabled and triggered to start Sprint 3 design (MinIO integration, evidence artifacts, linking, versioning, freshness tracking). |
 | 2026-02-20 12:52 | SA | Sprint 3 design complete: SCHEMA.md (3 tables: evidence_artifacts, evidence_links, evidence_evaluations + 5 new enums + 9 audit_action extensions + MinIO bucket config + query patterns + seed data) and API_SPEC.md (21 endpoints covering evidence CRUD, presigned upload/download, versioning, linking, relationship queries, freshness/staleness alerts, evaluations, advanced search). DBE unblocked. |
+| 2026-02-20 13:50 | PM | Sprint 3 status update — 8% complete (4/50 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete, 6 migration tasks queued). All other agents remain disabled. Critical path: DBE (must deliver evidence schema before backend work begins). |
