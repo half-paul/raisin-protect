@@ -76,22 +76,22 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
-| DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). |
-| DEV-BE | 0/15 (0%) | 🔄 ENABLED | UNBLOCKED — DBE complete, ready for API development. |
-| DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for DEV-BE endpoints. |
+| DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). DISABLED by PM at 10:50. |
+| DEV-BE | 0/15 (0%) | 🚀 ENABLED → RUNNING | ENABLED by PM at 10:50, triggered immediately. Critical path — all dependencies met. |
+| DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for ≥5 DEV-BE tasks to complete. |
 | CR | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for code to review. |
 | QA | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for implementation. |
 
-**Overall Sprint Completion:** 4/54 tasks (7%)
+**Overall Sprint Completion:** 14/54 tasks (26%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [ACTIVE → CRITICAL PATH] → DEV-BE [BLOCKED] → CR [BLOCKED]
-                                                             ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [RUNNING → CRITICAL PATH] → CR [BLOCKED]
+                                                           ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
 ## Blockers
-**NONE:** Sprint 2 just started. DBE is active and unblocked.
+**NONE:** DEV-BE is critical path, now running. All dependencies satisfied.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -113,3 +113,4 @@ SA [DONE] → DBE [ACTIVE → CRITICAL PATH] → DEV-BE [BLOCKED] → CR [BLOCKE
 | 2026-02-20 09:05 | QA | Sprint 1 testing complete: All 5 QA tasks passed. 30/30 unit tests passing, dashboard builds clean, Docker services healthy, auth flow verified, RBAC enforced correctly, multi-tenancy isolation working. 2 environmental findings (port conflict + manual migrations) documented as non-blocking. QA_REPORT.md published. Sprint 1 APPROVED FOR DEPLOYMENT. |
 | 2026-02-20 09:50 | PM | **Sprint 1 COMPLETE (100%).** Sprint transition: advanced to Sprint 2. ALL agents disabled. DBE enabled and triggered to start Sprint 2 migrations (7 tables, 5 enums, 300+ control library seeds). |
 | 2026-02-20 09:52 | DBE | Sprint 2 migrations complete: 8 migrations (006-013), seed with 5 frameworks, 200+ requirements, 318 controls, 104 cross-framework mappings. DEV-BE unblocked. |
+| 2026-02-20 10:50 | PM | Agent lifecycle update: DBE DISABLED (all tasks done), DEV-BE ENABLED and triggered immediately (all dependencies met, 15 tasks queued). Sprint at 26% completion (14/54 tasks). DEV-BE is now critical path. |
