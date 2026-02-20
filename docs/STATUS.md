@@ -1,95 +1,99 @@
 # Raisin Protect — Status
 
-## Current Sprint: 3 — Evidence Management
-**Started:** 2026-02-20 12:50
+## Current Sprint: 4 — Continuous Monitoring Engine
+**Started:** 2026-02-20 15:50
 
-## Sprint 3 Tasks
+## Sprint 4 Tasks
 
 ### System Architect
-- [x] Design Sprint 3 schema (evidence_artifacts, evidence_links, evidence_evaluations)
-- [x] Write Sprint 3 API spec (evidence upload, linking, versioning, freshness tracking, staleness alerts)
-- [x] Write docs/sprints/sprint-3/SCHEMA.md
-- [x] Write docs/sprints/sprint-3/API_SPEC.md
+- [ ] Design Sprint 4 schema (tests, test_runs, test_results, alerts, alert_rules)
+- [ ] Write Sprint 4 API spec (test execution, alert engine, alert delivery, monitoring dashboard)
+- [ ] Write docs/sprints/sprint-4/SCHEMA.md
+- [ ] Write docs/sprints/sprint-4/API_SPEC.md
 
 ### Database Engineer
-- [x] Write migration: evidence-related enums (evidence_type, evidence_status, evidence_collection_method)
-- [x] Write migration: evidence_artifacts table (with file metadata, MinIO object key)
-- [x] Write migration: evidence_links table (link evidence to controls/requirements/policies)
-- [x] Write migration: evidence_evaluations table (track review/approval history)
-- [x] Write migration: evidence version history tracking
-- [x] Add seed data: example evidence artifacts for demo controls
+- [ ] Write migration: test-related enums (test_type, test_status, test_severity, test_result_status)
+- [ ] Write migration: tests table (test definitions with schedules)
+- [ ] Write migration: test_runs table (execution history)
+- [ ] Write migration: test_results table (individual test outputs with pass/fail)
+- [ ] Write migration: alert-related enums (alert_severity, alert_status, alert_delivery_channel)
+- [ ] Write migration: alerts table (generated alerts with classification)
+- [ ] Write migration: alert_rules table (alert generation rules)
+- [ ] Add seed data: example tests for demo controls, sample alert rules
 
 ### Backend Developer
-- [x] MinIO integration: client library, bucket management, presigned upload URLs
-- [x] Evidence artifact CRUD endpoints (create, get, list, delete)
-- [x] Evidence upload endpoint (multipart form → MinIO storage)
-- [x] Evidence download endpoint (presigned download URLs)
-- [x] Evidence versioning: upload new version of existing artifact
-- [x] Evidence linking endpoints (link to controls, requirements, policies)
-- [x] Evidence relationship queries (list evidence for control, list controls for evidence)
-- [x] Freshness tracking: calculate evidence staleness based on collection date
-- [x] Staleness alert generation (identify expired/expiring evidence)
-- [x] Evidence search/filter (by type, status, collection method, linked entities)
-- [x] Evidence evaluation endpoints (submit review, approve, reject)
-- [x] Unit tests for evidence handlers
-- [x] Update docker-compose.yml to include MinIO service
+- [ ] Test execution worker (background job scheduler)
+- [ ] Test runner engine (execute tests against controls)
+- [ ] Test result storage and history tracking
+- [ ] Alert generation engine (detect → classify → assign)
+- [ ] Alert CRUD endpoints (list, get, update status, assign, resolve)
+- [ ] Alert delivery: Slack webhook integration
+- [ ] Alert delivery: email integration (SMTP)
+- [ ] Alert rule management endpoints (create, update, delete rules)
+- [ ] Monitoring dashboard API: control health heatmap data
+- [ ] Monitoring dashboard API: alert queue (pending, in-progress, resolved)
+- [ ] Monitoring dashboard API: compliance posture score per framework
+- [ ] Alert notification worker (deliver alerts via configured channels)
+- [ ] Unit tests for test runner and alert engine
+- [ ] Update docker-compose.yml for worker service
 
 ### Frontend Developer
-- [x] Evidence library page (searchable/filterable list)
-- [x] Evidence upload interface (drag-and-drop, file browser)
-- [x] Evidence detail page (metadata, version history, linked controls)
-- [x] Evidence-to-control linking UI (modal or inline)
-- [x] Control detail enhancement: show linked evidence
-- [x] Evidence freshness indicators (badges: fresh, expiring soon, expired)
-- [x] Staleness alert dashboard (list of expiring/expired evidence)
-- [x] Evidence evaluation interface (review, approve, reject)
-- [x] Evidence version comparison view
+- [ ] Monitoring dashboard home (control health heatmap)
+- [ ] Alert queue page (list of pending/in-progress/resolved alerts)
+- [ ] Alert detail page (alert info, related control, assignment, resolution)
+- [ ] Alert assignment interface (assign to user, set priority)
+- [ ] Alert resolution workflow (mark resolved, add notes)
+- [ ] Test execution history view (list test runs per control)
+- [ ] Test result detail page (pass/fail status, output logs)
+- [ ] Alert rule management page (create/edit rules)
+- [ ] Compliance posture score widget (real-time score per framework)
 
 ### Code Reviewer
-- [x] Review MinIO integration code (security of presigned URLs, bucket policies)
-- [x] Review evidence handlers and business logic
-- [x] Review database migrations (evidence tables, indexes, constraints)
-- [x] Review dashboard evidence pages
-- [x] Security audit: file upload validation, MIME type checking, size limits
-- [x] Check evidence-to-control authorization (orgs can only link their evidence)
-- [x] Verify MinIO credentials not hardcoded
-- [x] File GitHub issues for critical/high findings
-- [x] Write docs/sprints/sprint-3/CODE_REVIEW.md
+- [ ] Review test execution worker and runner logic
+- [ ] Review alert generation engine and classification rules
+- [ ] Review alert delivery integrations (Slack, email)
+- [ ] Review database migrations (tests, alerts, indexes)
+- [ ] Review dashboard monitoring pages
+- [ ] Security audit: webhook secret validation, email SMTP credentials
+- [ ] Check alert authorization (orgs can only see their alerts)
+- [ ] Verify test execution isolation (no cross-org data leakage)
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-4/CODE_REVIEW.md
 
 ### QA Engineer
-- [x] Verify all API tests pass
-- [x] Test evidence upload flow (file → MinIO → database record)
-- [x] Test evidence download (presigned URL generation)
-- [x] Test evidence linking (create link → query relationships)
-- [x] Test versioning (upload v2 → verify history)
-- [x] Test freshness tracking (expired evidence flagged correctly)
-- [x] Test staleness alerts (identify expiring evidence)
-- [x] Verify dashboard renders evidence library, upload UI, freshness badges
-- [x] Write docs/sprints/sprint-3/QA_REPORT.md
+- [ ] Verify all API tests pass
+- [ ] Test test execution worker (schedule → run → store results)
+- [ ] Test alert generation (trigger → classify → deliver)
+- [ ] Test alert delivery (Slack webhook, email)
+- [ ] Test alert assignment and resolution workflow
+- [ ] Test monitoring dashboard (heatmap, alert queue, posture score)
+- [ ] Verify background worker runs without crashes
+- [ ] Test multi-tenancy isolation for tests and alerts
+- [ ] Write docs/sprints/sprint-4/QA_REPORT.md
 
 ## Sprint Progress
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | 💤 DISABLED | Sprint 3 design complete. Will re-enable at 75% for Sprint 4 pre-design. |
-| DBE | 6/6 (100%) | 💤 DISABLED | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
-| DEV-BE | 13/13 (100%) | 💤 DISABLED | 21 REST endpoints, MinIO integration, 28 unit tests, Docker build clean. |
-| DEV-FE | 9/9 (100%) | 💤 DISABLED | All 9 tasks complete. Evidence library, upload (drag-and-drop), detail page, linking UI, control enhancement, freshness badges, staleness alerts, evaluation interface, version comparison. Build passes (14 routes). |
-| CR | 9/9 (100%) | ✅ DONE | All tasks complete. Comprehensive review: 0 critical/high issues, 3 medium findings (Issues #4-6), 3 low-priority suggestions. CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT. |
-| QA | 9/9 (100%) | ✅ DONE | All tasks complete. 84 unit tests passing, E2E API tests passing (5/5), dashboard builds clean, MinIO healthy, all evidence endpoints operational. QA_REPORT.md published. Result: APPROVED FOR DEPLOYMENT. |
+| SA | 0/4 (0%) | 🟢 ENABLED | Sprint 4 design starting. Schema + API spec for continuous monitoring engine (tests, alerts, worker). |
+| DBE | 0/8 (0%) | 💤 DISABLED | Waiting for SA to complete Sprint 4 schema design. |
+| DEV-BE | 0/14 (0%) | 💤 DISABLED | Waiting for DBE to complete Sprint 4 migrations. |
+| DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for DEV-BE to complete ≥5 backend tasks. |
+| CR | 0/10 (0%) | 💤 DISABLED | Waiting for code to review. |
+| QA | 0/9 (0%) | 💤 DISABLED | Waiting for code to test. |
 
-**Overall Sprint Completion:** 50/50 tasks (100%)
+**Overall Sprint Completion:** 0/54 tasks (0%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE]
-                                           ↘ DEV-FE [ACTIVE] → QA [ACTIVE]
+SA [ACTIVE] → DBE [BLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED]
+                                                 ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DEV-FE (9 dashboard pages to build), CR (review backend + upcoming frontend), QA (test evidence upload/linking flows)
+**Critical Path:** SA (must design schema + API spec before any other work can begin)
 
 ## Blockers
-**NONE:** Sprint 3 complete (100%). Ready for deployment.
+**NONE:** Sprint 4 just started. SA designing monitoring engine architecture.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -124,3 +128,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE]
 | 2026-02-20 14:55 | DEV-FE | All 9 tasks complete. Evidence library page (searchable/filterable with freshness summary cards), evidence upload (drag-and-drop + file browser with 3-step presigned URL flow), evidence detail page (metadata, tags, latest evaluation, 4-tab layout), evidence-to-control linking UI (search + select modal), control detail enhancement (Evidence tab with summary stats + linked evidence table), freshness badges (fresh/expiring_soon/expired with day counts), staleness alert dashboard (summary cards + urgency table + affected controls), evaluation interface (verdict/confidence/comments/missing elements/remediation), version comparison view (side-by-side metadata diff with change highlighting). Build passes clean (14 routes). New files: 6 pages, 1 shared component, 1 UI component. |
 | 2026-02-20 15:03 | CR | All 9 tasks complete. Comprehensive code review: MinIO integration (presigned URLs, bucket config), evidence handlers (3,200 lines backend), dashboard (2,800 lines frontend), migrations (5 files), tests (28 unit tests). Security audit: multi-tenancy isolation verified, MIME type whitelist, file size limits, RBAC enforcement, SQL injection prevention, audit logging. Result: 0 critical/high issues, 3 medium findings (Issues #4-6: presigned URL Content-Type enforcement, file size validation, client-side checks), 3 low-priority suggestions. CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT. |
 | 2026-02-20 15:08 | QA | All 9 tasks complete. Sprint 3 testing PASSED: 84/84 unit tests passing, E2E API tests passing (5/5), dashboard builds clean (14 routes), go vet clean, MinIO service healthy. Created Playwright E2E test suite with video capture. Security verification: multi-tenancy isolation confirmed, SQL injection prevention verified, no hardcoded secrets. 1 environmental finding (manual migrations required, non-blocking). Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. Sprint 3 at 100% completion. |
+| 2026-02-20 15:50 | PM | **Sprint 3 COMPLETE (100%).** Sprint transition: advanced to Sprint 4 (Continuous Monitoring Engine). ALL agents disabled. SA enabled and triggered immediately to start Sprint 4 design (tests, alerts, worker, monitoring dashboard). |

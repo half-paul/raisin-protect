@@ -137,3 +137,101 @@ Sprint 3 begins: Evidence Management
 - Control-to-evidence relationship views
 
 ---
+
+## Sprint 3: Evidence Management (2026-02-20)
+**Status:** ✅ COMPLETE — APPROVED FOR DEPLOYMENT
+
+### Delivered
+- **System Architecture**:
+  - SCHEMA.md: 3 new tables (evidence_artifacts, evidence_links, evidence_evaluations)
+  - 5 new enums (evidence_type, evidence_status, evidence_collection_method, evaluation_verdict, evaluation_confidence_level)
+  - 9 new audit_action extensions
+  - MinIO bucket configuration patterns
+  - API_SPEC.md: 21 endpoints (evidence CRUD, presigned upload/download, versioning, linking, relationship queries, freshness/staleness alerts, evaluations, search)
+- **Database**: 5 migrations (014-018) + seed data
+  - Evidence artifacts table with file metadata and MinIO object key storage
+  - Evidence links table (link evidence to controls/requirements/policies)
+  - Evidence evaluations table (track review/approval history with verdict/confidence/missing elements)
+  - Evidence version history view + helper functions
+  - Seed data: example evidence artifacts for demo controls
+- **Backend API**: 21 REST endpoints
+  - Evidence CRUD: create, get, list, update, delete (with org_id isolation)
+  - Upload/download: presigned upload URLs (multipart form → MinIO), presigned download URLs
+  - Versioning: upload new version of existing artifact, version history
+  - Linking: link to controls/requirements/policies, delete links
+  - Relationship queries: list evidence for control, list controls for evidence
+  - Freshness tracking: calculate staleness based on collection_date + validity_days
+  - Staleness alerts: identify expired/expiring evidence
+  - Evaluations: submit review, approve, reject with remediation notes
+  - Advanced search: filter by type, status, collection method, linked entities
+  - MinIO service layer with bucket management and presigned URL generation
+  - 28 evidence unit tests (84 total)
+  - docker-compose.yml updated with MinIO service
+- **Dashboard**: 9 new pages/components
+  - Evidence library page: searchable/filterable list with freshness summary cards (fresh/expiring/expired counts)
+  - Evidence upload interface: drag-and-drop + file browser with 3-step presigned URL flow
+  - Evidence detail page: metadata display, tags, latest evaluation, 4-tab layout (Overview/Linked Entities/Version History/Evaluations)
+  - Evidence-to-control linking UI: search + select modal with entity picker
+  - Control detail enhancement: Evidence tab with summary stats + linked evidence table
+  - Freshness badges: visual indicators (fresh/expiring_soon/expired) with day counts
+  - Staleness alert dashboard: summary cards + urgency table + affected controls list
+  - Evidence evaluation interface: verdict selection, confidence rating, comments, missing elements checklist, remediation guidance
+  - Version comparison view: side-by-side metadata diff with change highlighting
+  - 14 total routes in dashboard
+
+### Security Audit Results
+- **Code Review:** APPROVED — 0 critical, 0 high, 3 medium
+  - 3 medium findings (Issues #4-6): presigned URL Content-Type enforcement, file size validation, client-side checks
+  - 3 low-priority suggestions for future improvement
+  - 3,200 lines backend code reviewed (MinIO integration + evidence handlers)
+  - 2,800 lines frontend code reviewed (9 pages + components)
+  - 5 migration files audited
+  - 28 unit tests reviewed
+  - Multi-tenancy isolation verified across all evidence endpoints
+  - MIME type whitelist enforced (documents, images, videos, spreadsheets, PDFs)
+  - File size limits enforced (100MB max)
+  - SQL injection prevention confirmed
+  - Audit logging complete
+- **QA Testing:** APPROVED — All tests passed
+  - 84/84 unit tests passing
+  - E2E API tests passing (5/5): upload flow, presigned URLs, linking, versioning, staleness
+  - Dashboard builds clean (14 routes)
+  - go vet clean
+  - MinIO service healthy and accessible
+  - Created Playwright E2E test suite with video capture
+  - 1 environmental finding (manual migrations required, non-blocking)
+  - Multi-tenancy isolation verified
+  - No hardcoded secrets found
+
+### Metrics
+- **Tasks completed:** 50/50 (100%)
+- **Duration:** ~2.5 hours (12:50 - 15:10)
+- **Unit tests:** 84/84 passing (28 new evidence tests)
+- **E2E tests:** 5/5 passing (upload, download, linking, versioning, staleness)
+- **Lines of code:** ~6,000 additional (Go + TypeScript)
+- **Database tables:** +3 (15 total)
+- **API endpoints:** +21 (66+ total)
+- **MinIO integration:** Presigned URLs, bucket management, object storage
+- **GitHub issues filed:** 3 (medium priority, security hardening recommendations)
+
+### Key Features
+- **MinIO object storage**: S3-compatible, presigned URL pattern for secure uploads/downloads
+- **Evidence versioning**: Full history tracking, upload new versions
+- **Multi-entity linking**: Link evidence to controls, requirements, policies
+- **Freshness tracking**: Automatic staleness detection based on collection_date + validity_days
+- **Staleness alerts**: Dashboard showing expired/expiring evidence with urgency levels
+- **Evidence evaluation workflow**: Review → approve/reject → track remediation
+- **Advanced search**: Filter by type, status, collection method, linked entities
+- **File type support**: Documents (docx, pdf, txt), images (png, jpg), videos (mp4), spreadsheets (xlsx, csv)
+- **Size limits**: 100MB max per file
+
+### What's Next
+Sprint 4 begins: Continuous Monitoring Engine
+- Test execution worker (background jobs)
+- Alert engine with classification and assignment
+- Alert delivery via Slack/email
+- Monitoring view and alert queue dashboard
+- Control health heatmap
+- Real-time compliance posture score
+
+---
