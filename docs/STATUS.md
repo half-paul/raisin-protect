@@ -86,11 +86,13 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 ```
 
 ## Blockers
-**CRITICAL PATH:** Frontend Developer (DEV-FE) — next to execute
-- DEV-BE completed all 16 tasks (API, auth, middleware, tests, Docker)
-- DEV-FE can now start with full API available
-- CR can review BE code immediately
+**CRITICAL PATH:** Frontend Developer (DEV-FE) — ⚠️ APPROACHING STALLED
+- DEV-BE completed all 16 tasks at 05:00 (1h 50m ago)
+- DEV-FE unblocked since 05:00 but **no commits yet** — approaching 2h idle
+- CR can review BE code immediately (7 tasks available)
 - QA blocked until DEV-FE completes for integration testing
+
+**Recommendation:** DEV-FE should begin Next.js scaffolding, auth pages, and auth context immediately.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -102,4 +104,5 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 | 2026-02-20 04:06 | PM | Sprint 1 status update — 19% complete, DEV-BE is critical path (STALLED) |
 | 2026-02-20 04:50 | PM | Sprint 1 status check — 19% complete, DEV-BE still STALLED (>1h with no commits) |
 | 2026-02-20 05:00 | DEV-BE | All 16 tasks complete: Go API, auth, RBAC, org/user CRUD, audit, health, tests (30 pass), Dockerfile, docker-compose.yml |
-| 2026-02-20 05:50 | PM | Sprint 1 status update — 46% complete, DEV-FE and CR both UNBLOCKED and active
+| 2026-02-20 05:50 | PM | Sprint 1 status update — 46% complete, DEV-FE and CR both UNBLOCKED and active |
+| 2026-02-20 06:50 | PM | Sprint 1 status check — 46% complete, DEV-FE approaching STALLED (~2h since unblock, no commits)
