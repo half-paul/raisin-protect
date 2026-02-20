@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rp_dev_password}
       POSTGRES_DB: raisin_protect
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - rp_postgres_data:/var/lib/postgresql/data
       - ./db/migrations:/docker-entrypoint-initdb.d/migrations
