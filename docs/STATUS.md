@@ -71,25 +71,25 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | ✅ DONE | Schema (3 tables, 5 enums, 9 audit actions) + API spec (21 endpoints) delivered. |
-| DBE | 6/6 (100%) | ✅ DONE | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
-| DEV-BE | 13/13 (100%) | ✅ DONE | 21 REST endpoints, MinIO integration, 28 unit tests, Docker build clean. |
-| DEV-FE | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for ≥5 BE tasks complete. |
-| CR | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for code to review. |
-| QA | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for deliverables to test. |
+| SA | 4/4 (100%) | 💤 DISABLED | Sprint 3 design complete. Will re-enable at 75% for Sprint 4 pre-design. |
+| DBE | 6/6 (100%) | 💤 DISABLED | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
+| DEV-BE | 13/13 (100%) | 💤 DISABLED | 21 REST endpoints, MinIO integration, 28 unit tests, Docker build clean. |
+| DEV-FE | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Dependencies met (13 BE tasks complete). Building evidence UI. |
+| CR | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Backend code ready for review (MinIO integration + evidence endpoints). |
+| QA | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Backend complete, ready for testing. |
 
 **Overall Sprint Completion:** 23/50 tasks (46%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
-                                           ↘ DEV-FE [UNBLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE]
+                                           ↘ DEV-FE [ACTIVE] → QA [ACTIVE]
 ```
 
-**Critical Path:** DEV-FE and CR (Backend complete, frontend and review can begin in parallel)
+**Critical Path:** DEV-FE (9 dashboard pages to build), CR (review backend + upcoming frontend), QA (test evidence upload/linking flows)
 
 ## Blockers
-**NONE:** DEV-BE complete. DEV-FE, CR, and QA can proceed.
+**NONE:** All upstream dependencies complete. Three agents now active in parallel.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -120,3 +120,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 | 2026-02-20 12:52 | SA | Sprint 3 design complete: SCHEMA.md (3 tables: evidence_artifacts, evidence_links, evidence_evaluations + 5 new enums + 9 audit_action extensions + MinIO bucket config + query patterns + seed data) and API_SPEC.md (21 endpoints covering evidence CRUD, presigned upload/download, versioning, linking, relationship queries, freshness/staleness alerts, evaluations, advanced search). DBE unblocked. |
 | 2026-02-20 13:50 | PM | Sprint 3 status update — 8% complete (4/50 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete, 6 migration tasks queued). All other agents remain disabled. Critical path: DBE (must deliver evidence schema before backend work begins). |
 | 2026-02-20 14:11 | DEV-BE | All 13 tasks complete. Implemented 21 REST endpoints: evidence CRUD (7), upload/download (3), versioning (2), linking (3), relationship queries (2), staleness/freshness (2), evaluations (2), advanced search (1). MinIO service layer with presigned URLs. 7 new handler files, 3 new model files, 1 service file. 28 evidence unit tests passing (84 total). Docker build clean. docker-compose.yml updated with MinIO service. |
+| 2026-02-20 14:50 | PM | Agent lifecycle update: SA/DBE/DEV-BE DISABLED (all tasks complete). DEV-FE/CR/QA ENABLED and triggered (dependencies met: 13 BE tasks complete). Sprint at 46% completion (23/50 tasks). Critical path: DEV-FE (9 dashboard pages), CR (MinIO + evidence backend review), QA (evidence upload/linking flows). All three agents running in parallel. |
