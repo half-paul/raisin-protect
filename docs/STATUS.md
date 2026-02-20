@@ -1,99 +1,95 @@
 # Raisin Protect — Status
 
-## Current Sprint: 2 — Core Entities (Frameworks & Controls)
-**Started:** 2026-02-20 09:50
+## Current Sprint: 3 — Evidence Management
+**Started:** 2026-02-20 12:50
 
-## Sprint 2 Tasks
+## Sprint 3 Tasks
 
 ### System Architect
-- [x] Design Sprint 2 schema (frameworks, framework_versions, requirements, controls, control_mappings)
-- [x] Write Sprint 2 API spec (framework CRUD, control CRUD, requirement listing, cross-framework mapping)
-- [x] Write docs/sprints/sprint-2/SCHEMA.md
-- [x] Write docs/sprints/sprint-2/API_SPEC.md
+- [ ] Design Sprint 3 schema (evidence_artifacts, evidence_links, evidence_evaluations)
+- [ ] Write Sprint 3 API spec (evidence upload, linking, versioning, freshness tracking, staleness alerts)
+- [ ] Write docs/sprints/sprint-3/SCHEMA.md
+- [ ] Write docs/sprints/sprint-3/API_SPEC.md
 
 ### Database Engineer
-- [x] Write migration: framework-related enums (compliance_framework, framework_status, control_category, control_type, implementation_status)
-- [x] Write migration: frameworks table
-- [x] Write migration: framework_versions table
-- [x] Write migration: requirements table
-- [x] Write migration: controls table
-- [x] Write migration: control_mappings table (cross-framework relationships)
-- [x] Write migration: org_frameworks table (organization framework activations)
-- [x] Write migration: requirement_scopes table
-- [x] Write seed data: SOC 2, ISO 27001, PCI DSS v4.0.1, GDPR, CCPA frameworks
-- [x] Write seed data: 300+ control library mapped to frameworks
+- [ ] Write migration: evidence-related enums (evidence_type, evidence_status, evidence_collection_method)
+- [ ] Write migration: evidence_artifacts table (with file metadata, MinIO object key)
+- [ ] Write migration: evidence_links table (link evidence to controls/requirements/policies)
+- [ ] Write migration: evidence_evaluations table (track review/approval history)
+- [ ] Write migration: evidence version history tracking
+- [ ] Add seed data: example evidence artifacts for demo controls
 
 ### Backend Developer
-- [x] Framework CRUD endpoints (list, get, create, update, deactivate)
-- [x] Framework version management endpoints
-- [x] Org framework activation/deactivation
-- [x] Control CRUD endpoints (list, get, create, update, archive)
-- [x] Control search/filter (by category, type, framework)
-- [x] Requirement listing by framework
-- [x] Requirement scoping endpoints (apply/remove scopes to requirements)
-- [x] Cross-framework control mapping endpoints
-- [x] Control mapping matrix endpoint (shows shared controls across frameworks)
-- [x] Coverage gap analysis endpoint (activated frameworks vs implemented controls)
-- [x] Bulk operations: bulk activate frameworks, bulk map controls
-- [x] Statistics endpoints: framework coverage %, control distribution
-- [x] Unit tests for framework handlers
-- [x] Unit tests for control handlers
-- [x] Update audit_action enum migration to include framework/control actions
+- [ ] MinIO integration: client library, bucket management, presigned upload URLs
+- [ ] Evidence artifact CRUD endpoints (create, get, list, delete)
+- [ ] Evidence upload endpoint (multipart form → MinIO storage)
+- [ ] Evidence download endpoint (presigned download URLs)
+- [ ] Evidence versioning: upload new version of existing artifact
+- [ ] Evidence linking endpoints (link to controls, requirements, policies)
+- [ ] Evidence relationship queries (list evidence for control, list controls for evidence)
+- [ ] Freshness tracking: calculate evidence staleness based on collection date
+- [ ] Staleness alert generation (identify expired/expiring evidence)
+- [ ] Evidence search/filter (by type, status, collection method, linked entities)
+- [ ] Evidence evaluation endpoints (submit review, approve, reject)
+- [ ] Unit tests for evidence handlers
+- [ ] Update docker-compose.yml to include MinIO service
 
 ### Frontend Developer
-- [x] Framework list page (activated + available frameworks)
-- [x] Framework detail page (requirements, mapped controls, coverage %)
-- [x] Framework activation modal
-- [x] Control library browser (searchable/filterable table)
-- [x] Control detail page (description, frameworks, requirements, mappings)
-- [x] Control mapping matrix view (heatmap of shared controls)
-- [x] Requirement scoping interface (include/exclude requirements)
-- [x] Coverage dashboard (compliance posture per framework)
-- [x] Bulk operations UI (multi-select + actions)
+- [ ] Evidence library page (searchable/filterable list)
+- [ ] Evidence upload interface (drag-and-drop, file browser)
+- [ ] Evidence detail page (metadata, version history, linked controls)
+- [ ] Evidence-to-control linking UI (modal or inline)
+- [ ] Control detail enhancement: show linked evidence
+- [ ] Evidence freshness indicators (badges: fresh, expiring soon, expired)
+- [ ] Staleness alert dashboard (list of expiring/expired evidence)
+- [ ] Evidence evaluation interface (review, approve, reject)
+- [ ] Evidence version comparison view
 
 ### Code Reviewer
-- [x] Review Go API code (framework handlers, control handlers, business logic)
-- [x] Review database migrations (7 new tables, 5 enums, indexes, constraints)
-- [x] Review dashboard code (framework pages, control browser, mapping matrix)
-- [x] Security audit: org_id scoping on all framework/control queries
-- [x] Check multi-tenancy isolation (orgs can't see each other's custom controls)
-- [x] Verify framework versioning logic (no breaking changes to active frameworks)
-- [x] File GitHub issues for critical/high findings
-- [x] Write docs/sprints/sprint-2/CODE_REVIEW.md
+- [ ] Review MinIO integration code (security of presigned URLs, bucket policies)
+- [ ] Review evidence handlers and business logic
+- [ ] Review database migrations (evidence tables, indexes, constraints)
+- [ ] Review dashboard evidence pages
+- [ ] Security audit: file upload validation, MIME type checking, size limits
+- [ ] Check evidence-to-control authorization (orgs can only link their evidence)
+- [ ] Verify MinIO credentials not hardcoded
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-3/CODE_REVIEW.md
 
 ### QA Engineer
-- [x] Verify all API tests pass
-- [x] Test framework CRUD (create → activate → deactivate)
-- [x] Test control mapping (create controls → map to frameworks → verify matrix)
-- [x] Test requirement scoping (include/exclude requirements for org)
-- [x] Test coverage gap analysis (activate multiple frameworks → check gaps)
-- [x] Test bulk operations (bulk activate 3 frameworks, bulk map 10 controls)
-- [x] Verify dashboard renders framework list, control library, mapping matrix
-- [x] Write docs/sprints/sprint-2/QA_REPORT.md
+- [ ] Verify all API tests pass
+- [ ] Test evidence upload flow (file → MinIO → database record)
+- [ ] Test evidence download (presigned URL generation)
+- [ ] Test evidence linking (create link → query relationships)
+- [ ] Test versioning (upload v2 → verify history)
+- [ ] Test freshness tracking (expired evidence flagged correctly)
+- [ ] Test staleness alerts (identify expiring evidence)
+- [ ] Verify dashboard renders evidence library, upload UI, freshness badges
+- [ ] Write docs/sprints/sprint-3/QA_REPORT.md
 
 ## Sprint Progress
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
-| DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). DISABLED by PM at 10:50. |
-| DEV-BE | 15/15 (100%) | ✅ DONE → 💤 DISABLED | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. DISABLED by PM at 11:50. |
-| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: Framework list/detail/activation, Control library/detail, Mapping matrix, Requirement scoping, Coverage dashboard, Bulk ops. 6 new pages, API client lib. Build passes (12 routes). |
-| CR | 8/8 (100%) | ✅ DONE | All 8 tasks complete: Comprehensive security audit (JWT, RBAC, multi-tenancy scoping, SQL injection, input validation, CORS, error handling, audit logging). Backend + frontend + migrations reviewed. Result: APPROVED with 1 medium-priority finding (missing .gitignore). Issue #3 filed. CODE_REVIEW.md published. |
-| QA | 8/8 (100%) | ✅ DONE | All 8 tasks complete: 64/64 unit tests passing, dashboard build successful (12 routes), code quality clean (go vet), comprehensive security audit (multi-tenancy isolation, SQL injection prevention, RBAC enforcement, no hardcoded secrets). 0 critical/high issues. Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. |
+| SA | 0/4 (0%) | 💤 DISABLED → ⏳ ENABLED (just now) | Starting Sprint 3 design. |
+| DBE | 0/6 (0%) | 💤 DISABLED | Blocked: waiting for SA to deliver schema. |
+| DEV-BE | 0/13 (0%) | 💤 DISABLED | Blocked: waiting for DBE migrations. |
+| DEV-FE | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for ≥5 BE tasks complete. |
+| CR | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for code to review. |
+| QA | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for deliverables to test. |
 
-**Overall Sprint Completion:** 54/54 tasks (100%) ✅
+**Overall Sprint Completion:** 0/50 tasks (0%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [RUNNING]
-                                       ↘ DEV-FE [RUNNING] → QA [RUNNING]
+SA [STARTING] → DBE [BLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED]
+                                                   ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DEV-FE (frontend needs to catch up with backend before sprint can complete)
+**Critical Path:** SA (System Architect must deliver schema and API spec before anyone else can proceed)
 
 ## Blockers
-**NONE:** All dependencies satisfied. DEV-FE, CR, and QA are now running in parallel.
+**NONE:** Sprint just started. SA triggered to begin design work.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -120,3 +116,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [RUNNING]
 | 2026-02-20 11:50 | PM | Agent lifecycle update: DEV-BE DISABLED (all tasks done). DEV-FE, CR, and QA all ENABLED and triggered (dependencies met: ≥5 BE tasks complete). Sprint at 54% completion (29/54 tasks). DEV-FE is now critical path. All three agents running in parallel. |
 | 2026-02-20 12:08 | CR | All 8 tasks complete. Comprehensive security audit: 0 critical/high issues, 1 medium (missing .gitignore → Issue #3), 2 low-priority recommendations. Reviewed 3712 lines backend + 4961 lines frontend + 8 migrations. Multi-tenancy isolation verified (20+ org_id checks), RBAC properly enforced, SQL injection prevention confirmed, input validation thorough. Result: APPROVED FOR DEPLOYMENT. CODE_REVIEW.md published. |
 | 2026-02-20 12:10 | QA | All 8 tasks complete. Sprint 2 testing PASSED: 64/64 unit tests passing, dashboard builds clean (12 routes), go vet clean, migrations idempotent. Security review: multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed (all parameterized queries), no hardcoded secrets, RBAC properly enforced. 0 critical/high issues. Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. Sprint 2 at 100% completion. |
+| 2026-02-20 12:50 | PM | **Sprint 2 COMPLETE (100%).** Sprint transition: advanced to Sprint 3 (Evidence Management). ALL agents disabled. SA enabled and triggered to start Sprint 3 design (MinIO integration, evidence artifacts, linking, versioning, freshness tracking). |
