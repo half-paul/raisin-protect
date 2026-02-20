@@ -21,22 +21,22 @@
 - [x] Write seed data (demo org, users for each GRC role)
 
 ### Backend Developer
-- [ ] Go module init, directory structure, Gin setup
-- [ ] Config package (env-based)
-- [ ] Database connection package
-- [ ] Redis connection package
-- [ ] JWT auth: register, login, refresh, logout
-- [ ] Change password endpoint
-- [ ] RBAC middleware (GRC roles from spec §1.2)
-- [ ] Organization CRUD
-- [ ] User management (list, get, update, deactivate)
-- [ ] User role assignment/revocation
-- [ ] Health endpoints (/health, /ready)
-- [ ] Audit logging middleware
-- [ ] Dockerfile
-- [ ] docker-compose.yml (postgres, redis, api, dashboard)
-- [ ] Unit tests for auth handlers
-- [ ] Unit tests for user handlers
+- [x] Go module init, directory structure, Gin setup
+- [x] Config package (env-based)
+- [x] Database connection package
+- [x] Redis connection package
+- [x] JWT auth: register, login, refresh, logout
+- [x] Change password endpoint
+- [x] RBAC middleware (GRC roles from spec §1.2)
+- [x] Organization CRUD
+- [x] User management (list, get, update, deactivate)
+- [x] User role assignment/revocation
+- [x] Health endpoints (/health, /ready)
+- [x] Audit logging middleware
+- [x] Dockerfile
+- [x] docker-compose.yml (postgres, redis, api, dashboard)
+- [x] Unit tests for auth handlers
+- [x] Unit tests for user handlers
 
 ### Frontend Developer
 - [ ] Next.js 14 project with shadcn/ui + Tailwind
@@ -72,33 +72,25 @@
 |-------|----------|--------|-------|
 | SA | 5/5 (100%) | ✅ DONE | All design work complete |
 | DBE | 6/6 (100%) | ✅ DONE | All migrations + seeds complete |
-| DEV-BE | 0/16 (0%) | 🟢 UNBLOCKED | DBE migrations ready — can start |
-| DEV-FE | 0/10 (0%) | 🔴 BLOCKED | Waiting on DEV-BE scaffolding + auth |
-| CR | 0/7 (0%) | 🔴 BLOCKED | Waiting on code to review |
-| QA | 0/5 (0%) | 🔴 BLOCKED | Waiting on testable code |
+| DEV-BE | 16/16 (100%) | ✅ DONE | All API code, tests, Docker complete |
+| DEV-FE | 0/10 (0%) | 🟢 UNBLOCKED | DEV-BE complete — can start |
+| CR | 0/7 (0%) | 🟢 UNBLOCKED | DEV-BE code ready for review |
+| QA | 0/5 (0%) | 🔴 BLOCKED | Waiting on DEV-FE + integration |
 
-**Overall Sprint Completion:** 11/59 tasks (19%)
+**Overall Sprint Completion:** 27/59 tasks (46%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED] → QA [BLOCKED]
-                                     ↘ DEV-FE [BLOCKED] → CR ↗
+SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
+                                    ↘ DEV-FE [UNBLOCKED] → QA [BLOCKED]
 ```
 
 ## Blockers
-**CRITICAL PATH:** Backend Developer (DEV-BE) — ⚠️ STALLED
-- SA and DBE both complete — all prerequisites ready
-- DEV-BE has 16 tasks, 0 started
-- **STALLED:** DEV-BE is unblocked but has not committed any code yet
-- DEV-FE waiting on scaffolding + auth endpoints (needs 5+ BE tasks done)
-- CR and QA waiting for code to review/test
-
-**Action Required:** DEV-BE needs to start immediately. Focus on:
-1. Go module init and directory structure
-2. Config package and database connection
-3. Docker setup
-4. Auth endpoints (register, login, refresh, logout)
-5. Health endpoints
+**CRITICAL PATH:** Frontend Developer (DEV-FE) — next to execute
+- DEV-BE completed all 16 tasks (API, auth, middleware, tests, Docker)
+- DEV-FE can now start with full API available
+- CR can review BE code immediately
+- QA blocked until DEV-FE completes for integration testing
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -109,3 +101,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED] → QA [BLOCKED
 | 2026-02-20 ~03:45 | DBE | All migrations and seed data completed |
 | 2026-02-20 04:06 | PM | Sprint 1 status update — 19% complete, DEV-BE is critical path (STALLED) |
 | 2026-02-20 04:50 | PM | Sprint 1 status check — 19% complete, DEV-BE still STALLED (>1h with no commits) |
+| 2026-02-20 05:00 | DEV-BE | All 16 tasks complete: Go API, auth, RBAC, org/user CRUD, audit, health, tests (30 pass), Dockerfile, docker-compose.yml |
