@@ -70,30 +70,23 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 5/5 (100%) | ✅ DONE | All design work complete |
-| DBE | 6/6 (100%) | ✅ DONE | All migrations + seeds complete |
-| DEV-BE | 16/16 (100%) | ✅ DONE | All API code, tests, Docker complete |
-| DEV-FE | 10/10 (100%) | ✅ DONE | All dashboard pages, auth, sidebar, Docker complete |
-| CR | 7/7 (100%) | ✅ DONE | Security audit complete — APPROVED with 2 medium-priority improvements |
-| QA | 0/5 (0%) | 🟡 UNBLOCKED | CR complete, ready for integration testing |
+| SA | 5/5 (100%) | ✅ DONE → 🔄 ENABLED | Sprint 1 complete. Now enabled to pre-design Sprint 2 (sprint at 75% threshold) |
+| DBE | 6/6 (100%) | ✅ DONE → 💤 DISABLED | All migrations + seeds complete. Disabled per lifecycle rules. |
+| DEV-BE | 16/16 (100%) | ✅ DONE → 💤 DISABLED | All API code, tests, Docker complete. Disabled per lifecycle rules. |
+| DEV-FE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | All dashboard pages, auth, sidebar, Docker complete. Disabled per lifecycle rules. |
+| CR | 7/7 (100%) | ✅ DONE → 💤 DISABLED | Security audit complete — APPROVED. Disabled per lifecycle rules. |
+| QA | 0/5 (0%) | 🟡 UNBLOCKED → ✅ ENABLED | Code ready for testing. Now enabled and scheduled to run. |
 
 **Overall Sprint Completion:** 44/59 tasks (75%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
-                                    ↘ DEV-FE [DONE] → QA [UNBLOCKED]
+SA [DONE → PRE-DESIGNING SPRINT 2] → DBE [DONE] → DEV-BE [DONE] → CR [DONE]
+                                                              ↘ DEV-FE [DONE] → QA [TESTING]
 ```
 
 ## Blockers
-**RESOLVED:** All development blockers cleared! 🎉
-
-**Code Reviewer (CR):** ✅ DONE
-- Security audit complete: 0 critical, 0 high, 2 medium, 2 low findings
-- Result: **APPROVED** — High-quality implementation with strong security foundations
-- Medium-priority improvements: API_BASE URL config, global audit middleware
-
-**QA Status:** 🟡 UNBLOCKED — CR complete, ready for integration testing
+**NONE:** All agents properly sequenced. QA testing Sprint 1 deliverables. SA pre-designing Sprint 2.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -110,3 +103,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
 | 2026-02-20 07:50 | PM | Sprint 1 status check — 46% complete, **DEV-FE and CR both STALLED** (~3h idle, zero commits) |
 | 2026-02-20 07:55 | DEV-FE | All 10 tasks complete: Next.js 14 + shadcn/ui + Tailwind, login/register pages, auth context with JWT token mgmt, app shell with role-based sidebar (7 GRC roles), dashboard home with stat cards, user management with CRUD, org settings with password change, Dockerfile + .dockerignore. Build passes. |
 | 2026-02-20 08:00 | CR | All 7 tasks complete: Comprehensive security audit (JWT, RBAC, multi-tenancy, SQL injection, audit logging, CORS). Review result: APPROVED — 0 critical/high issues, 2 medium-priority improvements (API_BASE URL, audit middleware). CODE_REVIEW.md published. |
+| 2026-02-20 08:50 | PM | Sprint 1 at 75% completion threshold. Agent lifecycle update: SA ENABLED (pre-design Sprint 2), DBE/DEV-BE/DEV-FE/CR DISABLED (work complete), QA ENABLED (ready for integration testing). Triggered SA and QA to run immediately. |
