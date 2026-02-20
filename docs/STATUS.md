@@ -20,19 +20,19 @@
 - [x] Add seed data: example evidence artifacts for demo controls
 
 ### Backend Developer
-- [ ] MinIO integration: client library, bucket management, presigned upload URLs
-- [ ] Evidence artifact CRUD endpoints (create, get, list, delete)
-- [ ] Evidence upload endpoint (multipart form → MinIO storage)
-- [ ] Evidence download endpoint (presigned download URLs)
-- [ ] Evidence versioning: upload new version of existing artifact
-- [ ] Evidence linking endpoints (link to controls, requirements, policies)
-- [ ] Evidence relationship queries (list evidence for control, list controls for evidence)
-- [ ] Freshness tracking: calculate evidence staleness based on collection date
-- [ ] Staleness alert generation (identify expired/expiring evidence)
-- [ ] Evidence search/filter (by type, status, collection method, linked entities)
-- [ ] Evidence evaluation endpoints (submit review, approve, reject)
-- [ ] Unit tests for evidence handlers
-- [ ] Update docker-compose.yml to include MinIO service
+- [x] MinIO integration: client library, bucket management, presigned upload URLs
+- [x] Evidence artifact CRUD endpoints (create, get, list, delete)
+- [x] Evidence upload endpoint (multipart form → MinIO storage)
+- [x] Evidence download endpoint (presigned download URLs)
+- [x] Evidence versioning: upload new version of existing artifact
+- [x] Evidence linking endpoints (link to controls, requirements, policies)
+- [x] Evidence relationship queries (list evidence for control, list controls for evidence)
+- [x] Freshness tracking: calculate evidence staleness based on collection date
+- [x] Staleness alert generation (identify expired/expiring evidence)
+- [x] Evidence search/filter (by type, status, collection method, linked entities)
+- [x] Evidence evaluation endpoints (submit review, approve, reject)
+- [x] Unit tests for evidence handlers
+- [x] Update docker-compose.yml to include MinIO service
 
 ### Frontend Developer
 - [ ] Evidence library page (searchable/filterable list)
@@ -73,23 +73,23 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Schema (3 tables, 5 enums, 9 audit actions) + API spec (21 endpoints) delivered. |
 | DBE | 6/6 (100%) | ✅ DONE | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
-| DEV-BE | 0/13 (0%) | 💤 DISABLED | Blocked: waiting for DBE migrations. |
+| DEV-BE | 13/13 (100%) | ✅ DONE | 21 REST endpoints, MinIO integration, 28 unit tests, Docker build clean. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for ≥5 BE tasks complete. |
 | CR | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Blocked: waiting for deliverables to test. |
 
-**Overall Sprint Completion:** 10/50 tasks (20%)
+**Overall Sprint Completion:** 23/50 tasks (46%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED]
-                                                 ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
+                                           ↘ DEV-FE [UNBLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DEV-BE (Backend Developer must implement evidence endpoints before frontend/review can begin)
+**Critical Path:** DEV-FE and CR (Backend complete, frontend and review can begin in parallel)
 
 ## Blockers
-**NONE:** DEV-BE is unblocked and ready to start.
+**NONE:** DEV-BE complete. DEV-FE, CR, and QA can proceed.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -119,3 +119,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED]
 | 2026-02-20 12:50 | PM | **Sprint 2 COMPLETE (100%).** Sprint transition: advanced to Sprint 3 (Evidence Management). ALL agents disabled. SA enabled and triggered to start Sprint 3 design (MinIO integration, evidence artifacts, linking, versioning, freshness tracking). |
 | 2026-02-20 12:52 | SA | Sprint 3 design complete: SCHEMA.md (3 tables: evidence_artifacts, evidence_links, evidence_evaluations + 5 new enums + 9 audit_action extensions + MinIO bucket config + query patterns + seed data) and API_SPEC.md (21 endpoints covering evidence CRUD, presigned upload/download, versioning, linking, relationship queries, freshness/staleness alerts, evaluations, advanced search). DBE unblocked. |
 | 2026-02-20 13:50 | PM | Sprint 3 status update — 8% complete (4/50 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete, 6 migration tasks queued). All other agents remain disabled. Critical path: DBE (must deliver evidence schema before backend work begins). |
+| 2026-02-20 14:11 | DEV-BE | All 13 tasks complete. Implemented 21 REST endpoints: evidence CRUD (7), upload/download (3), versioning (2), linking (3), relationship queries (2), staleness/freshness (2), evaluations (2), advanced search (1). MinIO service layer with presigned URLs. 7 new handler files, 3 new model files, 1 service file. 28 evidence unit tests passing (84 total). Docker build clean. docker-compose.yml updated with MinIO service. |

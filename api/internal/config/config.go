@@ -35,6 +35,13 @@ type Config struct {
 	BcryptCost     int
 	CORSOrigins    string
 	TrustedProxies []string
+
+	// MinIO
+	MinIOEndpoint  string
+	MinIOAccessKey string
+	MinIOSecretKey string
+	MinIOBucket    string
+	MinIOUseSSL    bool
 }
 
 // Load reads configuration from RP_* environment variables.
@@ -54,6 +61,8 @@ func Load() (*Config, error) {
 		bcryptCost = 12
 	}
 
+	minioSSL := getEnv("RP_MINIO_USE_SSL", "false") == "true"
+
 	cfg := &Config{
 		Port:             getEnv("RP_PORT", "8090"),
 		Environment:      getEnv("RP_ENV", "development"),
@@ -65,6 +74,11 @@ func Load() (*Config, error) {
 		JWTIssuer:        getEnv("RP_JWT_ISSUER", "raisin-protect"),
 		BcryptCost:       bcryptCost,
 		CORSOrigins:      getEnv("RP_CORS_ORIGINS", "http://localhost:3010"),
+		MinIOEndpoint:    getEnv("RP_MINIO_ENDPOINT", "localhost:9000"),
+		MinIOAccessKey:   getEnv("RP_MINIO_ACCESS_KEY", "rp-admin"),
+		MinIOSecretKey:   getEnv("RP_MINIO_SECRET_KEY", "changeme-minio"),
+		MinIOBucket:      getEnv("RP_MINIO_BUCKET", "rp-evidence"),
+		MinIOUseSSL:      minioSSL,
 	}
 
 	// Validate JWT secret

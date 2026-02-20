@@ -17,6 +17,7 @@ import (
 	"github.com/half-paul/raisin-protect/api/internal/handlers"
 	"github.com/half-paul/raisin-protect/api/internal/middleware"
 	"github.com/half-paul/raisin-protect/api/internal/models"
+	"github.com/half-paul/raisin-protect/api/internal/services"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -77,6 +78,24 @@ func main() {
 		defer redisClient.Close()
 		handlers.SetRedis(redisClient)
 		log.Info().Msg("Redis connected successfully")
+	}
+
+	// MinIO
+	minioSvc, err := services.NewMinIOService(services.MinIOConfig{
+		Endpoint:  cfg.MinIOEndpoint,
+		AccessKey: cfg.MinIOAccessKey,
+		SecretKey: cfg.MinIOSecretKey,
+		Bucket:    cfg.MinIOBucket,
+		UseSSL:    cfg.MinIOUseSSL,
+	})
+	if err != nil {
+		log.Warn().Err(err).Msg("Failed to connect to MinIO — evidence uploads may be degraded")
+	} else {
+		if err := minioSvc.EnsureBucket(context.Background()); err != nil {
+			log.Warn().Err(err).Msg("Failed to ensure MinIO bucket")
+		}
+		handlers.SetMinIO(minioSvc)
+		log.Info().Str("bucket", cfg.MinIOBucket).Msg("MinIO connected successfully")
 	}
 
 	// Gin
@@ -176,6 +195,49 @@ func main() {
 
 			// Mapping matrix
 			protected.GET("/mapping-matrix", handlers.GetMappingMatrix)
+
+			// === Sprint 3: Evidence Management ===
+
+			ev := protected.Group("/evidence")
+			{
+				ev.GET("", handlers.ListEvidence)
+				ev.POST("", middleware.RequireRoles(models.EvidenceUploadRoles...), handlers.CreateEvidence)
+				ev.GET("/staleness", handlers.GetStalenessAlerts)
+				ev.GET("/freshness-summary", handlers.GetFreshnessSummary)
+				ev.GET("/search", handlers.SearchEvidence)
+
+				ev.GET("/:id", handlers.GetEvidence)
+				ev.PUT("/:id", handlers.UpdateEvidence) // uploader check in handler
+				ev.DELETE("/:id", middleware.RequireRoles(models.EvidenceStatusRoles...), handlers.DeleteEvidence)
+				ev.PUT("/:id/status", middleware.RequireRoles(models.EvidenceStatusRoles...), handlers.ChangeEvidenceStatus)
+
+				// Upload flow
+				ev.POST("/:id/confirm", handlers.ConfirmEvidenceUpload) // uploader check in handler
+				ev.POST("/:id/upload", handlers.GetUploadURL)          // uploader check in handler
+				ev.GET("/:id/download", handlers.GetDownloadURL)
+
+				// Versioning
+				ev.POST("/:id/versions", middleware.RequireRoles(models.EvidenceUploadRoles...), handlers.CreateEvidenceVersion)
+				ev.GET("/:id/versions", handlers.ListEvidenceVersions)
+
+				// Links
+				ev.GET("/:id/links", handlers.ListEvidenceLinks)
+				ev.POST("/:id/links", middleware.RequireRoles(models.EvidenceLinkRoles...), handlers.CreateEvidenceLinks)
+				ev.DELETE("/:id/links/:lid", middleware.RequireRoles(models.EvidenceLinkRoles...), handlers.DeleteEvidenceLink)
+
+				// Evaluations
+				ev.GET("/:id/evaluations", handlers.ListEvidenceEvaluations)
+				ev.POST("/:id/evaluations", middleware.RequireRoles(models.EvidenceEvalRoles...), handlers.CreateEvidenceEvaluation)
+			}
+
+			// Evidence on existing resources
+			ctrl.GET("/:id/evidence", handlers.ListControlEvidence)
+
+			// Requirements evidence
+			req := protected.Group("/requirements")
+			{
+				req.GET("/:id/evidence", handlers.ListRequirementEvidence)
+			}
 		}
 	}
 
