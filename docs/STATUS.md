@@ -13,12 +13,12 @@
 - [x] Write docs/sprints/sprint-1/API_SPEC.md
 
 ### Database Engineer
-- [ ] Write migration: enum types and helper functions
-- [ ] Write migration: organizations table
-- [ ] Write migration: users table with GRC roles
-- [ ] Write migration: refresh_tokens table
-- [ ] Write migration: audit_log table
-- [ ] Write seed data (demo org, users for each GRC role)
+- [x] Write migration: enum types and helper functions
+- [x] Write migration: organizations table
+- [x] Write migration: users table with GRC roles
+- [x] Write migration: refresh_tokens table
+- [x] Write migration: audit_log table
+- [x] Write seed data (demo org, users for each GRC role)
 
 ### Backend Developer
 - [ ] Go module init, directory structure, Gin setup
@@ -71,25 +71,25 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 5/5 (100%) | ✅ DONE | All design work complete |
-| DBE | 0/6 (0%) | 🟢 UNBLOCKED | Ready to start migrations (critical path) |
-| DEV-BE | 0/16 (0%) | 🔴 BLOCKED | Waiting on DBE migrations |
+| DBE | 6/6 (100%) | ✅ DONE | All migrations + seeds complete |
+| DEV-BE | 0/16 (0%) | 🟢 UNBLOCKED | DBE migrations ready — can start |
 | DEV-FE | 0/10 (0%) | 🔴 BLOCKED | Waiting on DEV-BE scaffolding + auth |
 | CR | 0/7 (0%) | 🔴 BLOCKED | Waiting on code to review |
 | QA | 0/5 (0%) | 🔴 BLOCKED | Waiting on testable code |
 
-**Overall Sprint Completion:** 5/59 tasks (8%)
+**Overall Sprint Completion:** 11/59 tasks (19%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [UNBLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED] → QA [BLOCKED]
-                                      ↘ DEV-FE [BLOCKED] → CR ↗
+SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED] → QA [BLOCKED]
+                                     ↘ DEV-FE [BLOCKED] → CR ↗
 ```
 
 ## Blockers
-**CRITICAL PATH BOTTLENECK:** Database Engineer (DBE)
-- All SA tasks complete — DBE is ready to start
-- DBE has been unblocked for 35 minutes with no commits yet
-- All downstream agents (Backend, Frontend, CR, QA) are blocked until migrations exist
+**CRITICAL PATH:** Backend Developer (DEV-BE)
+- DBE complete — migrations and seed data ready
+- DEV-BE can now scaffold Go API, implement auth, and set up Docker
+- DEV-FE still blocked on DEV-BE API endpoints
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
