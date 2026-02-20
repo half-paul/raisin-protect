@@ -12,16 +12,16 @@
 - [x] Write docs/sprints/sprint-2/API_SPEC.md
 
 ### Database Engineer
-- [ ] Write migration: framework-related enums (compliance_framework, framework_status, control_category, control_type, implementation_status)
-- [ ] Write migration: frameworks table
-- [ ] Write migration: framework_versions table
-- [ ] Write migration: requirements table
-- [ ] Write migration: controls table
-- [ ] Write migration: control_mappings table (cross-framework relationships)
-- [ ] Write migration: org_frameworks table (organization framework activations)
-- [ ] Write migration: requirement_scopes table
-- [ ] Write seed data: SOC 2, ISO 27001, PCI DSS v4.0.1, GDPR, CCPA frameworks
-- [ ] Write seed data: 300+ control library mapped to frameworks
+- [x] Write migration: framework-related enums (compliance_framework, framework_status, control_category, control_type, implementation_status)
+- [x] Write migration: frameworks table
+- [x] Write migration: framework_versions table
+- [x] Write migration: requirements table
+- [x] Write migration: controls table
+- [x] Write migration: control_mappings table (cross-framework relationships)
+- [x] Write migration: org_frameworks table (organization framework activations)
+- [x] Write migration: requirement_scopes table
+- [x] Write seed data: SOC 2, ISO 27001, PCI DSS v4.0.1, GDPR, CCPA frameworks
+- [x] Write seed data: 300+ control library mapped to frameworks
 
 ### Backend Developer
 - [ ] Framework CRUD endpoints (list, get, create, update, deactivate)
@@ -76,8 +76,8 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
-| DBE | 0/10 (0%) | 🔄 ENABLED → TRIGGERED | Migrations + seeds for 7 tables, 5 enums. CRITICAL PATH. |
-| DEV-BE | 0/15 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for DBE migrations. |
+| DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). |
+| DEV-BE | 0/15 (0%) | 🔄 ENABLED | UNBLOCKED — DBE complete, ready for API development. |
 | DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for DEV-BE endpoints. |
 | CR | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for code to review. |
 | QA | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for implementation. |
@@ -112,3 +112,4 @@ SA [DONE] → DBE [ACTIVE → CRITICAL PATH] → DEV-BE [BLOCKED] → CR [BLOCKE
 | 2026-02-20 08:55 | SA | Sprint 2 pre-design complete: SCHEMA.md (7 tables: frameworks, framework_versions, requirements, org_frameworks, requirement_scopes, controls, control_mappings + 5 new enums + audit_action extensions) and API_SPEC.md (25 endpoints covering framework catalog, org activation, controls CRUD, cross-framework mapping matrix, coverage gap analysis, requirement scoping, bulk ops, and statistics). |
 | 2026-02-20 09:05 | QA | Sprint 1 testing complete: All 5 QA tasks passed. 30/30 unit tests passing, dashboard builds clean, Docker services healthy, auth flow verified, RBAC enforced correctly, multi-tenancy isolation working. 2 environmental findings (port conflict + manual migrations) documented as non-blocking. QA_REPORT.md published. Sprint 1 APPROVED FOR DEPLOYMENT. |
 | 2026-02-20 09:50 | PM | **Sprint 1 COMPLETE (100%).** Sprint transition: advanced to Sprint 2. ALL agents disabled. DBE enabled and triggered to start Sprint 2 migrations (7 tables, 5 enums, 300+ control library seeds). |
+| 2026-02-20 09:52 | DBE | Sprint 2 migrations complete: 8 migrations (006-013), seed with 5 frameworks, 200+ requirements, 318 controls, 104 cross-framework mappings. DEV-BE unblocked. |
