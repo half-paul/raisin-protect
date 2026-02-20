@@ -1,92 +1,97 @@
 # Raisin Protect — Status
 
-## Current Sprint: 1 — Project Scaffolding & Auth
-**Started:** 2026-02-20
+## Current Sprint: 2 — Core Entities (Frameworks & Controls)
+**Started:** 2026-02-20 09:50
 
-## Sprint 1 Tasks
+## Sprint 2 Tasks
 
 ### System Architect
-- [x] Design Sprint 1 schema (organizations, users, roles, sessions)
-- [x] Write Sprint 1 API spec (health, auth, users, org endpoints)
-- [x] Define Docker service topology
-- [x] Write docs/sprints/sprint-1/SCHEMA.md
-- [x] Write docs/sprints/sprint-1/API_SPEC.md
+- [x] Design Sprint 2 schema (frameworks, framework_versions, requirements, controls, control_mappings)
+- [x] Write Sprint 2 API spec (framework CRUD, control CRUD, requirement listing, cross-framework mapping)
+- [x] Write docs/sprints/sprint-2/SCHEMA.md
+- [x] Write docs/sprints/sprint-2/API_SPEC.md
 
 ### Database Engineer
-- [x] Write migration: enum types and helper functions
-- [x] Write migration: organizations table
-- [x] Write migration: users table with GRC roles
-- [x] Write migration: refresh_tokens table
-- [x] Write migration: audit_log table
-- [x] Write seed data (demo org, users for each GRC role)
+- [ ] Write migration: framework-related enums (compliance_framework, framework_status, control_category, control_type, implementation_status)
+- [ ] Write migration: frameworks table
+- [ ] Write migration: framework_versions table
+- [ ] Write migration: requirements table
+- [ ] Write migration: controls table
+- [ ] Write migration: control_mappings table (cross-framework relationships)
+- [ ] Write migration: org_frameworks table (organization framework activations)
+- [ ] Write migration: requirement_scopes table
+- [ ] Write seed data: SOC 2, ISO 27001, PCI DSS v4.0.1, GDPR, CCPA frameworks
+- [ ] Write seed data: 300+ control library mapped to frameworks
 
 ### Backend Developer
-- [x] Go module init, directory structure, Gin setup
-- [x] Config package (env-based)
-- [x] Database connection package
-- [x] Redis connection package
-- [x] JWT auth: register, login, refresh, logout
-- [x] Change password endpoint
-- [x] RBAC middleware (GRC roles from spec §1.2)
-- [x] Organization CRUD
-- [x] User management (list, get, update, deactivate)
-- [x] User role assignment/revocation
-- [x] Health endpoints (/health, /ready)
-- [x] Audit logging middleware
-- [x] Dockerfile
-- [x] docker-compose.yml (postgres, redis, api, dashboard)
-- [x] Unit tests for auth handlers
-- [x] Unit tests for user handlers
+- [ ] Framework CRUD endpoints (list, get, create, update, deactivate)
+- [ ] Framework version management endpoints
+- [ ] Org framework activation/deactivation
+- [ ] Control CRUD endpoints (list, get, create, update, archive)
+- [ ] Control search/filter (by category, type, framework)
+- [ ] Requirement listing by framework
+- [ ] Requirement scoping endpoints (apply/remove scopes to requirements)
+- [ ] Cross-framework control mapping endpoints
+- [ ] Control mapping matrix endpoint (shows shared controls across frameworks)
+- [ ] Coverage gap analysis endpoint (activated frameworks vs implemented controls)
+- [ ] Bulk operations: bulk activate frameworks, bulk map controls
+- [ ] Statistics endpoints: framework coverage %, control distribution
+- [ ] Unit tests for framework handlers
+- [ ] Unit tests for control handlers
+- [ ] Update audit_action enum migration to include framework/control actions
 
 ### Frontend Developer
-- [x] Next.js 14 project with shadcn/ui + Tailwind
-- [x] Auth pages (login, register)
-- [x] Auth context + token management (lib/auth.ts)
-- [x] App layout with sidebar
-- [x] Role-based navigation
-- [x] Dashboard home (placeholder cards)
-- [x] User management page
-- [x] Organization settings page
-- [x] Dockerfile
-- [x] .dockerignore
+- [ ] Framework list page (activated + available frameworks)
+- [ ] Framework detail page (requirements, mapped controls, coverage %)
+- [ ] Framework activation modal
+- [ ] Control library browser (searchable/filterable table)
+- [ ] Control detail page (description, frameworks, requirements, mappings)
+- [ ] Control mapping matrix view (heatmap of shared controls)
+- [ ] Requirement scoping interface (include/exclude requirements)
+- [ ] Coverage dashboard (compliance posture per framework)
+- [ ] Bulk operations UI (multi-select + actions)
 
 ### Code Reviewer
-- [x] Review Go API code (auth handlers, middleware, config)
-- [x] Review database migrations and seed data
-- [x] Review dashboard code (auth, layout, components)
-- [x] Security audit (JWT implementation, RBAC, input validation, SQL injection)
-- [x] Check multi-tenancy isolation (org_id scoping on all queries)
-- [x] File GitHub issues for critical/high findings
-- [x] Write docs/sprints/sprint-1/CODE_REVIEW.md
+- [ ] Review Go API code (framework handlers, control handlers, business logic)
+- [ ] Review database migrations (7 new tables, 5 enums, indexes, constraints)
+- [ ] Review dashboard code (framework pages, control browser, mapping matrix)
+- [ ] Security audit: org_id scoping on all framework/control queries
+- [ ] Check multi-tenancy isolation (orgs can't see each other's custom controls)
+- [ ] Verify framework versioning logic (no breaking changes to active frameworks)
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-2/CODE_REVIEW.md
 
 ### QA Engineer
-- [x] Verify all API tests pass
-- [x] Verify Docker compose starts all services healthy
-- [x] Test auth flow (register → login → refresh → logout)
-- [x] Test RBAC (each role sees correct data)
-- [x] Test dashboard builds and renders
+- [ ] Verify all API tests pass
+- [ ] Test framework CRUD (create → activate → deactivate)
+- [ ] Test control mapping (create controls → map to frameworks → verify matrix)
+- [ ] Test requirement scoping (include/exclude requirements for org)
+- [ ] Test coverage gap analysis (activate multiple frameworks → check gaps)
+- [ ] Test bulk operations (bulk activate 3 frameworks, bulk map 10 controls)
+- [ ] Verify dashboard renders framework list, control library, mapping matrix
+- [ ] Write docs/sprints/sprint-2/QA_REPORT.md
 
 ## Sprint Progress
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 5/5 (100%) | ✅ DONE → 🔄 ENABLED | Sprint 1 complete. Now enabled to pre-design Sprint 2 (sprint at 75% threshold) |
-| DBE | 6/6 (100%) | ✅ DONE → 💤 DISABLED | All migrations + seeds complete. Disabled per lifecycle rules. |
-| DEV-BE | 16/16 (100%) | ✅ DONE → 💤 DISABLED | All API code, tests, Docker complete. Disabled per lifecycle rules. |
-| DEV-FE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | All dashboard pages, auth, sidebar, Docker complete. Disabled per lifecycle rules. |
-| CR | 7/7 (100%) | ✅ DONE → 💤 DISABLED | Security audit complete — APPROVED. Disabled per lifecycle rules. |
-| QA | 5/5 (100%) | ✅ DONE → 💤 DISABLED | All integration tests passed. Sprint 1 APPROVED. Disabled per lifecycle rules. |
+| SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
+| DBE | 0/10 (0%) | 🔄 ENABLED → TRIGGERED | Migrations + seeds for 7 tables, 5 enums. CRITICAL PATH. |
+| DEV-BE | 0/15 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for DBE migrations. |
+| DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for DEV-BE endpoints. |
+| CR | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for code to review. |
+| QA | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for implementation. |
 
-**Overall Sprint Completion:** 49/49 tasks (100%)
+**Overall Sprint Completion:** 4/54 tasks (7%)
 
 ## Dependency Chain Status
 ```
-SA [DONE → PRE-DESIGNING SPRINT 2] → DBE [DONE] → DEV-BE [DONE] → CR [DONE]
-                                                              ↘ DEV-FE [DONE] → QA [DONE]
+SA [DONE] → DBE [ACTIVE → CRITICAL PATH] → DEV-BE [BLOCKED] → CR [BLOCKED]
+                                                             ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
 ## Blockers
-**NONE:** Sprint 1 complete (100%). All agents disabled except SA (pre-designing Sprint 2).
+**NONE:** Sprint 2 just started. DBE is active and unblocked.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -106,3 +111,4 @@ SA [DONE → PRE-DESIGNING SPRINT 2] → DBE [DONE] → DEV-BE [DONE] → CR [DO
 | 2026-02-20 08:50 | PM | Sprint 1 at 75% completion threshold. Agent lifecycle update: SA ENABLED (pre-design Sprint 2), DBE/DEV-BE/DEV-FE/CR DISABLED (work complete), QA ENABLED (ready for integration testing). Triggered SA and QA to run immediately. |
 | 2026-02-20 08:55 | SA | Sprint 2 pre-design complete: SCHEMA.md (7 tables: frameworks, framework_versions, requirements, org_frameworks, requirement_scopes, controls, control_mappings + 5 new enums + audit_action extensions) and API_SPEC.md (25 endpoints covering framework catalog, org activation, controls CRUD, cross-framework mapping matrix, coverage gap analysis, requirement scoping, bulk ops, and statistics). |
 | 2026-02-20 09:05 | QA | Sprint 1 testing complete: All 5 QA tasks passed. 30/30 unit tests passing, dashboard builds clean, Docker services healthy, auth flow verified, RBAC enforced correctly, multi-tenancy isolation working. 2 environmental findings (port conflict + manual migrations) documented as non-blocking. QA_REPORT.md published. Sprint 1 APPROVED FOR DEPLOYMENT. |
+| 2026-02-20 09:50 | PM | **Sprint 1 COMPLETE (100%).** Sprint transition: advanced to Sprint 2. ALL agents disabled. DBE enabled and triggered to start Sprint 2 migrations (7 tables, 5 enums, 300+ control library seeds). |
