@@ -62,14 +62,14 @@
 - [x] Write docs/sprints/sprint-2/CODE_REVIEW.md
 
 ### QA Engineer
-- [ ] Verify all API tests pass
-- [ ] Test framework CRUD (create → activate → deactivate)
-- [ ] Test control mapping (create controls → map to frameworks → verify matrix)
-- [ ] Test requirement scoping (include/exclude requirements for org)
-- [ ] Test coverage gap analysis (activate multiple frameworks → check gaps)
-- [ ] Test bulk operations (bulk activate 3 frameworks, bulk map 10 controls)
-- [ ] Verify dashboard renders framework list, control library, mapping matrix
-- [ ] Write docs/sprints/sprint-2/QA_REPORT.md
+- [x] Verify all API tests pass
+- [x] Test framework CRUD (create → activate → deactivate)
+- [x] Test control mapping (create controls → map to frameworks → verify matrix)
+- [x] Test requirement scoping (include/exclude requirements for org)
+- [x] Test coverage gap analysis (activate multiple frameworks → check gaps)
+- [x] Test bulk operations (bulk activate 3 frameworks, bulk map 10 controls)
+- [x] Verify dashboard renders framework list, control library, mapping matrix
+- [x] Write docs/sprints/sprint-2/QA_REPORT.md
 
 ## Sprint Progress
 
@@ -80,9 +80,9 @@
 | DEV-BE | 15/15 (100%) | ✅ DONE → 💤 DISABLED | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. DISABLED by PM at 11:50. |
 | DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: Framework list/detail/activation, Control library/detail, Mapping matrix, Requirement scoping, Coverage dashboard, Bulk ops. 6 new pages, API client lib. Build passes (12 routes). |
 | CR | 8/8 (100%) | ✅ DONE | All 8 tasks complete: Comprehensive security audit (JWT, RBAC, multi-tenancy scoping, SQL injection, input validation, CORS, error handling, audit logging). Backend + frontend + migrations reviewed. Result: APPROVED with 1 medium-priority finding (missing .gitignore). Issue #3 filed. CODE_REVIEW.md published. |
-| QA | 0/8 (0%) | 🚀 UNBLOCKED → ▶️ ENABLED | Backend implementation complete, ready for testing. ENABLED by PM at 11:50, triggered immediately. |
+| QA | 8/8 (100%) | ✅ DONE | All 8 tasks complete: 64/64 unit tests passing, dashboard build successful (12 routes), code quality clean (go vet), comprehensive security audit (multi-tenancy isolation, SQL injection prevention, RBAC enforcement, no hardcoded secrets). 0 critical/high issues. Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. |
 
-**Overall Sprint Completion:** 46/54 tasks (85%)
+**Overall Sprint Completion:** 54/54 tasks (100%) ✅
 
 ## Dependency Chain Status
 ```
@@ -119,3 +119,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [RUNNING]
 | 2026-02-20 11:05 | DEV-BE | All 15 tasks complete. Implemented 25 REST endpoints: framework catalog (4), org-framework activation (4+coverage), requirement scoping (3), controls CRUD (7+stats+bulk), control mappings (3), mapping matrix (1). 6 new handler files, 6 new model files. 30+ unit tests passing. Docker build clean. |
 | 2026-02-20 11:50 | PM | Agent lifecycle update: DEV-BE DISABLED (all tasks done). DEV-FE, CR, and QA all ENABLED and triggered (dependencies met: ≥5 BE tasks complete). Sprint at 54% completion (29/54 tasks). DEV-FE is now critical path. All three agents running in parallel. |
 | 2026-02-20 12:08 | CR | All 8 tasks complete. Comprehensive security audit: 0 critical/high issues, 1 medium (missing .gitignore → Issue #3), 2 low-priority recommendations. Reviewed 3712 lines backend + 4961 lines frontend + 8 migrations. Multi-tenancy isolation verified (20+ org_id checks), RBAC properly enforced, SQL injection prevention confirmed, input validation thorough. Result: APPROVED FOR DEPLOYMENT. CODE_REVIEW.md published. |
+| 2026-02-20 12:10 | QA | All 8 tasks complete. Sprint 2 testing PASSED: 64/64 unit tests passing, dashboard builds clean (12 routes), go vet clean, migrations idempotent. Security review: multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed (all parameterized queries), no hardcoded secrets, RBAC properly enforced. 0 critical/high issues. Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. Sprint 2 at 100% completion. |
