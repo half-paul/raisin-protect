@@ -429,3 +429,335 @@ export function deleteControlMapping(controlId: string, mappingId: string) {
 export function getMappingMatrix(params?: Record<string, string>) {
   return apiGet<MappingMatrixData>('/api/v1/mapping-matrix', params);
 }
+
+// ========== Evidence Types ==========
+
+export type EvidenceType =
+  | 'screenshot'
+  | 'api_response'
+  | 'configuration_export'
+  | 'log_sample'
+  | 'policy_document'
+  | 'access_list'
+  | 'vulnerability_report'
+  | 'certificate'
+  | 'training_record'
+  | 'penetration_test'
+  | 'audit_report'
+  | 'other';
+
+export type EvidenceStatus =
+  | 'draft'
+  | 'pending_review'
+  | 'approved'
+  | 'rejected'
+  | 'expired'
+  | 'superseded';
+
+export type CollectionMethod =
+  | 'manual_upload'
+  | 'automated_pull'
+  | 'api_ingestion'
+  | 'screenshot_capture'
+  | 'system_export';
+
+export type FreshnessStatus = 'fresh' | 'expiring_soon' | 'expired';
+
+export type EvidenceVerdict = 'sufficient' | 'partial' | 'insufficient' | 'needs_update';
+
+export type LinkStrength = 'primary' | 'supporting' | 'supplementary';
+
+export interface EvidenceArtifact {
+  id: string;
+  title: string;
+  description?: string;
+  evidence_type: EvidenceType;
+  status: EvidenceStatus;
+  collection_method: CollectionMethod;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  object_key?: string;
+  checksum_sha256?: string;
+  version: number;
+  is_current: boolean;
+  total_versions?: number;
+  collection_date: string;
+  expires_at: string | null;
+  freshness_period_days: number | null;
+  freshness_status: FreshnessStatus | null;
+  days_until_expiry?: number | null;
+  source_system: string | null;
+  uploaded_by: { id: string; name: string; email?: string };
+  tags: string[];
+  metadata?: Record<string, unknown>;
+  links_count?: number;
+  evaluations_count?: number;
+  links?: EvidenceLink[];
+  latest_evaluation?: {
+    id?: string;
+    verdict: EvidenceVerdict;
+    confidence: string;
+    comments?: string;
+    evaluated_by?: { id: string; name: string };
+    evaluated_at?: string;
+    created_at?: string;
+  } | null;
+  parent_artifact_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EvidenceLink {
+  id: string;
+  target_type: 'control' | 'requirement';
+  control?: {
+    id: string;
+    identifier: string;
+    title: string;
+    category?: string;
+    status?: string;
+  } | null;
+  requirement?: {
+    id: string;
+    identifier: string;
+    title: string;
+    framework?: string;
+    framework_version?: string;
+  } | null;
+  strength: LinkStrength;
+  notes: string | null;
+  linked_by?: { id: string; name: string };
+  created_at: string;
+}
+
+export interface EvidenceEvaluation {
+  id: string;
+  artifact_id?: string;
+  evidence_link_id?: string;
+  verdict: EvidenceVerdict;
+  confidence: string;
+  comments: string;
+  missing_elements: string[];
+  remediation_notes: string | null;
+  evidence_link?: {
+    id: string;
+    target_type: string;
+    control_identifier?: string;
+  } | null;
+  evaluated_by: { id: string; name: string; role?: string };
+  created_at: string;
+}
+
+export interface EvidenceVersion {
+  id: string;
+  version: number;
+  is_current: boolean;
+  title: string;
+  status: EvidenceStatus;
+  file_name: string;
+  file_size: number;
+  collection_date: string;
+  uploaded_by: { id: string; name: string };
+  created_at: string;
+}
+
+export interface UploadInfo {
+  presigned_url: string;
+  method: string;
+  expires_in: number;
+  max_size: number;
+  content_type: string;
+}
+
+export interface StalenessAlert {
+  id: string;
+  title: string;
+  evidence_type: EvidenceType;
+  status: EvidenceStatus;
+  collection_date: string;
+  expires_at: string;
+  freshness_period_days: number;
+  alert_level: 'expired' | 'expiring_soon';
+  days_overdue?: number;
+  days_until_expiry?: number;
+  linked_controls: { id: string; identifier: string; title: string }[];
+  linked_controls_count: number;
+  uploaded_by: { id: string; name: string };
+}
+
+export interface StalenessSummary {
+  total_alerts: number;
+  expired: number;
+  expiring_soon: number;
+  affected_controls: number;
+}
+
+export interface FreshnessSummary {
+  total_evidence: number;
+  by_freshness: { fresh: number; expiring_soon: number; expired: number; no_expiry: number };
+  by_status: Record<string, number>;
+  by_type: Record<string, number>;
+  coverage: {
+    total_active_controls: number;
+    controls_with_evidence: number;
+    controls_without_evidence: number;
+    evidence_coverage_pct: number;
+  };
+}
+
+export interface ControlEvidence {
+  control: { id: string; identifier: string; title: string };
+  evidence_summary: {
+    total: number;
+    approved: number;
+    pending_review: number;
+    fresh: number;
+    expiring_soon: number;
+    expired: number;
+  };
+  evidence: (EvidenceArtifact & {
+    link: { id: string; strength: string; notes: string | null };
+  })[];
+}
+
+// ========== Evidence API Functions ==========
+
+export function listEvidence(params?: Record<string, string>) {
+  return apiGet<EvidenceArtifact[]>('/api/v1/evidence', params);
+}
+
+export function getEvidence(id: string) {
+  return apiGet<EvidenceArtifact>(`/api/v1/evidence/${id}`);
+}
+
+export function createEvidence(body: {
+  title: string;
+  description?: string;
+  evidence_type: string;
+  collection_method?: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  collection_date: string;
+  freshness_period_days?: number;
+  source_system?: string;
+  tags?: string[];
+}) {
+  return apiPost<EvidenceArtifact & { upload: UploadInfo }>('/api/v1/evidence', body);
+}
+
+export function updateEvidence(id: string, body: Partial<{
+  title: string;
+  description: string;
+  evidence_type: string;
+  collection_date: string;
+  freshness_period_days: number;
+  source_system: string;
+  tags: string[];
+}>) {
+  return apiPut<EvidenceArtifact>(`/api/v1/evidence/${id}`, body);
+}
+
+export function deleteEvidence(id: string) {
+  return apiDelete<{ id: string; status: string; message: string }>(`/api/v1/evidence/${id}`);
+}
+
+export function confirmEvidenceUpload(id: string, body?: { checksum_sha256?: string }) {
+  return apiPost<{ id: string; status: string; file_verified: boolean; message: string }>(
+    `/api/v1/evidence/${id}/confirm`,
+    body || {}
+  );
+}
+
+export function getUploadURL(id: string) {
+  return apiPost<{ id: string; upload: UploadInfo }>(`/api/v1/evidence/${id}/upload`, {});
+}
+
+export function getDownloadURL(id: string, version?: number) {
+  const params: Record<string, string> = {};
+  if (version) params.version = String(version);
+  return apiGet<{ id: string; file_name: string; file_size: number; mime_type: string; download: { presigned_url: string; method: string; expires_in: number } }>(
+    `/api/v1/evidence/${id}/download`,
+    params
+  );
+}
+
+export function changeEvidenceStatus(id: string, status: string) {
+  return apiPut<{ id: string; status: string; previous_status: string; message: string }>(
+    `/api/v1/evidence/${id}/status`,
+    { status }
+  );
+}
+
+export function createEvidenceVersion(id: string, body: {
+  title?: string;
+  description?: string;
+  file_name: string;
+  file_size: number;
+  mime_type: string;
+  collection_date: string;
+  freshness_period_days?: number;
+  tags?: string[];
+}) {
+  return apiPost<EvidenceArtifact & { previous_version: { id: string; version: number; status: string }; upload: UploadInfo }>(
+    `/api/v1/evidence/${id}/versions`,
+    body
+  );
+}
+
+export function listEvidenceVersions(id: string) {
+  return apiGet<EvidenceVersion[]>(`/api/v1/evidence/${id}/versions`);
+}
+
+export function listEvidenceLinks(id: string) {
+  return apiGet<EvidenceLink[]>(`/api/v1/evidence/${id}/links`);
+}
+
+export function createEvidenceLinks(id: string, links: {
+  target_type: string;
+  control_id?: string;
+  requirement_id?: string;
+  strength?: string;
+  notes?: string;
+}[]) {
+  if (links.length === 1) {
+    return apiPost<{ created: number; links: EvidenceLink[] }>(`/api/v1/evidence/${id}/links`, links[0]);
+  }
+  return apiPost<{ created: number; links: EvidenceLink[] }>(`/api/v1/evidence/${id}/links`, { links });
+}
+
+export function deleteEvidenceLink(evidenceId: string, linkId: string) {
+  return apiDelete<{ message: string }>(`/api/v1/evidence/${evidenceId}/links/${linkId}`);
+}
+
+export function listControlEvidence(controlId: string, params?: Record<string, string>) {
+  return apiGet<ControlEvidence>(`/api/v1/controls/${controlId}/evidence`, params);
+}
+
+export function getStalenessAlerts(params?: Record<string, string>) {
+  return apiGet<{ summary: StalenessSummary; alerts: StalenessAlert[] }>('/api/v1/evidence/staleness', params);
+}
+
+export function getFreshnessSummary() {
+  return apiGet<FreshnessSummary>('/api/v1/evidence/freshness-summary');
+}
+
+export function listEvidenceEvaluations(id: string, params?: Record<string, string>) {
+  return apiGet<EvidenceEvaluation[]>(`/api/v1/evidence/${id}/evaluations`, params);
+}
+
+export function createEvidenceEvaluation(id: string, body: {
+  evidence_link_id?: string;
+  verdict: string;
+  confidence?: string;
+  comments: string;
+  missing_elements?: string[];
+  remediation_notes?: string;
+}) {
+  return apiPost<EvidenceEvaluation>(`/api/v1/evidence/${id}/evaluations`, body);
+}
+
+export function searchEvidence(params?: Record<string, string>) {
+  return apiGet<EvidenceArtifact[]>('/api/v1/evidence/search', params);
+}

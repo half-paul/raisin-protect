@@ -97,6 +97,12 @@ const navigation: NavSection[] = [
         icon: ClipboardCheck,
         roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
       },
+      {
+        label: 'Staleness Alerts',
+        href: '/staleness',
+        icon: AlertTriangle,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
     ],
   },
   {

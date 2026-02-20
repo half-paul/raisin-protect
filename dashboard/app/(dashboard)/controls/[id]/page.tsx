@@ -28,8 +28,14 @@ import {
   AlertTriangle,
   Archive,
   Layers,
+  ClipboardCheck,
 } from 'lucide-react';
-import { ControlDetail, getControl } from '@/lib/api';
+import { ControlDetail, ControlEvidence, getControl, listControlEvidence } from '@/lib/api';
+import {
+  FreshnessBadge,
+  EVIDENCE_TYPE_LABELS, EVIDENCE_STATUS_LABELS, EVIDENCE_STATUS_COLORS,
+  VERDICT_CONFIG, formatFileSize,
+} from '@/components/evidence/freshness-badge';
 
 const STATUS_CONFIG: Record<string, { label: string; icon: typeof CheckCircle2; color: string }> = {
   draft: { label: 'Draft', icon: Clock, color: 'text-amber-600 dark:text-amber-400' },
@@ -63,14 +69,19 @@ export default function ControlDetailPage() {
   const controlId = params.id as string;
 
   const [control, setControl] = useState<ControlDetail | null>(null);
+  const [controlEvidence, setControlEvidence] = useState<ControlEvidence | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
 
   const fetchControl = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getControl(controlId);
-      setControl(res.data);
+      const [ctrlRes, evRes] = await Promise.all([
+        getControl(controlId),
+        listControlEvidence(controlId).catch(() => ({ data: null })),
+      ]);
+      setControl(ctrlRes.data);
+      setControlEvidence(evRes.data);
     } catch {
       router.push('/controls');
     } finally {
@@ -181,6 +192,10 @@ export default function ControlDetailPage() {
           <TabsTrigger value="mappings">
             <Link2 className="h-4 w-4 mr-1" />
             Mappings ({control.mappings?.length || 0})
+          </TabsTrigger>
+          <TabsTrigger value="evidence">
+            <ClipboardCheck className="h-4 w-4 mr-1" />
+            Evidence ({controlEvidence?.evidence_summary?.total || 0})
           </TabsTrigger>
         </TabsList>
 
@@ -317,6 +332,122 @@ export default function ControlDetailPage() {
                 </CardContent>
               </Card>
             ))
+          )}
+        </TabsContent>
+
+        {/* Evidence Tab (Sprint 3: linked evidence for this control) */}
+        <TabsContent value="evidence" className="space-y-6 mt-4">
+          {controlEvidence?.evidence_summary && (
+            <div className="grid gap-4 md:grid-cols-5">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-2xl font-bold">{controlEvidence.evidence_summary.total}</div>
+                  <p className="text-xs text-muted-foreground">Total Evidence</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {controlEvidence.evidence_summary.approved}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Approved</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {controlEvidence.evidence_summary.pending_review}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Pending Review</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {controlEvidence.evidence_summary.fresh}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Fresh</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                    {controlEvidence.evidence_summary.expired}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Expired</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {(!controlEvidence?.evidence || controlEvidence.evidence.length === 0) ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                <ClipboardCheck className="h-12 w-12 mb-4 opacity-50" />
+                <p className="text-lg font-medium">No evidence linked</p>
+                <p className="text-sm">Link evidence from the Evidence Library to this control</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead className="w-[120px]">Type</TableHead>
+                      <TableHead className="w-[100px]">Status</TableHead>
+                      <TableHead className="w-[130px]">Freshness</TableHead>
+                      <TableHead className="w-[100px]">Strength</TableHead>
+                      <TableHead className="w-[100px]">Verdict</TableHead>
+                      <TableHead className="w-[100px]">Collected</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {controlEvidence.evidence.map((ev) => (
+                      <TableRow key={ev.id}>
+                        <TableCell>
+                          <Link href={`/evidence/${ev.id}`} className="hover:text-primary">
+                            <span className="text-sm font-medium line-clamp-1">{ev.title}</span>
+                          </Link>
+                          <span className="text-xs text-muted-foreground block">{ev.file_name}</span>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-xs">
+                            {EVIDENCE_TYPE_LABELS[ev.evidence_type] || ev.evidence_type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={`text-xs ${EVIDENCE_STATUS_COLORS[ev.status] || ''}`}>
+                            {EVIDENCE_STATUS_LABELS[ev.status] || ev.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <FreshnessBadge status={ev.freshness_status} daysUntilExpiry={ev.days_until_expiry} />
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-xs">
+                            {ev.link?.strength || '—'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {ev.latest_evaluation ? (
+                            <Badge variant="outline" className={`text-xs ${VERDICT_CONFIG[ev.latest_evaluation.verdict]?.className || ''}`}>
+                              {VERDICT_CONFIG[ev.latest_evaluation.verdict]?.label || ev.latest_evaluation.verdict}
+                            </Badge>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">Not evaluated</span>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {new Date(ev.collection_date).toLocaleDateString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           )}
         </TabsContent>
       </Tabs>

@@ -35,15 +35,15 @@
 - [x] Update docker-compose.yml to include MinIO service
 
 ### Frontend Developer
-- [ ] Evidence library page (searchable/filterable list)
-- [ ] Evidence upload interface (drag-and-drop, file browser)
-- [ ] Evidence detail page (metadata, version history, linked controls)
-- [ ] Evidence-to-control linking UI (modal or inline)
-- [ ] Control detail enhancement: show linked evidence
-- [ ] Evidence freshness indicators (badges: fresh, expiring soon, expired)
-- [ ] Staleness alert dashboard (list of expiring/expired evidence)
-- [ ] Evidence evaluation interface (review, approve, reject)
-- [ ] Evidence version comparison view
+- [x] Evidence library page (searchable/filterable list)
+- [x] Evidence upload interface (drag-and-drop, file browser)
+- [x] Evidence detail page (metadata, version history, linked controls)
+- [x] Evidence-to-control linking UI (modal or inline)
+- [x] Control detail enhancement: show linked evidence
+- [x] Evidence freshness indicators (badges: fresh, expiring soon, expired)
+- [x] Staleness alert dashboard (list of expiring/expired evidence)
+- [x] Evidence evaluation interface (review, approve, reject)
+- [x] Evidence version comparison view
 
 ### Code Reviewer
 - [ ] Review MinIO integration code (security of presigned URLs, bucket policies)
@@ -74,11 +74,11 @@
 | SA | 4/4 (100%) | 💤 DISABLED | Sprint 3 design complete. Will re-enable at 75% for Sprint 4 pre-design. |
 | DBE | 6/6 (100%) | 💤 DISABLED | 5 migrations (014-018) + seed data delivered. Enums, 3 tables, version tracking view + functions. |
 | DEV-BE | 13/13 (100%) | 💤 DISABLED | 21 REST endpoints, MinIO integration, 28 unit tests, Docker build clean. |
-| DEV-FE | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Dependencies met (13 BE tasks complete). Building evidence UI. |
+| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Evidence library, upload (drag-and-drop), detail page, linking UI, control enhancement, freshness badges, staleness alerts, evaluation interface, version comparison. Build passes (14 routes). |
 | CR | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Backend code ready for review (MinIO integration + evidence endpoints). |
 | QA | 0/9 (0%) | ⚡ ENABLED | Triggered at 14:50. Backend complete, ready for testing. |
 
-**Overall Sprint Completion:** 23/50 tasks (46%)
+**Overall Sprint Completion:** 32/50 tasks (64%)
 
 ## Dependency Chain Status
 ```
@@ -121,3 +121,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE]
 | 2026-02-20 13:50 | PM | Sprint 3 status update — 8% complete (4/50 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete, 6 migration tasks queued). All other agents remain disabled. Critical path: DBE (must deliver evidence schema before backend work begins). |
 | 2026-02-20 14:11 | DEV-BE | All 13 tasks complete. Implemented 21 REST endpoints: evidence CRUD (7), upload/download (3), versioning (2), linking (3), relationship queries (2), staleness/freshness (2), evaluations (2), advanced search (1). MinIO service layer with presigned URLs. 7 new handler files, 3 new model files, 1 service file. 28 evidence unit tests passing (84 total). Docker build clean. docker-compose.yml updated with MinIO service. |
 | 2026-02-20 14:50 | PM | Agent lifecycle update: SA/DBE/DEV-BE DISABLED (all tasks complete). DEV-FE/CR/QA ENABLED and triggered (dependencies met: 13 BE tasks complete). Sprint at 46% completion (23/50 tasks). Critical path: DEV-FE (9 dashboard pages), CR (MinIO + evidence backend review), QA (evidence upload/linking flows). All three agents running in parallel. |
+| 2026-02-20 14:55 | DEV-FE | All 9 tasks complete. Evidence library page (searchable/filterable with freshness summary cards), evidence upload (drag-and-drop + file browser with 3-step presigned URL flow), evidence detail page (metadata, tags, latest evaluation, 4-tab layout), evidence-to-control linking UI (search + select modal), control detail enhancement (Evidence tab with summary stats + linked evidence table), freshness badges (fresh/expiring_soon/expired with day counts), staleness alert dashboard (summary cards + urgency table + affected controls), evaluation interface (verdict/confidence/comments/missing elements/remediation), version comparison view (side-by-side metadata diff with change highlighting). Build passes clean (14 routes). New files: 6 pages, 1 shared component, 1 UI component. |
