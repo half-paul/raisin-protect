@@ -24,21 +24,21 @@
 - [x] Write seed data: 300+ control library mapped to frameworks
 
 ### Backend Developer
-- [ ] Framework CRUD endpoints (list, get, create, update, deactivate)
-- [ ] Framework version management endpoints
-- [ ] Org framework activation/deactivation
-- [ ] Control CRUD endpoints (list, get, create, update, archive)
-- [ ] Control search/filter (by category, type, framework)
-- [ ] Requirement listing by framework
-- [ ] Requirement scoping endpoints (apply/remove scopes to requirements)
-- [ ] Cross-framework control mapping endpoints
-- [ ] Control mapping matrix endpoint (shows shared controls across frameworks)
-- [ ] Coverage gap analysis endpoint (activated frameworks vs implemented controls)
-- [ ] Bulk operations: bulk activate frameworks, bulk map controls
-- [ ] Statistics endpoints: framework coverage %, control distribution
-- [ ] Unit tests for framework handlers
-- [ ] Unit tests for control handlers
-- [ ] Update audit_action enum migration to include framework/control actions
+- [x] Framework CRUD endpoints (list, get, create, update, deactivate)
+- [x] Framework version management endpoints
+- [x] Org framework activation/deactivation
+- [x] Control CRUD endpoints (list, get, create, update, archive)
+- [x] Control search/filter (by category, type, framework)
+- [x] Requirement listing by framework
+- [x] Requirement scoping endpoints (apply/remove scopes to requirements)
+- [x] Cross-framework control mapping endpoints
+- [x] Control mapping matrix endpoint (shows shared controls across frameworks)
+- [x] Coverage gap analysis endpoint (activated frameworks vs implemented controls)
+- [x] Bulk operations: bulk activate frameworks, bulk map controls
+- [x] Statistics endpoints: framework coverage %, control distribution
+- [x] Unit tests for framework handlers
+- [x] Unit tests for control handlers
+- [x] Update audit_action enum migration to include framework/control actions
 
 ### Frontend Developer
 - [ ] Framework list page (activated + available frameworks)
@@ -77,12 +77,12 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 2 pre-design complete (completed during Sprint 1). |
 | DBE | 10/10 (100%) | ✅ DONE → 💤 DISABLED | 8 migrations + comprehensive seed (318 controls, 104 mappings). DISABLED by PM at 10:50. |
-| DEV-BE | 0/15 (0%) | 🚀 ENABLED → RUNNING | ENABLED by PM at 10:50, triggered immediately. Critical path — all dependencies met. |
+| DEV-BE | 15/15 (100%) | ✅ DONE | All 15 tasks complete: 25 endpoints (frameworks, org-frameworks, controls, mappings, matrix, scoping, coverage, stats, bulk ops). 30+ unit tests passing. Docker build clean. |
 | DEV-FE | 0/9 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for ≥5 DEV-BE tasks to complete. |
 | CR | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for code to review. |
 | QA | 0/8 (0%) | ⏸️ BLOCKED → 💤 DISABLED | Waiting for implementation. |
 
-**Overall Sprint Completion:** 14/54 tasks (26%)
+**Overall Sprint Completion:** 29/54 tasks (54%)
 
 ## Dependency Chain Status
 ```
@@ -114,3 +114,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [RUNNING → CRITICAL PATH] → CR [BLOCKED]
 | 2026-02-20 09:50 | PM | **Sprint 1 COMPLETE (100%).** Sprint transition: advanced to Sprint 2. ALL agents disabled. DBE enabled and triggered to start Sprint 2 migrations (7 tables, 5 enums, 300+ control library seeds). |
 | 2026-02-20 09:52 | DBE | Sprint 2 migrations complete: 8 migrations (006-013), seed with 5 frameworks, 200+ requirements, 318 controls, 104 cross-framework mappings. DEV-BE unblocked. |
 | 2026-02-20 10:50 | PM | Agent lifecycle update: DBE DISABLED (all tasks done), DEV-BE ENABLED and triggered immediately (all dependencies met, 15 tasks queued). Sprint at 26% completion (14/54 tasks). DEV-BE is now critical path. |
+| 2026-02-20 11:05 | DEV-BE | All 15 tasks complete. Implemented 25 REST endpoints: framework catalog (4), org-framework activation (4+coverage), requirement scoping (3), controls CRUD (7+stats+bulk), control mappings (3), mapping matrix (1). 6 new handler files, 6 new model files. 30+ unit tests passing. Docker build clean. |

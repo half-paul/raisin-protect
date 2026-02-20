@@ -132,6 +132,50 @@ func main() {
 
 			// Audit log (admin + auditor)
 			protected.GET("/audit-log", middleware.RequireRoles(models.AuditViewRoles...), handlers.ListAuditLogs)
+
+			// === Sprint 2: Frameworks & Controls ===
+
+			// Framework catalog (system-level, read-only)
+			fw := protected.Group("/frameworks")
+			{
+				fw.GET("", handlers.ListFrameworks)
+				fw.GET("/:id", handlers.GetFramework)
+				fw.GET("/:id/versions/:vid", handlers.GetFrameworkVersion)
+				fw.GET("/:id/versions/:vid/requirements", handlers.ListRequirements)
+			}
+
+			// Org frameworks (per-org activation)
+			of := protected.Group("/org-frameworks")
+			{
+				of.GET("", handlers.ListOrgFrameworks)
+				of.POST("", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.ActivateFramework)
+				of.PUT("/:id", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.UpdateOrgFramework)
+				of.DELETE("/:id", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.DeactivateFramework)
+				of.GET("/:id/coverage", handlers.GetCoverage)
+				of.GET("/:id/scoping", handlers.ListScoping)
+				of.PUT("/:id/requirements/:rid/scope", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.SetScope)
+				of.DELETE("/:id/requirements/:rid/scope", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.ResetScope)
+			}
+
+			// Controls (per-org library)
+			ctrl := protected.Group("/controls")
+			{
+				ctrl.GET("", handlers.ListControls)
+				ctrl.POST("", middleware.RequireRoles(models.ControlCreateRoles...), handlers.CreateControl)
+				ctrl.GET("/stats", handlers.GetControlStats)
+				ctrl.POST("/bulk-status", middleware.RequireRoles(models.AdminRoles...), handlers.BulkControlStatus)
+				ctrl.GET("/:id", handlers.GetControl)
+				ctrl.PUT("/:id", handlers.UpdateControl) // owner check in handler
+				ctrl.PUT("/:id/owner", middleware.RequireRoles(models.AdminRoles...), handlers.ChangeControlOwner)
+				ctrl.PUT("/:id/status", middleware.RequireRoles(models.ControlStatusRoles...), handlers.ChangeControlStatus)
+				ctrl.DELETE("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.DeprecateControl)
+				ctrl.GET("/:id/mappings", handlers.ListControlMappings)
+				ctrl.POST("/:id/mappings", middleware.RequireRoles(models.ControlMappingRoles...), handlers.CreateControlMappings)
+				ctrl.DELETE("/:id/mappings/:mid", middleware.RequireRoles(models.ControlMappingRoles...), handlers.DeleteControlMapping)
+			}
+
+			// Mapping matrix
+			protected.GET("/mapping-matrix", handlers.GetMappingMatrix)
 		}
 	}
 
