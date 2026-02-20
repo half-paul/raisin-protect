@@ -86,10 +86,19 @@ SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED] → QA [BLOCKED
 ```
 
 ## Blockers
-**CRITICAL PATH:** Backend Developer (DEV-BE)
-- DBE complete — migrations and seed data ready
-- DEV-BE can now scaffold Go API, implement auth, and set up Docker
-- DEV-FE still blocked on DEV-BE API endpoints
+**CRITICAL PATH:** Backend Developer (DEV-BE) — ⚠️ STALLED
+- SA and DBE both complete — all prerequisites ready
+- DEV-BE has 16 tasks, 0 started
+- **STALLED:** DEV-BE is unblocked but has not committed any code yet
+- DEV-FE waiting on scaffolding + auth endpoints (needs 5+ BE tasks done)
+- CR and QA waiting for code to review/test
+
+**Action Required:** DEV-BE needs to start immediately. Focus on:
+1. Go module init and directory structure
+2. Config package and database connection
+3. Docker setup
+4. Auth endpoints (register, login, refresh, logout)
+5. Health endpoints
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -97,3 +106,5 @@ SA [DONE] → DBE [DONE] → DEV-BE [UNBLOCKED] → CR [BLOCKED] → QA [BLOCKED
 | 2026-02-20 03:22 | PM | Project plan and status created |
 | 2026-02-20 03:25 | SA | Sprint 1 schema, API spec, and Docker topology designed |
 | 2026-02-20 04:01 | PM | Sprint 1 status update — 8% complete, DBE is critical path |
+| 2026-02-20 ~03:45 | DBE | All migrations and seed data completed |
+| 2026-02-20 04:06 | PM | Sprint 1 status update — 19% complete, DEV-BE is critical path (STALLED) |
