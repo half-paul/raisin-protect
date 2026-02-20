@@ -128,6 +128,11 @@ Focusing on what's buildable as an MVP:
 **Job:** Run tests, verify endpoints, file bugs, check for regressions
 **Output:** Test results, bug reports in GitHub issues
 
+### 🔍 Code Reviewer (CR)
+**When:** Every 4h, after DEV-BE and DEV-FE have committed code
+**Job:** Review all new code for quality, security, correctness, and standards compliance
+**Output:** Review reports in `docs/sprints/sprint-N/CODE_REVIEW.md`, GitHub issues for critical findings
+
 ### 📋 Project Manager (PM)
 **When:** Every 6h
 **Job:** Track sprint progress, advance to next sprint when done, update STATUS.md
@@ -136,6 +141,13 @@ Focusing on what's buildable as an MVP:
 ---
 
 ## Coordination Protocol
+
+### Dependency Chain
+```
+SA → DBE → DEV-BE → CR → QA
+                ↘ DEV-FE → CR ↗
+```
+CR reviews code after DEV-BE/DEV-FE commit. QA tests after CR approves.
 
 ### File Structure
 ```
@@ -147,6 +159,7 @@ docs/
     └── sprint-N/
         ├── SCHEMA.md        — SA's database design
         ├── API_SPEC.md      — SA's endpoint specs
+        ├── CODE_REVIEW.md   — CR's code review findings
         └── REVIEW.md        — QA's review notes
 
 db/migrations/               — SQL migration files
@@ -175,9 +188,10 @@ docker-compose.yml
 
 ### Agent Rules
 1. **Read STATUS.md first** — know the current sprint and what's in progress
-2. **Check your dependencies** — SA needs nothing, DBE needs SCHEMA.md, DEV-BE needs migrations, DEV-FE needs API
+2. **Check your dependencies** — SA needs nothing, DBE needs SCHEMA.md, DEV-BE needs migrations, DEV-FE needs API, CR needs committed code
 3. **Do useful work** — If blocked on primary task, do secondary work (refactoring, tests, docs)
 4. **Mark progress** — Update TODO items in STATUS.md
 5. **Always test** — Run `go test ./...` and `npm run build` before committing
 6. **Always commit and push** — Every session should produce a commit
 7. **Don't duplicate** — Check git log for recent commits before starting
+8. **Address review findings** — DEV-BE and DEV-FE should check CODE_REVIEW.md for open issues before starting new work

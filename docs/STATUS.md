@@ -50,6 +50,15 @@
 - [ ] Dockerfile
 - [ ] .dockerignore
 
+### Code Reviewer
+- [ ] Review Go API code (auth handlers, middleware, config)
+- [ ] Review database migrations and seed data
+- [ ] Review dashboard code (auth, layout, components)
+- [ ] Security audit (JWT implementation, RBAC, input validation, SQL injection)
+- [ ] Check multi-tenancy isolation (org_id scoping on all queries)
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-1/CODE_REVIEW.md
+
 ### QA Engineer
 - [ ] Verify all API tests pass
 - [ ] Verify Docker compose starts all services healthy
