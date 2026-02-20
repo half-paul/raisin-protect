@@ -6,11 +6,11 @@
 ## Sprint 1 Tasks
 
 ### System Architect
-- [ ] Design Sprint 1 schema (organizations, users, roles, sessions)
-- [ ] Write Sprint 1 API spec (health, auth, users, org endpoints)
-- [ ] Define Docker service topology
-- [ ] Write docs/sprints/sprint-1/SCHEMA.md
-- [ ] Write docs/sprints/sprint-1/API_SPEC.md
+- [x] Design Sprint 1 schema (organizations, users, roles, sessions)
+- [x] Write Sprint 1 API spec (health, auth, users, org endpoints)
+- [x] Define Docker service topology
+- [x] Write docs/sprints/sprint-1/SCHEMA.md
+- [x] Write docs/sprints/sprint-1/API_SPEC.md
 
 ### Database Engineer
 - [ ] Write migration: enum types and helper functions
@@ -64,3 +64,4 @@ _(none)_
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
 | 2026-02-20 03:22 | PM | Project plan and status created |
+| 2026-02-20 03:25 | SA | Sprint 1 schema, API spec, and Docker topology designed |
