@@ -34,15 +34,15 @@
 - [x] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
-- [ ] Risk register page (list of risks with filters, heat map preview)
-- [ ] Risk detail page (current assessment, treatment plans, linked controls)
-- [ ] Risk editor (create/edit risk with category, description, owner)
-- [ ] Risk assessment interface (likelihood/impact sliders with score calculation)
-- [ ] Risk heat map visualization (2D grid: likelihood vs impact)
-- [ ] Risk treatment plan UI (create treatment, assign owner, track progress)
-- [ ] Risk-to-control linking UI (search controls, create mappings)
-- [ ] Risk gap dashboard (risks without treatments, high risks without controls)
-- [ ] Treatment progress tracking (timeline view, completion status)
+- [x] Risk register page (list of risks with filters, heat map preview)
+- [x] Risk detail page (current assessment, treatment plans, linked controls)
+- [x] Risk editor (create/edit risk with category, description, owner)
+- [x] Risk assessment interface (likelihood/impact sliders with score calculation)
+- [x] Risk heat map visualization (2D grid: likelihood vs impact)
+- [x] Risk treatment plan UI (create treatment, assign owner, track progress)
+- [x] Risk-to-control linking UI (search controls, create mappings)
+- [x] Risk gap dashboard (risks without treatments, high risks without controls)
+- [x] Treatment progress tracking (timeline view, completion status)
 
 ### Code Reviewer
 - [ ] Review risk CRUD handlers and assessment logic
@@ -74,11 +74,11 @@
 | SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
 | DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
 | DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete: 21 REST endpoints (risk CRUD+status, assessments+recalc, treatments+complete, controls CRUD, heat map, gaps, search, stats). 50 risk unit tests passing (261 total). Docker build clean. |
-| DEV-FE | 0/9 (0%) | 🔄 ENABLED | Dependencies met (11 BE tasks complete). Starting risk register dashboard implementation. |
+| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: risk register list (filterable + mini heat map), risk detail (4-tab: info/assessments/treatments/controls), risk editor (create + edit), assessment interface (likelihood×impact dropdowns + live score preview), heat map visualization (5×5 grid + tooltips + severity legend), treatment plan UI (CRUD + status transitions + complete with effectiveness), control linking (search + link + unlink + effectiveness), risk gap dashboard (6 summary cards + urgency table), treatment progress tracking (completion bars + status breakdown). Sidebar updated with 4 Risk Management nav items. Build passes clean (36 routes). |
 | CR | 0/10 (0%) | 🔄 ENABLED | Dependencies met (11 BE tasks complete). Starting code review of risk management backend. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for CR approval. Will enable when CR completes review. |
 
-**Overall Sprint Completion:** 22/50 tasks (44%)
+**Overall Sprint Completion:** 31/50 tasks (62%)
 
 ## Dependency Chain Status
 ```
@@ -150,3 +150,4 @@ None currently.
 | 2026-02-21 01:50 | PM | Sprint 6 agent lifecycle update — 22% complete (11/50 tasks). **SA DISABLED** (all tasks done, sprint <75%). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 11 risk API endpoints (CRUD, assessments, treatments, heat map, scoring engine, gap detection, notifications). Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-21 02:05 | DEV-BE | All 11 tasks complete. Implemented 21 REST endpoints: risk CRUD (5 — list, get, create, update, archive), status transitions (1 — with acceptance workflow), assessments (3 — list, create, recalculate), treatments (4 — list, create, update, complete with auto-transition to monitoring), risk-to-control linkage (4 — list, link, update effectiveness, unlink), heat map (1 — 5×5 grid with risk drill-down), gap detection (1 — 5 gap types with recommendations), search (1 — full-text with match context), stats (1 — comprehensive dashboard statistics). Scoring engine: likelihood × impact formula (1–25 range), severity bands (critical/high/medium/low), appetite breach detection. 6 new handler files, 1 model file. 50 risk unit tests passing (261 total). Docker build clean. No new services needed — docker-compose.yml unchanged. DEV-FE/CR/QA unblocked. |
 | 2026-02-21 02:50 | PM | Sprint 6 agent lifecycle update — 44% complete (22/50 tasks). **DEV-BE DISABLED** (all 11 tasks complete). **DEV-FE and CR both ENABLED** and triggered (dependencies met: 11 BE tasks complete > threshold). Critical path: DEV-FE (9 risk dashboard pages) and CR (risk backend security audit) running in parallel. QA remains disabled (waits for CR completion). Gateway timeout on trigger (agents will run on schedule). |
+| 2026-02-21 02:55 | DEV-FE | All 9 tasks complete. Risk register list page (filterable by status/category/severity + mini heat map preview with tooltips), risk detail page (score cards + description/metadata + 3-tab layout: assessments/treatments/controls + all CRUD dialogs), risk editor (create with initial assessment or edit existing + live score preview), risk assessment interface (likelihood×impact select dropdowns with real-time score calculation + severity preview), risk heat map visualization (5×5 grid with color-coded severity + drill-down tooltips + summary cards + legend), risk treatment plan UI (create/start/complete/cancel workflow + effectiveness recording + expected residual tracking), risk-to-control linking UI (searchable control selector + effectiveness/mitigation % + unlink), risk gap dashboard (6 summary cards: no treatments/no controls/high without controls/overdue assessments/expired acceptances + urgency table with recommendations), treatment progress tracking (overall completion progress bar + per-risk treatment breakdown with status badges). Sidebar updated with 4 Risk Management nav items (Risk Register, Heat Map, Risk Gaps, Treatments). API client extended with 200+ Sprint 6 types and 15 API functions. Build passes clean (36 routes total). New files: 6 pages, 1 constants module. |

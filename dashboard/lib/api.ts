@@ -1699,3 +1699,485 @@ export function searchPolicies(params: Record<string, string>) {
 export function getPolicyStats() {
   return apiGet<PolicyStats>('/api/v1/policies/stats');
 }
+
+// ========== Sprint 6: Risk Management Types ==========
+
+export type RiskCategory =
+  | 'cyber_security'
+  | 'operational'
+  | 'compliance'
+  | 'data_privacy'
+  | 'technology'
+  | 'third_party'
+  | 'financial'
+  | 'legal'
+  | 'reputational'
+  | 'hr_personnel'
+  | 'strategic'
+  | 'physical_security'
+  | 'environmental';
+
+export type RiskStatus =
+  | 'identified'
+  | 'open'
+  | 'assessing'
+  | 'treating'
+  | 'monitoring'
+  | 'accepted'
+  | 'closed'
+  | 'archived';
+
+export type LikelihoodLevel = 'rare' | 'unlikely' | 'possible' | 'likely' | 'almost_certain';
+export type ImpactLevel = 'negligible' | 'minor' | 'moderate' | 'major' | 'severe';
+export type RiskSeverity = 'critical' | 'high' | 'medium' | 'low';
+
+export type TreatmentType = 'mitigate' | 'accept' | 'transfer' | 'avoid';
+export type TreatmentStatus = 'planned' | 'in_progress' | 'implemented' | 'verified' | 'ineffective' | 'cancelled';
+export type ControlEffectiveness = 'effective' | 'partially_effective' | 'ineffective' | 'not_assessed';
+
+export type AssessmentType = 'inherent' | 'residual' | 'target';
+export type AssessmentStatus = 'overdue' | 'due_soon' | 'on_track' | 'no_schedule';
+
+export interface RiskScore {
+  likelihood?: LikelihoodLevel;
+  likelihood_score?: number;
+  impact?: ImpactLevel;
+  impact_score?: number;
+  score: number;
+  severity: RiskSeverity;
+}
+
+export interface RiskOwner {
+  id: string;
+  name: string;
+  email?: string;
+}
+
+export interface Risk {
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category: RiskCategory;
+  status: RiskStatus;
+  owner?: RiskOwner | null;
+  secondary_owner?: RiskOwner | null;
+  inherent_score?: RiskScore | null;
+  residual_score?: RiskScore | null;
+  risk_appetite_threshold?: number | null;
+  appetite_breached?: boolean;
+  acceptance?: {
+    accepted_at: string;
+    accepted_by: RiskOwner;
+    expiry: string;
+    justification: string;
+  } | null;
+  assessment_frequency_days?: number | null;
+  next_assessment_at?: string | null;
+  last_assessed_at?: string | null;
+  assessment_status?: AssessmentStatus;
+  source?: string | null;
+  affected_assets?: string[];
+  is_template?: boolean;
+  template_source?: string | null;
+  linked_controls?: {
+    id: string;
+    identifier: string;
+    title: string;
+    effectiveness: ControlEffectiveness;
+    mitigation_percentage: number;
+  }[];
+  linked_controls_count?: number;
+  treatment_summary?: {
+    total: number;
+    planned: number;
+    in_progress: number;
+    implemented: number;
+    verified: number;
+    cancelled: number;
+  };
+  active_treatments_count?: number;
+  latest_assessments?: {
+    inherent?: {
+      id: string;
+      assessment_date: string;
+      assessor: string;
+      justification: string;
+      valid_until: string;
+    } | null;
+    residual?: {
+      id: string;
+      assessment_date: string;
+      assessor: string;
+      justification: string;
+      valid_until: string;
+    } | null;
+  };
+  tags?: string[];
+  metadata?: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RiskAssessment {
+  id: string;
+  risk_id: string;
+  assessment_type: AssessmentType;
+  likelihood: LikelihoodLevel;
+  impact: ImpactLevel;
+  likelihood_score: number;
+  impact_score: number;
+  overall_score: number;
+  scoring_formula: string;
+  severity: RiskSeverity;
+  justification?: string;
+  assumptions?: string | null;
+  data_sources?: string[];
+  assessed_by: RiskOwner;
+  assessment_date: string;
+  valid_until?: string | null;
+  is_current: boolean;
+  superseded_by?: string | null;
+  created_at: string;
+}
+
+export interface RiskTreatment {
+  id: string;
+  risk_id: string;
+  treatment_type: TreatmentType;
+  title: string;
+  description?: string;
+  status: TreatmentStatus;
+  owner?: RiskOwner | null;
+  priority?: string;
+  due_date?: string | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+  estimated_effort_hours?: number | null;
+  actual_effort_hours?: number | null;
+  effectiveness_rating?: string | null;
+  effectiveness_notes?: string | null;
+  expected_residual?: {
+    likelihood: LikelihoodLevel;
+    impact: ImpactLevel;
+    score: number;
+  } | null;
+  target_control?: {
+    id: string;
+    identifier: string;
+    title: string;
+  } | null;
+  notes?: string | null;
+  created_by?: RiskOwner;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RiskControl {
+  id: string;
+  risk_control_id?: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category?: string;
+  status?: string;
+  effectiveness: ControlEffectiveness;
+  mitigation_percentage: number;
+  notes?: string | null;
+  last_effectiveness_review?: string | null;
+  reviewed_by?: RiskOwner | null;
+  linked_by?: RiskOwner | null;
+  linked_at?: string;
+  latest_test_status?: string | null;
+  frameworks?: string[];
+}
+
+export interface HeatMapCell {
+  likelihood: LikelihoodLevel;
+  likelihood_score: number;
+  impact: ImpactLevel;
+  impact_score: number;
+  score: number;
+  severity: RiskSeverity;
+  count: number;
+  risks: {
+    id: string;
+    identifier: string;
+    title: string;
+    status: RiskStatus;
+  }[];
+}
+
+export interface HeatMapData {
+  score_type: string;
+  grid: HeatMapCell[];
+  summary: {
+    total_risks: number;
+    by_severity: Record<RiskSeverity, number>;
+    average_score: number;
+    appetite_breaches: number;
+  };
+}
+
+export interface RiskGapItem {
+  risk: {
+    id: string;
+    identifier: string;
+    title: string;
+    category: RiskCategory;
+    status: RiskStatus;
+    residual_score: number;
+    severity: RiskSeverity;
+    owner?: RiskOwner | null;
+  };
+  gap_types: string[];
+  days_open: number;
+  recommendation: string;
+  acceptance_expiry?: string;
+  days_until_expiry?: number;
+}
+
+export interface RiskGapData {
+  summary: {
+    total_active_risks: number;
+    risks_without_treatments: number;
+    risks_without_controls: number;
+    high_risks_without_controls: number;
+    overdue_assessments: number;
+    expired_acceptances: number;
+  };
+  gaps: RiskGapItem[];
+}
+
+export interface RiskStats {
+  total_risks: number;
+  by_status: Record<string, number>;
+  by_category: Record<string, number>;
+  by_severity: Record<string, number>;
+  scoring_summary: {
+    average_inherent_score: number;
+    average_residual_score: number;
+    average_risk_reduction: number;
+    highest_residual?: {
+      id: string;
+      identifier: string;
+      title: string;
+      score: number;
+      severity: RiskSeverity;
+    };
+  };
+  treatment_summary: {
+    total_treatments: number;
+    planned: number;
+    in_progress: number;
+    implemented: number;
+    verified: number;
+    ineffective: number;
+    cancelled: number;
+    overdue: number;
+  };
+  control_coverage: {
+    risks_with_controls: number;
+    risks_without_controls: number;
+    average_controls_per_risk: number;
+  };
+  assessment_health: {
+    overdue_assessments: number;
+    due_within_30_days: number;
+    expired_acceptances: number;
+  };
+  appetite_summary: {
+    within_appetite: number;
+    breaching_appetite: number;
+    no_threshold_set: number;
+  };
+  templates_available: number;
+  recent_activity: {
+    risk_identifier: string;
+    action: string;
+    actor: string;
+    timestamp: string;
+  }[];
+}
+
+// ========== Sprint 6: Risk Management API Functions ==========
+
+// ---- Risks ----
+
+export function listRisks(params?: Record<string, string>) {
+  return apiGet<Risk[]>('/api/v1/risks', params);
+}
+
+export function getRisk(id: string) {
+  return apiGet<Risk>(`/api/v1/risks/${id}`);
+}
+
+export function createRisk(body: {
+  identifier: string;
+  title: string;
+  description?: string;
+  category: string;
+  owner_id?: string;
+  secondary_owner_id?: string;
+  risk_appetite_threshold?: number;
+  assessment_frequency_days?: number;
+  source?: string;
+  affected_assets?: string[];
+  tags?: string[];
+  initial_assessment?: {
+    inherent_likelihood: string;
+    inherent_impact: string;
+    residual_likelihood?: string;
+    residual_impact?: string;
+    justification?: string;
+  };
+}) {
+  return apiPost<Risk>('/api/v1/risks', body);
+}
+
+export function updateRisk(id: string, body: Partial<{
+  title: string;
+  description: string;
+  category: string;
+  owner_id: string;
+  secondary_owner_id: string | null;
+  risk_appetite_threshold: number;
+  assessment_frequency_days: number;
+  next_assessment_at: string;
+  source: string;
+  affected_assets: string[];
+  tags: string[];
+}>) {
+  return apiPut<Risk>(`/api/v1/risks/${id}`, body);
+}
+
+export function archiveRisk(id: string) {
+  return apiPost<{ id: string; identifier: string; status: string }>(`/api/v1/risks/${id}/archive`, {});
+}
+
+export function changeRiskStatus(id: string, body: {
+  status: string;
+  justification?: string;
+  acceptance_expiry?: string;
+}) {
+  return apiPut<Risk>(`/api/v1/risks/${id}/status`, body);
+}
+
+// ---- Risk Assessments ----
+
+export function listRiskAssessments(riskId: string, params?: Record<string, string>) {
+  return apiGet<RiskAssessment[]>(`/api/v1/risks/${riskId}/assessments`, params);
+}
+
+export function createRiskAssessment(riskId: string, body: {
+  assessment_type: string;
+  likelihood: string;
+  impact: string;
+  scoring_formula?: string;
+  justification?: string;
+  assumptions?: string;
+  data_sources?: string[];
+  valid_until?: string;
+}) {
+  return apiPost<RiskAssessment>(`/api/v1/risks/${riskId}/assessments`, body);
+}
+
+export function recalculateRisk(riskId: string) {
+  return apiPost<Risk>(`/api/v1/risks/${riskId}/recalculate`, {});
+}
+
+// ---- Risk Treatments ----
+
+export function listRiskTreatments(riskId: string, params?: Record<string, string>) {
+  return apiGet<RiskTreatment[]>(`/api/v1/risks/${riskId}/treatments`, params);
+}
+
+export function createRiskTreatment(riskId: string, body: {
+  treatment_type: string;
+  title: string;
+  description?: string;
+  owner_id?: string;
+  priority?: string;
+  due_date?: string;
+  estimated_effort_hours?: number;
+  expected_residual_likelihood?: string;
+  expected_residual_impact?: string;
+  target_control_id?: string;
+  notes?: string;
+}) {
+  return apiPost<RiskTreatment>(`/api/v1/risks/${riskId}/treatments`, body);
+}
+
+export function updateRiskTreatment(riskId: string, treatmentId: string, body: Partial<{
+  title: string;
+  description: string;
+  status: string;
+  owner_id: string;
+  priority: string;
+  due_date: string;
+  started_at: string;
+  estimated_effort_hours: number;
+  actual_effort_hours: number;
+  notes: string;
+}>) {
+  return apiPut<RiskTreatment>(`/api/v1/risks/${riskId}/treatments/${treatmentId}`, body);
+}
+
+export function completeRiskTreatment(riskId: string, treatmentId: string, body?: {
+  actual_effort_hours?: number;
+  effectiveness_rating?: string;
+  effectiveness_notes?: string;
+}) {
+  return apiPost<RiskTreatment>(`/api/v1/risks/${riskId}/treatments/${treatmentId}/complete`, body || {});
+}
+
+// ---- Risk Controls ----
+
+export function listRiskControls(riskId: string) {
+  return apiGet<RiskControl[]>(`/api/v1/risks/${riskId}/controls`);
+}
+
+export function linkRiskControl(riskId: string, body: {
+  control_id: string;
+  effectiveness?: string;
+  mitigation_percentage?: number;
+  notes?: string;
+}) {
+  return apiPost<RiskControl>(`/api/v1/risks/${riskId}/controls`, body);
+}
+
+export function updateRiskControlEffectiveness(riskId: string, controlId: string, body: {
+  effectiveness?: string;
+  mitigation_percentage?: number;
+  notes?: string;
+}) {
+  return apiPut<RiskControl>(`/api/v1/risks/${riskId}/controls/${controlId}`, body);
+}
+
+export function unlinkRiskControl(riskId: string, controlId: string) {
+  return apiDelete<{ message: string }>(`/api/v1/risks/${riskId}/controls/${controlId}`);
+}
+
+// ---- Risk Heat Map ----
+
+export function getRiskHeatMap(params?: Record<string, string>) {
+  return apiGet<HeatMapData>('/api/v1/risks/heat-map', params);
+}
+
+// ---- Risk Gaps ----
+
+export function getRiskGaps(params?: Record<string, string>) {
+  return apiGet<RiskGapData>('/api/v1/risks/gaps', params);
+}
+
+// ---- Risk Search ----
+
+export function searchRisks(params: Record<string, string>) {
+  return apiGet<Risk[]>('/api/v1/risks/search', params);
+}
+
+// ---- Risk Stats ----
+
+export function getRiskStats() {
+  return apiGet<RiskStats>('/api/v1/risks/stats');
+}

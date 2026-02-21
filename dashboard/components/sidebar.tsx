@@ -114,6 +114,35 @@ const navigation: NavSection[] = [
     ],
   },
   {
+    title: 'Risk Management',
+    items: [
+      {
+        label: 'Risk Register',
+        href: '/risks',
+        icon: AlertTriangle,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Heat Map',
+        href: '/risk-heatmap',
+        icon: Grid3X3,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Risk Gaps',
+        href: '/risk-gaps',
+        icon: Shield,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Treatments',
+        href: '/risk-treatments',
+        icon: Target,
+        roles: ['ciso', 'compliance_manager', 'security_engineer'],
+      },
+    ],
+  },
+  {
     title: 'Policy Management',
     items: [
       {
