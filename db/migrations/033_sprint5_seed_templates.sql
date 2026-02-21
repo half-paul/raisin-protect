@@ -14,35 +14,35 @@ INSERT INTO policies (
     id, org_id, identifier, title, description, category, status,
     is_template, template_framework_id, review_frequency_days, tags
 ) VALUES
-    ('pt000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
      'TPL-IS-001', 'Information Security Policy',
      'Comprehensive information security policy establishing the organization''s commitment to protecting information assets. Covers scope, objectives, roles, and responsibilities.',
      'information_security', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000001', 365,
      ARRAY['soc2', 'iso27001', 'pci', 'template', 'mandatory']),
 
-    ('pt000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
      'TPL-AC-001', 'Access Control Policy',
      'Defines requirements for user access management, authentication, authorization, and periodic access reviews.',
      'access_control', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000001', 365,
      ARRAY['soc2', 'iso27001', 'pci', 'template']),
 
-    ('pt000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
      'TPL-IR-001', 'Incident Response Policy',
      'Establishes procedures for detecting, reporting, assessing, responding to, and learning from security incidents.',
      'incident_response', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000001', 365,
      ARRAY['soc2', 'iso27001', 'pci', 'template']),
 
-    ('pt000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
      'TPL-CM-001', 'Change Management Policy',
      'Defines the process for requesting, reviewing, approving, implementing, and documenting changes to IT systems and infrastructure.',
      'change_management', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000001', 365,
      ARRAY['soc2', 'iso27001', 'template']),
 
-    ('pt000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
      'TPL-BC-001', 'Business Continuity & Disaster Recovery Policy',
      'Establishes the framework for maintaining business operations during and recovering from disruptive events.',
      'business_continuity', 'published', TRUE,
@@ -58,21 +58,21 @@ INSERT INTO policies (
     id, org_id, identifier, title, description, category, status,
     is_template, template_framework_id, review_frequency_days, tags
 ) VALUES
-    ('pt000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001',
      'TPL-NW-001', 'Network Security Policy',
      'Defines requirements for network segmentation, firewall configuration, and monitoring of network traffic to protect cardholder data environments.',
      'network_security', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000003', 365,
      ARRAY['pci', 'template', 'network']),
 
-    ('pt000000-0000-0000-0000-000000000011', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000011', 'a0000000-0000-0000-0000-000000000001',
      'TPL-EN-001', 'Encryption & Key Management Policy',
      'Establishes standards for cryptographic protection of sensitive data at rest and in transit, and procedures for cryptographic key lifecycle management.',
      'encryption', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000003', 365,
      ARRAY['pci', 'template', 'encryption']),
 
-    ('pt000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000001',
      'TPL-VM-001', 'Vulnerability Management Policy',
      'Defines the process for identifying, assessing, prioritizing, and remediating vulnerabilities in systems and applications.',
      'vulnerability_management', 'published', TRUE,
@@ -88,14 +88,14 @@ INSERT INTO policies (
     id, org_id, identifier, title, description, category, status,
     is_template, template_framework_id, review_frequency_days, tags
 ) VALUES
-    ('pt000000-0000-0000-0000-000000000020', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000020', 'a0000000-0000-0000-0000-000000000001',
      'TPL-AM-001', 'Asset Management Policy',
      'Defines requirements for identifying, classifying, and managing information assets throughout their lifecycle.',
      'asset_management', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000002', 365,
      ARRAY['iso27001', 'template', 'asset']),
 
-    ('pt000000-0000-0000-0000-000000000021', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000021', 'a0000000-0000-0000-0000-000000000001',
      'TPL-RM-001', 'Risk Management Policy',
      'Establishes the organization''s approach to identifying, assessing, treating, and monitoring information security risks.',
      'risk_management', 'published', TRUE,
@@ -111,14 +111,14 @@ INSERT INTO policies (
     id, org_id, identifier, title, description, category, status,
     is_template, template_framework_id, review_frequency_days, tags
 ) VALUES
-    ('pt000000-0000-0000-0000-000000000030', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000030', 'a0000000-0000-0000-0000-000000000001',
      'TPL-DP-001', 'Data Privacy Policy',
      'Establishes the organization''s approach to processing personal data in compliance with GDPR. Covers lawful basis, data subject rights, cross-border transfers, and DPIAs.',
      'data_privacy', 'published', TRUE,
      'f0000000-0000-0000-0000-000000000004', 365,
      ARRAY['gdpr', 'template', 'privacy']),
 
-    ('pt000000-0000-0000-0000-000000000031', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000031', 'a0000000-0000-0000-0000-000000000001',
      'TPL-DR-001', 'Data Retention & Disposal Policy',
      'Defines retention periods for different data categories and secure disposal procedures for data that has exceeded its retention period.',
      'data_retention', 'published', TRUE,
@@ -134,7 +134,7 @@ INSERT INTO policies (
     id, org_id, identifier, title, description, category, status,
     is_template, template_framework_id, review_frequency_days, tags
 ) VALUES
-    ('pt000000-0000-0000-0000-000000000040', 'a0000000-0000-0000-0000-000000000001',
+    ('b4000000-0000-0000-0000-000000000040', 'a0000000-0000-0000-0000-000000000001',
      'TPL-CP-001', 'Consumer Privacy Rights Policy',
      'Defines procedures for handling consumer privacy rights requests under CCPA/CPRA: right to know, delete, opt-out of sale, and correct.',
      'data_privacy', 'published', TRUE,
@@ -152,8 +152,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000001', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000001', 1, TRUE,
      '<h1>Information Security Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes the organization''s commitment to protecting information assets from threats, whether internal or external, deliberate or accidental. It provides the framework for setting objectives and establishing the overall direction and principles for information security.</p>
@@ -201,8 +201,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000002', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000002', 1, TRUE,
      '<h1>Access Control Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines the requirements for managing user access to information systems, applications, and data to ensure that access is granted based on the principle of least privilege and business need-to-know.</p>
@@ -255,8 +255,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000003', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000003', 1, TRUE,
      '<h1>Incident Response Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes procedures for detecting, reporting, assessing, responding to, and learning from security incidents to minimize damage and recovery time.</p>
@@ -304,8 +304,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000004', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000004', 1, TRUE,
      '<h1>Change Management Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines the process for requesting, reviewing, approving, implementing, and documenting changes to IT systems and infrastructure to minimize service disruption.</p>
@@ -342,8 +342,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000005', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000005', 1, TRUE,
      '<h1>Business Continuity &amp; Disaster Recovery Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes the framework for maintaining business operations during and recovering from disruptive events including natural disasters, cyber attacks, and infrastructure failures.</p>
@@ -379,8 +379,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000006', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000010', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000006', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000010', 1, TRUE,
      '<h1>Network Security Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines requirements for network segmentation, firewall configuration, and monitoring to protect cardholder data environments and critical infrastructure.</p>
@@ -416,8 +416,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000007', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000011', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000007', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000011', 1, TRUE,
      '<h1>Encryption &amp; Key Management Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes standards for cryptographic protection of sensitive data and procedures for key lifecycle management.</p>
@@ -457,8 +457,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000008', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000012', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000008', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000012', 1, TRUE,
      '<h1>Vulnerability Management Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines the process for identifying, assessing, prioritizing, and remediating vulnerabilities in systems and applications.</p>
@@ -494,8 +494,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000009', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000020', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000009', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000020', 1, TRUE,
      '<h1>Asset Management Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines requirements for identifying, classifying, and managing information assets throughout their lifecycle.</p>
@@ -531,8 +531,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000010a', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000021', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000010a', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000021', 1, TRUE,
      '<h1>Risk Management Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes the organization''s approach to identifying, assessing, treating, and monitoring information security risks.</p>
@@ -568,8 +568,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000011a', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000030', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000011a', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000030', 1, TRUE,
      '<h1>Data Privacy Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy establishes the organization''s approach to processing personal data in compliance with GDPR and other applicable privacy regulations.</p>
@@ -605,8 +605,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000012a', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000031', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000012a', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000031', 1, TRUE,
      '<h1>Data Retention &amp; Disposal Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines retention periods for different data categories and secure disposal procedures for data that has exceeded its retention period.</p>
@@ -643,8 +643,8 @@ INSERT INTO policy_versions (
     content, content_format, content_summary, change_summary, change_type,
     word_count, created_by
 ) VALUES
-    ('pv000000-0000-0000-0000-000000000013a', 'a0000000-0000-0000-0000-000000000001',
-     'pt000000-0000-0000-0000-000000000040', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000013a', 'a0000000-0000-0000-0000-000000000001',
+     'b4000000-0000-0000-0000-000000000040', 1, TRUE,
      '<h1>Consumer Privacy Rights Policy</h1>
 <h2>1. Purpose</h2>
 <p>This policy defines procedures for handling consumer privacy rights requests under CCPA/CPRA.</p>
@@ -680,41 +680,41 @@ ON CONFLICT (policy_id, version_number) DO NOTHING;
 -- UPDATE current_version_id FOR ALL TEMPLATES
 -- ============================================================================
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000001'
-WHERE id = 'pt000000-0000-0000-0000-000000000001' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000001'
+WHERE id = 'b4000000-0000-0000-0000-000000000001' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000002'
-WHERE id = 'pt000000-0000-0000-0000-000000000002' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000002'
+WHERE id = 'b4000000-0000-0000-0000-000000000002' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000003'
-WHERE id = 'pt000000-0000-0000-0000-000000000003' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000003'
+WHERE id = 'b4000000-0000-0000-0000-000000000003' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000004'
-WHERE id = 'pt000000-0000-0000-0000-000000000004' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000004'
+WHERE id = 'b4000000-0000-0000-0000-000000000004' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000005'
-WHERE id = 'pt000000-0000-0000-0000-000000000005' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000005'
+WHERE id = 'b4000000-0000-0000-0000-000000000005' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000006'
-WHERE id = 'pt000000-0000-0000-0000-000000000010' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000006'
+WHERE id = 'b4000000-0000-0000-0000-000000000010' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000007'
-WHERE id = 'pt000000-0000-0000-0000-000000000011' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000007'
+WHERE id = 'b4000000-0000-0000-0000-000000000011' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000008'
-WHERE id = 'pt000000-0000-0000-0000-000000000012' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000008'
+WHERE id = 'b4000000-0000-0000-0000-000000000012' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000009'
-WHERE id = 'pt000000-0000-0000-0000-000000000020' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000009'
+WHERE id = 'b4000000-0000-0000-0000-000000000020' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000010a'
-WHERE id = 'pt000000-0000-0000-0000-000000000021' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000010a'
+WHERE id = 'b4000000-0000-0000-0000-000000000021' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000011a'
-WHERE id = 'pt000000-0000-0000-0000-000000000030' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000011a'
+WHERE id = 'b4000000-0000-0000-0000-000000000030' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000012a'
-WHERE id = 'pt000000-0000-0000-0000-000000000031' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000012a'
+WHERE id = 'b4000000-0000-0000-0000-000000000031' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000013a'
-WHERE id = 'pt000000-0000-0000-0000-000000000040' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000013a'
+WHERE id = 'b4000000-0000-0000-0000-000000000040' AND current_version_id IS NULL;

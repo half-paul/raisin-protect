@@ -20,34 +20,34 @@ INSERT INTO policies (
     tags
 ) VALUES
     -- Published: Information Security Policy
-    ('pd000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
+    ('b2000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
      'POL-IS-001', 'Acme Corp Information Security Policy',
      'Acme Corporation''s information security policy. Establishes the framework for protecting company and customer information assets.',
      'information_security', 'published',
      'b0000000-0000-0000-0000-000000000004',  -- CISO (David)
-     FALSE, 'pt000000-0000-0000-0000-000000000001',
+     FALSE, 'b4000000-0000-0000-0000-000000000001',
      365, '2027-01-15', '2026-01-15',
      '2026-01-15 10:00:00+00', 1, '2026-01-15 10:30:00+00',
      ARRAY['mandatory', 'annual', 'all-employees']),
 
     -- Published: Access Control Policy
-    ('pd000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
+    ('b2000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
      'POL-AC-001', 'Acme Corp Access Control Policy',
      'Defines access management requirements for all Acme Corp systems and data.',
      'access_control', 'published',
      'b0000000-0000-0000-0000-000000000002',  -- Security Engineer (Bob)
-     FALSE, 'pt000000-0000-0000-0000-000000000002',
+     FALSE, 'b4000000-0000-0000-0000-000000000002',
      365, '2027-02-01', '2026-02-01',
      '2026-02-01 14:00:00+00', 1, '2026-02-01 14:30:00+00',
      ARRAY['annual', 'access', 'production']),
 
     -- In Review: Incident Response Plan
-    ('pd000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
+    ('b2000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
      'POL-IR-001', 'Acme Corp Incident Response Plan',
      'Procedures for detecting, reporting, and responding to security incidents at Acme Corp.',
      'incident_response', 'in_review',
      'b0000000-0000-0000-0000-000000000002',  -- Security Engineer (Bob)
-     FALSE, 'pt000000-0000-0000-0000-000000000003',
+     FALSE, 'b4000000-0000-0000-0000-000000000003',
      365, NULL, NULL,
      NULL, NULL, NULL,
      ARRAY['annual', 'incident', 'security'])
@@ -63,8 +63,8 @@ INSERT INTO policy_versions (
     word_count, created_by
 ) VALUES
     -- Info Security Policy v1
-    ('pv000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000001', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000010', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000001', 1, TRUE,
      '<h1>Acme Corporation — Information Security Policy</h1>
 <p>Version 1.0 — Effective January 15, 2026</p>
 
@@ -104,8 +104,8 @@ INSERT INTO policy_versions (
      'b0000000-0000-0000-0000-000000000001'),  -- Compliance Manager (Alice)
 
     -- Access Control Policy v1
-    ('pv000000-0000-0000-0000-000000000011', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000011', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002', 1, TRUE,
      '<h1>Acme Corporation — Access Control Policy</h1>
 <p>Version 1.0 — Effective February 1, 2026</p>
 
@@ -143,8 +143,8 @@ INSERT INTO policy_versions (
      'b0000000-0000-0000-0000-000000000002'),  -- Security Engineer (Bob)
 
     -- Incident Response Plan v1 (draft/in-review)
-    ('pv000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000003', 1, TRUE,
+    ('b5000000-0000-0000-0000-000000000012', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000003', 1, TRUE,
      '<h1>Acme Corporation — Incident Response Plan</h1>
 <p>DRAFT — Version 1.0 — Pending Approval</p>
 
@@ -188,14 +188,14 @@ ON CONFLICT (policy_id, version_number) DO NOTHING;
 -- UPDATE current_version_id FOR DEMO POLICIES
 -- ============================================================================
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000010'
-WHERE id = 'pd000000-0000-0000-0000-000000000001' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000010'
+WHERE id = 'b2000000-0000-0000-0000-000000000001' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000011'
-WHERE id = 'pd000000-0000-0000-0000-000000000002' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000011'
+WHERE id = 'b2000000-0000-0000-0000-000000000002' AND current_version_id IS NULL;
 
-UPDATE policies SET current_version_id = 'pv000000-0000-0000-0000-000000000012'
-WHERE id = 'pd000000-0000-0000-0000-000000000003' AND current_version_id IS NULL;
+UPDATE policies SET current_version_id = 'b5000000-0000-0000-0000-000000000012'
+WHERE id = 'b2000000-0000-0000-0000-000000000003' AND current_version_id IS NULL;
 
 -- ============================================================================
 -- DEMO SIGN-OFFS
@@ -207,8 +207,8 @@ INSERT INTO policy_signoffs (
     status, decided_at, comments
 ) VALUES
     -- Info Security Policy — approved by CISO
-    ('ps000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000001', 'pv000000-0000-0000-0000-000000000010',
+    ('b3000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000001', 'b5000000-0000-0000-0000-000000000010',
      'b0000000-0000-0000-0000-000000000004',  -- CISO (David)
      'ciso',
      'b0000000-0000-0000-0000-000000000001',  -- Compliance Manager (Alice)
@@ -217,8 +217,8 @@ INSERT INTO policy_signoffs (
      'Reviewed and approved. Meets all framework requirements. Aligns with our SOC 2 and ISO 27001 obligations.'),
 
     -- Access Control Policy — approved by CISO
-    ('ps000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002', 'pv000000-0000-0000-0000-000000000011',
+    ('b3000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002', 'b5000000-0000-0000-0000-000000000011',
      'b0000000-0000-0000-0000-000000000004',  -- CISO (David)
      'ciso',
      'b0000000-0000-0000-0000-000000000002',  -- Security Engineer (Bob)
@@ -227,8 +227,8 @@ INSERT INTO policy_signoffs (
      'Approved — aligns with PCI DSS Requirements 7 and 8. MFA and access review cadences meet compliance needs.'),
 
     -- Incident Response Plan — pending sign-off from CISO
-    ('ps000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000003', 'pv000000-0000-0000-0000-000000000012',
+    ('b3000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000003', 'b5000000-0000-0000-0000-000000000012',
      'b0000000-0000-0000-0000-000000000004',  -- CISO (David)
      'ciso',
      'b0000000-0000-0000-0000-000000000002',  -- Security Engineer (Bob)
@@ -236,8 +236,8 @@ INSERT INTO policy_signoffs (
      'pending', NULL, NULL),
 
     -- Incident Response Plan — pending sign-off from Compliance Manager
-    ('ps000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000003', 'pv000000-0000-0000-0000-000000000012',
+    ('b3000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000003', 'b5000000-0000-0000-0000-000000000012',
      'b0000000-0000-0000-0000-000000000001',  -- Compliance Manager (Alice)
      'compliance_manager',
      'b0000000-0000-0000-0000-000000000002',  -- Security Engineer (Bob)
@@ -253,51 +253,51 @@ INSERT INTO policy_controls (
     id, org_id, policy_id, control_id, coverage, notes, linked_by
 ) VALUES
     -- Info Security Policy → high-level controls
-    ('pc000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000001',
+    ('b1000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000001',
      'c0000000-0000-0000-0000-000000000001',  -- CTRL-AC-001 (MFA)
      'partial', 'ISP Section 3 references MFA requirements at a high level — detailed coverage in Access Control Policy',
      'b0000000-0000-0000-0000-000000000001'),  -- Alice
 
-    ('pc000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000001',
+    ('b1000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000001',
      'c0000000-0000-0000-0000-000000000206',  -- CTRL-SA-001 (Security Awareness Training)
      'full', 'ISP Section 3 — security awareness training mandate: annual training for all personnel',
      'b0000000-0000-0000-0000-000000000001'),  -- Alice
 
     -- Access Control Policy → access control domain
-    ('pc000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000001',  -- CTRL-AC-001 (MFA)
      'full', 'Section 2 — MFA enforcement requirements for production and VPN',
      'b0000000-0000-0000-0000-000000000002'),  -- Bob
 
-    ('pc000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000002',  -- CTRL-AC-002 (RBAC)
      'full', 'Section 3 — RBAC and least privilege across all systems with 7 GRC roles',
      'b0000000-0000-0000-0000-000000000002'),  -- Bob
 
-    ('pc000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000003',  -- CTRL-AC-003 (Quarterly Access Reviews)
      'full', 'Section 4 — Quarterly access review requirements with stale account cleanup',
      'b0000000-0000-0000-0000-000000000002'),  -- Bob
 
-    ('pc000000-0000-0000-0000-000000000006', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000006', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000004',  -- CTRL-AC-004 (PAM)
      'full', 'Section 3 — Privileged access via PAM with session recording and JIT approval',
      'b0000000-0000-0000-0000-000000000002'),  -- Bob
 
-    ('pc000000-0000-0000-0000-000000000007', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000007', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000005',  -- CTRL-AC-005 (Provisioning/Deprovisioning)
      'full', 'Section 4 — Termination access revocation within 4 hours',
      'b0000000-0000-0000-0000-000000000002'),  -- Bob
 
-    ('pc000000-0000-0000-0000-000000000008', 'a0000000-0000-0000-0000-000000000001',
-     'pd000000-0000-0000-0000-000000000002',
+    ('b1000000-0000-0000-0000-000000000008', 'a0000000-0000-0000-0000-000000000001',
+     'b2000000-0000-0000-0000-000000000002',
      'c0000000-0000-0000-0000-000000000006',  -- CTRL-AC-006 (Password Policy)
      'full', 'Section 2 — Password policy: 14+ chars, complexity, 24 password history',
      'b0000000-0000-0000-0000-000000000002')  -- Bob
@@ -310,31 +310,31 @@ ON CONFLICT (org_id, policy_id, control_id) DO NOTHING;
 INSERT INTO audit_log (org_id, actor_id, action, resource_type, resource_id, metadata, ip_address)
 VALUES
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'policy.created', 'policy', 'pd000000-0000-0000-0000-000000000001',
+     'policy.created', 'policy', 'b2000000-0000-0000-0000-000000000001',
      '{"identifier": "POL-IS-001", "title": "Acme Corp Information Security Policy", "cloned_from": "TPL-IS-001"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'policy_version.created', 'policy_version', 'pv000000-0000-0000-0000-000000000010',
+     'policy_version.created', 'policy_version', 'b5000000-0000-0000-0000-000000000010',
      '{"policy_id": "pd000000-0000-0000-0000-000000000001", "version": 1, "change_type": "initial"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000004',
-     'policy_signoff.approved', 'policy_signoff', 'ps000000-0000-0000-0000-000000000001',
+     'policy_signoff.approved', 'policy_signoff', 'b3000000-0000-0000-0000-000000000001',
      '{"policy_id": "pd000000-0000-0000-0000-000000000001", "policy": "POL-IS-001", "signer": "ciso@acme.example.com"}'::jsonb,
      '192.168.1.20'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'policy.status_changed', 'policy', 'pd000000-0000-0000-0000-000000000001',
+     'policy.status_changed', 'policy', 'b2000000-0000-0000-0000-000000000001',
      '{"identifier": "POL-IS-001", "from": "in_review", "to": "published"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'policy.created', 'policy', 'pd000000-0000-0000-0000-000000000003',
+     'policy.created', 'policy', 'b2000000-0000-0000-0000-000000000003',
      '{"identifier": "POL-IR-001", "title": "Acme Corp Incident Response Plan", "cloned_from": "TPL-IR-001"}'::jsonb,
      '192.168.1.15'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'policy_signoff.requested', 'policy_signoff', 'ps000000-0000-0000-0000-000000000003',
+     'policy_signoff.requested', 'policy_signoff', 'b3000000-0000-0000-0000-000000000003',
      '{"policy_id": "pd000000-0000-0000-0000-000000000003", "policy": "POL-IR-001", "signer": "ciso@acme.example.com"}'::jsonb,
      '192.168.1.15'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'policy_control.linked', 'policy_control', 'pc000000-0000-0000-0000-000000000003',
+     'policy_control.linked', 'policy_control', 'b1000000-0000-0000-0000-000000000003',
      '{"policy": "POL-AC-001", "control": "CTRL-AC-001", "coverage": "full"}'::jsonb,
      '192.168.1.15'::inet)
 ON CONFLICT DO NOTHING;

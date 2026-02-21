@@ -47,7 +47,7 @@ INSERT INTO audits (
     total_findings, open_findings,
     tags
 ) VALUES (
-    'aa000000-0000-0000-0000-000000000001',
+    'a1000000-0000-0000-0000-000000000001',
     'a0000000-0000-0000-0000-000000000001',
     'SOC 2 Type II — 2026 Annual',
     'Annual SOC 2 Type II audit covering the Trust Services Criteria for security, availability, and confidentiality. Audit period January 1 through December 31, 2026. Deloitte & Touche LLP engaged as the service auditor.',
@@ -89,9 +89,9 @@ INSERT INTO audit_requests (
     reference_number, tags
 ) VALUES
     -- 1. Information Security Policy — ACCEPTED
-    ('ar000000-0000-0000-0000-000000000001',
+    ('a5000000-0000-0000-0000-000000000001',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Information Security Policy (Current, Approved)',
      'Provide the current board-approved information security policy. Include approval date, version history, and evidence of annual review.',
      'high', 'accepted',
@@ -103,9 +103,9 @@ INSERT INTO audit_requests (
      'PBC-001', ARRAY['policy', 'cc1', 'cc5']),
 
     -- 2. Access Control Procedures — SUBMITTED (pending review)
-    ('ar000000-0000-0000-0000-000000000002',
+    ('a5000000-0000-0000-0000-000000000002',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Access Control Procedures and User Provisioning',
      'Document access control procedures including user provisioning, de-provisioning, RBAC model, and approval workflows for access requests.',
      'high', 'submitted',
@@ -117,9 +117,9 @@ INSERT INTO audit_requests (
      'PBC-002', ARRAY['access-control', 'cc6']),
 
     -- 3. Network Diagram — IN_PROGRESS (assigned)
-    ('ar000000-0000-0000-0000-000000000003',
+    ('a5000000-0000-0000-0000-000000000003',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Network Diagram Showing Data Flows',
      'Provide current network architecture diagram showing production environment, data flows, encryption indicators, and security zone boundaries.',
      'high', 'in_progress',
@@ -131,9 +131,9 @@ INSERT INTO audit_requests (
      'PBC-003', ARRAY['network', 'cc6', 'cc7']),
 
     -- 4. Vulnerability Scan Reports — OPEN (unassigned)
-    ('ar000000-0000-0000-0000-000000000004',
+    ('a5000000-0000-0000-0000-000000000004',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Vulnerability Scan Reports Q1-Q2 2026',
      'Provide internal and external vulnerability scan reports covering Q1 and Q2 2026. Include remediation tracking and trend analysis for high/critical findings.',
      'high', 'open',
@@ -145,9 +145,9 @@ INSERT INTO audit_requests (
      'PBC-004', ARRAY['vulnerability', 'cc7']),
 
     -- 5. Change Management Logs — ACCEPTED
-    ('ar000000-0000-0000-0000-000000000005',
+    ('a5000000-0000-0000-0000-000000000005',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Change Management Procedures and Recent Change Logs',
      'Provide change management policy and change logs from the audit period showing approval, testing, and rollback documentation for production changes.',
      'high', 'accepted',
@@ -159,9 +159,9 @@ INSERT INTO audit_requests (
      'PBC-005', ARRAY['change-management', 'cc8']),
 
     -- 6. Incident Response Plan — REJECTED (needs update)
-    ('ar000000-0000-0000-0000-000000000006',
+    ('a5000000-0000-0000-0000-000000000006',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Incident Response Plan and Recent Incident Reports',
      'Provide the incident response plan including escalation procedures, communication templates, and reports for any security incidents during the audit period.',
      'high', 'rejected',
@@ -173,9 +173,9 @@ INSERT INTO audit_requests (
      'PBC-006', ARRAY['incident-response', 'cc7']),
 
     -- 7. Employee Training Records — OVERDUE
-    ('ar000000-0000-0000-0000-000000000007',
+    ('a5000000-0000-0000-0000-000000000007',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Security Awareness Training Records (Last 12 Months)',
      'Provide evidence of security awareness training completion for all employees. Include completion rates, topics covered, and phishing simulation results.',
      'medium', 'overdue',
@@ -187,9 +187,9 @@ INSERT INTO audit_requests (
      'PBC-007', ARRAY['training', 'cc1']),
 
     -- 8. Vendor Risk Assessments — OPEN
-    ('ar000000-0000-0000-0000-000000000008',
+    ('a5000000-0000-0000-0000-000000000008',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Vendor Risk Assessments for Critical Third Parties',
      'Provide vendor risk assessments and due diligence records for top 10 critical third-party vendors. Include SOC report reviews and security questionnaire results.',
      'medium', 'open',
@@ -217,9 +217,9 @@ INSERT INTO audit_findings (
     tags
 ) VALUES
     -- 1. Incomplete access reviews — HIGH, remediation in progress
-    ('af000000-0000-0000-0000-000000000001',
+    ('a3000000-0000-0000-0000-000000000001',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Incomplete Quarterly Access Reviews',
      'Access reviews for Q3 and Q4 2025 were incomplete. Three production systems (payment-api, customer-db, analytics-platform) were not included in the quarterly review cycle. 47 user accounts on these systems were not reviewed during the audit period.',
      'high', 'access_control', 'remediation_in_progress',
@@ -237,9 +237,9 @@ INSERT INTO audit_findings (
      ARRAY['access-review', 'critical-path']),
 
     -- 2. Missing MFA on admin accounts — CRITICAL, remediation complete
-    ('af000000-0000-0000-0000-000000000002',
+    ('a3000000-0000-0000-0000-000000000002',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Missing MFA on Infrastructure Admin Accounts',
      'Two AWS IAM admin accounts and one database admin account were not enrolled in multi-factor authentication. These accounts have full administrative access to production infrastructure.',
      'critical', 'access_control', 'remediation_complete',
@@ -257,9 +257,9 @@ INSERT INTO audit_findings (
      ARRAY['mfa', 'admin-access', 'urgent']),
 
     -- 3. Stale vendor risk assessments — MEDIUM, acknowledged
-    ('af000000-0000-0000-0000-000000000003',
+    ('a3000000-0000-0000-0000-000000000003',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Stale Vendor Risk Assessments',
      'Four of ten critical vendors have risk assessments older than 12 months. Vendors affected: Cloudflare (18 months old), Datadog (14 months), Stripe (13 months), and SendGrid (15 months).',
      'medium', 'vendor_risk', 'acknowledged',
@@ -276,9 +276,9 @@ INSERT INTO audit_findings (
      ARRAY['vendor', 'reassessment']),
 
     -- 4. Backup test not documented — LOW, identified
-    ('af000000-0000-0000-0000-000000000004',
+    ('a3000000-0000-0000-0000-000000000004',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
      'Backup Recovery Tests Not Formally Documented',
      'While backup recovery tests are performed quarterly, the test results are not formally documented. Recovery times and success/failure outcomes are communicated via Slack but not captured in a formal test report.',
      'low', 'documentation_gap', 'identified',
@@ -306,10 +306,10 @@ INSERT INTO audit_evidence_links (
     status, reviewed_by, reviewed_at, review_notes
 ) VALUES
     -- Request 1 (InfoSec Policy) — linked to InfoSec Policy artifact, ACCEPTED
-    ('al000000-0000-0000-0000-000000000001',
+    ('a4000000-0000-0000-0000-000000000001',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'ar000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
+     'a5000000-0000-0000-0000-000000000001',
      'e0000000-0000-0000-0000-000000000004',
      'b0000000-0000-0000-0000-000000000001',
      '2026-02-15 14:30:00+00',
@@ -320,10 +320,10 @@ INSERT INTO audit_evidence_links (
      'Policy document verified. Version 3.1 is current and meets SOC 2 CC1.1 and CC5.2 requirements.'),
 
     -- Request 2 (Access Control) — linked to Okta MFA Config, PENDING_REVIEW
-    ('al000000-0000-0000-0000-000000000002',
+    ('a4000000-0000-0000-0000-000000000002',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'ar000000-0000-0000-0000-000000000002',
+     'a1000000-0000-0000-0000-000000000001',
+     'a5000000-0000-0000-0000-000000000002',
      'e0000000-0000-0000-0000-000000000001',
      'b0000000-0000-0000-0000-000000000002',
      '2026-02-18 11:00:00+00',
@@ -332,10 +332,10 @@ INSERT INTO audit_evidence_links (
      NULL, NULL, NULL),
 
     -- Request 2 (Access Control) — also linked to Access Review Report, PENDING_REVIEW
-    ('al000000-0000-0000-0000-000000000003',
+    ('a4000000-0000-0000-0000-000000000003',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'ar000000-0000-0000-0000-000000000002',
+     'a1000000-0000-0000-0000-000000000001',
+     'a5000000-0000-0000-0000-000000000002',
      'e0000000-0000-0000-0000-000000000002',
      'b0000000-0000-0000-0000-000000000002',
      '2026-02-18 11:05:00+00',
@@ -344,10 +344,10 @@ INSERT INTO audit_evidence_links (
      NULL, NULL, NULL),
 
     -- Request 5 (Change Mgmt) — linked to InfoSec Policy (covers change mgmt section), ACCEPTED
-    ('al000000-0000-0000-0000-000000000004',
+    ('a4000000-0000-0000-0000-000000000004',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'ar000000-0000-0000-0000-000000000005',
+     'a1000000-0000-0000-0000-000000000001',
+     'a5000000-0000-0000-0000-000000000005',
      'e0000000-0000-0000-0000-000000000004',
      'b0000000-0000-0000-0000-000000000005',
      '2026-02-14 16:45:00+00',
@@ -358,10 +358,10 @@ INSERT INTO audit_evidence_links (
      'Change management section reviewed. Jira logs show proper approval workflow for all sampled changes.'),
 
     -- Request 5 (Change Mgmt) — also linked to Vulnerability Scan (shows change impact), NEEDS_CLARIFICATION
-    ('al000000-0000-0000-0000-000000000005',
+    ('a4000000-0000-0000-0000-000000000005',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'ar000000-0000-0000-0000-000000000005',
+     'a1000000-0000-0000-0000-000000000001',
+     'a5000000-0000-0000-0000-000000000005',
      'e0000000-0000-0000-0000-000000000003',
      'b0000000-0000-0000-0000-000000000005',
      '2026-02-14 16:50:00+00',
@@ -384,55 +384,55 @@ INSERT INTO audit_comments (
     parent_comment_id, is_internal
 ) VALUES
     -- Comment 1: Auditor question on the audit itself
-    ('ac000000-0000-0000-0000-000000000001',
+    ('a2000000-0000-0000-0000-000000000001',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'audit', 'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
+     'audit', 'a1000000-0000-0000-0000-000000000001',
      'b0000000-0000-0000-0000-000000000006',
      'Can you confirm the list of subservice organizations? We need to verify the system description scope includes all relevant third parties.',
      NULL, FALSE),
 
     -- Comment 2: Internal response to auditor
-    ('ac000000-0000-0000-0000-000000000002',
+    ('a2000000-0000-0000-0000-000000000002',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'audit', 'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
+     'audit', 'a1000000-0000-0000-0000-000000000001',
      'b0000000-0000-0000-0000-000000000001',
      'Our subservice organizations are: AWS (IaaS), Okta (IAM), Datadog (monitoring), and Stripe (payment processing). We have current SOC 2 reports from all four. I will upload them to the evidence library.',
-     'ac000000-0000-0000-0000-000000000001', FALSE),
+     'a2000000-0000-0000-0000-000000000001', FALSE),
 
     -- Comment 3: Internal-only note (hidden from auditors)
-    ('ac000000-0000-0000-0000-000000000003',
+    ('a2000000-0000-0000-0000-000000000003',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'audit', 'aa000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
+     'audit', 'a1000000-0000-0000-0000-000000000001',
      'b0000000-0000-0000-0000-000000000004',
      'Internal note: The Stripe SOC 2 report has a qualified opinion on the processing integrity criteria. We should prepare talking points in case the auditor asks about it. Discuss at the Monday leadership sync.',
      NULL, TRUE),
 
     -- Comment 4: Auditor question on request 6 (rejected IR plan)
-    ('ac000000-0000-0000-0000-000000000004',
+    ('a2000000-0000-0000-0000-000000000004',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'request', 'ar000000-0000-0000-0000-000000000006',
+     'a1000000-0000-0000-0000-000000000001',
+     'request', 'a5000000-0000-0000-0000-000000000006',
      'b0000000-0000-0000-0000-000000000006',
      'The IR plan references a "Security Operations Center" team that no longer appears in the org chart. Please update the plan to reflect the current team structure and provide evidence of the most recent tabletop exercise.',
      NULL, FALSE),
 
     -- Comment 5: Internal response on request 6
-    ('ac000000-0000-0000-0000-000000000005',
+    ('a2000000-0000-0000-0000-000000000005',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'request', 'ar000000-0000-0000-0000-000000000006',
+     'a1000000-0000-0000-0000-000000000001',
+     'request', 'a5000000-0000-0000-0000-000000000006',
      'b0000000-0000-0000-0000-000000000002',
      'Understood. We merged the SOC team into the Security Engineering team in Q3 2025. I am updating the IR plan now — will have a revised version by end of week. The tabletop exercise from November 2025 is being formatted for submission.',
-     'ac000000-0000-0000-0000-000000000004', FALSE),
+     'a2000000-0000-0000-0000-000000000004', FALSE),
 
     -- Comment 6: Auditor comment on finding 1 (access reviews)
-    ('ac000000-0000-0000-0000-000000000006',
+    ('a2000000-0000-0000-0000-000000000006',
      'a0000000-0000-0000-0000-000000000001',
-     'aa000000-0000-0000-0000-000000000001',
-     'finding', 'af000000-0000-0000-0000-000000000001',
+     'a1000000-0000-0000-0000-000000000001',
+     'finding', 'a3000000-0000-0000-0000-000000000001',
      'b0000000-0000-0000-0000-000000000008',
      'We will need to see the Opal configuration and at least one complete access review cycle using the new tool before we can consider this finding remediated. Please plan for verification testing during the final fieldwork phase.',
      NULL, FALSE)
@@ -445,35 +445,35 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO audit_log (org_id, actor_id, action, resource_type, resource_id, metadata, ip_address)
 VALUES
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'audit.created', 'audit', 'aa000000-0000-0000-0000-000000000001',
+     'audit.created', 'audit', 'a1000000-0000-0000-0000-000000000001',
      '{"title": "SOC 2 Type II — 2026 Annual", "audit_type": "soc2_type2", "firm": "Deloitte & Touche LLP"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'audit.status_changed', 'audit', 'aa000000-0000-0000-0000-000000000001',
+     'audit.status_changed', 'audit', 'a1000000-0000-0000-0000-000000000001',
      '{"from": "planning", "to": "fieldwork"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000006',
-     'audit_request.created', 'audit_request', 'ar000000-0000-0000-0000-000000000001',
+     'audit_request.created', 'audit_request', 'a5000000-0000-0000-0000-000000000001',
      '{"title": "Information Security Policy", "reference": "PBC-001"}'::jsonb,
      '10.0.0.100'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'audit_evidence.submitted', 'audit_evidence_link', 'al000000-0000-0000-0000-000000000001',
+     'audit_evidence.submitted', 'audit_evidence_link', 'a4000000-0000-0000-0000-000000000001',
      '{"request_title": "Information Security Policy", "artifact_title": "Information Security Policy v3.1"}'::jsonb,
      '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000006',
-     'audit_evidence.reviewed', 'audit_evidence_link', 'al000000-0000-0000-0000-000000000001',
+     'audit_evidence.reviewed', 'audit_evidence_link', 'a4000000-0000-0000-0000-000000000001',
      '{"status": "accepted", "artifact_title": "Information Security Policy v3.1"}'::jsonb,
      '10.0.0.100'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000006',
-     'audit_finding.created', 'audit_finding', 'af000000-0000-0000-0000-000000000001',
+     'audit_finding.created', 'audit_finding', 'a3000000-0000-0000-0000-000000000001',
      '{"title": "Incomplete Quarterly Access Reviews", "severity": "high"}'::jsonb,
      '10.0.0.100'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000006',
-     'audit_finding.created', 'audit_finding', 'af000000-0000-0000-0000-000000000002',
+     'audit_finding.created', 'audit_finding', 'a3000000-0000-0000-0000-000000000002',
      '{"title": "Missing MFA on Infrastructure Admin Accounts", "severity": "critical"}'::jsonb,
      '10.0.0.100'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'audit_finding.status_changed', 'audit_finding', 'af000000-0000-0000-0000-000000000002',
+     'audit_finding.status_changed', 'audit_finding', 'a3000000-0000-0000-0000-000000000002',
      '{"from": "identified", "to": "remediation_complete", "title": "Missing MFA on Infrastructure Admin Accounts"}'::jsonb,
      '192.168.1.20'::inet)
 ON CONFLICT DO NOTHING;
