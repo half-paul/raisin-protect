@@ -1,99 +1,95 @@
 # Raisin Protect — Status
 
-## Current Sprint: 4 — Continuous Monitoring Engine
-**Started:** 2026-02-20 15:50
+## Current Sprint: 5 — Policy Management
+**Started:** 2026-02-20 19:50
 
-## Sprint 4 Tasks
+## Sprint 5 Tasks
 
 ### System Architect
-- [x] Design Sprint 4 schema (tests, test_runs, test_results, alerts, alert_rules)
-- [x] Write Sprint 4 API spec (test execution, alert engine, alert delivery, monitoring dashboard)
-- [x] Write docs/sprints/sprint-4/SCHEMA.md
-- [x] Write docs/sprints/sprint-4/API_SPEC.md
+- [ ] Design Sprint 5 schema (policies, policy_versions, policy_signoffs)
+- [ ] Write Sprint 5 API spec (policy CRUD, versioning, sign-offs, templates, mapping)
+- [ ] Write docs/sprints/sprint-5/SCHEMA.md
+- [ ] Write docs/sprints/sprint-5/API_SPEC.md
 
 ### Database Engineer
-- [x] Write migration: test-related enums (test_type, test_status, test_severity, test_result_status)
-- [x] Write migration: tests table (test definitions with schedules)
-- [x] Write migration: test_runs table (execution history)
-- [x] Write migration: test_results table (individual test outputs with pass/fail)
-- [x] Write migration: alert-related enums (alert_severity, alert_status, alert_delivery_channel)
-- [x] Write migration: alerts table (generated alerts with classification)
-- [x] Write migration: alert_rules table (alert generation rules)
-- [x] Add seed data: example tests for demo controls, sample alert rules
+- [ ] Write migration: policy-related enums (policy_category, policy_status, signoff_status)
+- [ ] Write migration: policies table (policy definitions with ownership)
+- [ ] Write migration: policy_versions table (full text content + change tracking)
+- [ ] Write migration: policy_signoffs table (approval workflow tracking)
+- [ ] Write migration: policy_controls table (link policies to controls)
+- [ ] Add seed data: policy templates per framework (SOC 2, ISO 27001, PCI DSS, GDPR, CCPA)
+- [ ] Add seed data: example policies for demo organization
 
 ### Backend Developer
-- [x] Test execution worker (background job scheduler)
-- [x] Test runner engine (execute tests against controls)
-- [x] Test result storage and history tracking
-- [x] Alert generation engine (detect → classify → assign)
-- [x] Alert CRUD endpoints (list, get, update status, assign, resolve)
-- [x] Alert delivery: Slack webhook integration
-- [x] Alert delivery: email integration (SMTP)
-- [x] Alert rule management endpoints (create, update, delete rules)
-- [x] Monitoring dashboard API: control health heatmap data
-- [x] Monitoring dashboard API: alert queue (pending, in-progress, resolved)
-- [x] Monitoring dashboard API: compliance posture score per framework
-- [x] Alert notification worker (deliver alerts via configured channels)
-- [x] Unit tests for test runner and alert engine
-- [x] Update docker-compose.yml for worker service
+- [ ] Policy CRUD endpoints (create, get, list, update, archive)
+- [ ] Policy version management (create version, list versions, compare versions)
+- [ ] Policy content storage (rich text support)
+- [ ] Policy sign-off workflow (request sign-off, approve, reject, track status)
+- [ ] Policy-to-control mapping endpoints (link policy to controls, unlink, list mappings)
+- [ ] Policy template endpoints (list templates, clone template to policy)
+- [ ] Policy gap detection (identify controls without policy coverage)
+- [ ] Policy search and filtering (by category, status, framework, owner)
+- [ ] Policy approval notifications (email/Slack when sign-off requested)
+- [ ] Unit tests for policy handlers and sign-off workflow
+- [ ] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
-- [x] Monitoring dashboard home (control health heatmap)
-- [x] Alert queue page (list of pending/in-progress/resolved alerts)
-- [x] Alert detail page (alert info, related control, assignment, resolution)
-- [x] Alert assignment interface (assign to user, set priority)
-- [x] Alert resolution workflow (mark resolved, add notes)
-- [x] Test execution history view (list test runs per control)
-- [x] Test result detail page (pass/fail status, output logs)
-- [x] Alert rule management page (create/edit rules)
-- [x] Compliance posture score widget (real-time score per framework)
+- [ ] Policy library page (list of policies with category filters)
+- [ ] Policy detail page (current version content, metadata, linked controls)
+- [ ] Policy editor (rich text editor for policy content)
+- [ ] Policy version history page (list versions, compare side-by-side)
+- [ ] Policy sign-off interface (request approvals, track status, approve/reject)
+- [ ] Policy-to-control linking UI (search controls, create mappings)
+- [ ] Policy template library (browse templates, clone to new policy)
+- [ ] Policy gap dashboard (controls without policy coverage)
+- [ ] Policy approval workflow UI (pending approvals, approval history)
 
 ### Code Reviewer
-- [x] Review test execution worker and runner logic
-- [x] Review alert generation engine and classification rules
-- [x] Review alert delivery integrations (Slack, email)
-- [x] Review database migrations (tests, alerts, indexes)
-- [x] Review dashboard monitoring pages
-- [x] Security audit: webhook secret validation, email SMTP credentials
-- [x] Check alert authorization (orgs can only see their alerts)
-- [x] Verify test execution isolation (no cross-org data leakage)
-- [x] File GitHub issues for critical/high findings
-- [x] Write docs/sprints/sprint-4/CODE_REVIEW.md
+- [ ] Review policy CRUD handlers and version management logic
+- [ ] Review policy-to-control mapping implementation
+- [ ] Review rich text storage (security: XSS prevention, content sanitization)
+- [ ] Review sign-off workflow (authorization: only designated approvers can sign)
+- [ ] Review policy gap detection logic
+- [ ] Security audit: policy ownership validation, sign-off authorization checks
+- [ ] Check multi-tenancy isolation for policies and sign-offs
+- [ ] Verify policy content is sanitized before storage/display
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-5/CODE_REVIEW.md
 
 ### QA Engineer
-- [x] Verify all API tests pass
-- [x] Test test execution worker (schedule → run → store results)
-- [x] Test alert generation (trigger → classify → deliver)
-- [x] Test alert delivery (Slack webhook, email)
-- [x] Test alert assignment and resolution workflow
-- [x] Test monitoring dashboard (heatmap, alert queue, posture score)
-- [x] Verify background worker runs without crashes
-- [x] Test multi-tenancy isolation for tests and alerts
-- [x] Write docs/sprints/sprint-4/QA_REPORT.md
+- [ ] Verify all API tests pass
+- [ ] Test policy CRUD (create, edit, archive, search)
+- [ ] Test policy versioning (create version, view history, compare)
+- [ ] Test policy sign-off workflow (request → approve/reject → notifications)
+- [ ] Test policy-to-control mapping (link, unlink, gap detection)
+- [ ] Test policy template cloning
+- [ ] Test rich text editor (formatting, content storage/retrieval)
+- [ ] Test multi-tenancy isolation for policies
+- [ ] Write docs/sprints/sprint-5/QA_REPORT.md
 
 ## Sprint Progress
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | 💤 DISABLED | Sprint 4 design complete. All tasks done, sprint <75%, agent disabled per lifecycle rules. |
-| DBE | 8/8 (100%) | 💤 DISABLED | All migrations (019-025) and seed data complete. All tasks done, agent disabled. |
-| DEV-BE | 14/14 (100%) | 💤 DISABLED | All 14 tasks complete. 32 REST endpoints, MonitoringWorker, 34 unit tests passing. All tasks done, agent disabled. |
-| DEV-FE | 9/9 (100%) | 💤 DISABLED | All 9 tasks complete. Monitoring dashboard (heatmap + posture + activity), alert queue (filter/paginate/summary cards), alert detail (status/assign/resolve/suppress/close/redeliver), test run history (trigger/cancel/filter), test result detail (output logs + structured details), alert rules CRUD (create/toggle/delete + test delivery), compliance posture scores (SVG ring charts + trend). Build passes clean (21 routes). |
-| CR | 10/10 (100%) | 💤 DISABLED | All 10 tasks complete. Comprehensive code review (8,000 lines): MonitoringWorker, alert handlers, delivery integrations, migrations, dashboard. Security audit: multi-tenancy isolation verified, RBAC enforcement confirmed, SQL injection prevention verified. Result: 0 critical/high issues, 3 medium findings (Issues #7-9: SSRF, webhook headers, Slack timeout). CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT. |
-| QA | 9/9 (100%) | 💤 DISABLED | All 9 tasks complete. Comprehensive testing: 172/172 unit tests passing, 12 core API endpoints verified, services healthy, worker operational, multi-tenancy isolation confirmed. 3 medium bugs found (posture SQL error, seed UUIDs, deployment process). QA_REPORT.md published. Result: APPROVED FOR DEPLOYMENT (after addressing Issues #7-9). All tasks done, agent disabled. |
+| SA | 0/4 (0%) | 🔄 ENABLED | Sprint 5 design starting. Agent enabled and triggered immediately. |
+| DBE | 0/7 (0%) | 💤 DISABLED | Waiting for SA to complete schema design. |
+| DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
+| DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
+| CR | 0/10 (0%) | 💤 DISABLED | Waiting for implementation code to review. |
+| QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
 
-**Overall Sprint Completion:** 54/54 tasks (100%)
+**Overall Sprint Completion:** 0/50 tasks (0%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE - 0/10]
-                                        ↘ DEV-FE [ACTIVE - 0/9] → QA [ACTIVE - 0/9]
+SA [ACTIVE - 0/4] → DBE [WAITING] → DEV-BE [WAITING] → CR [WAITING]
+                                                      ↘ DEV-FE [WAITING] → QA [WAITING]
 ```
 
-**Critical Path:** DEV-FE (9 dashboard pages), CR (10 review tasks), and QA (9 test tasks) all running in parallel. CR and QA will continuously review/test as FE commits code.
+**Critical Path:** SA (system architect) must complete schema + API spec design before DBE can begin.
 
 ## Blockers
-**NONE:** All three agents (DEV-FE, CR, QA) are now active and have work queued.
+**NONE:** SA is now active and will start Sprint 5 design.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -137,3 +133,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [ACTIVE - 0/10]
 | 2026-02-20 18:52 | DEV-FE | All 9 tasks complete. Monitoring dashboard home (control health heatmap with tooltips + summary stats + posture scores + activity feed), alert queue page (queue summary cards + severity/search filtering + SLA tracking + pagination), alert detail page (full lifecycle: acknowledge/start/resolve/assign/suppress/close/redeliver + test result display + sidebar metadata), test execution history (trigger manual runs + cancel + filter by status/trigger), test result detail page (per-result output logs + structured JSON details + alert links), alert rule management (create with match conditions + delivery channels + SLA + test delivery), compliance posture scores (SVG ring charts + framework breakdown + trend indicators). Sidebar updated with 4 new monitoring nav items. API client extended with 30+ Sprint 4 endpoints. Build passes clean (21 routes total). New files: 7 pages, 300+ API types/functions. |
 | 2026-02-20 19:05 | CR | All 10 tasks complete. Comprehensive code review: MonitoringWorker (367 lines), alert handlers (691 lines), alert delivery (176 lines), alert rules (520 lines), 8 migrations, 9 dashboard pages (~8,000 lines total). Security audit: multi-tenancy isolation verified (20+ org_id checks), RBAC enforcement confirmed, SQL injection prevention verified (all parameterized queries), no hardcoded secrets, audit logging present, JWT validation correct. Result: 0 critical/high issues, 3 medium findings (Issues #7-9: SSRF in webhook/Slack URLs, user-controlled webhook headers, missing Slack HTTP timeout), 3 low-priority recommendations (custom template code, rate limiting, worker metrics). Frontend: TypeScript strict, no XSS vectors (zero dangerouslySetInnerHTML), proper loading/error states. Migrations: proper indexes, foreign keys, multi-tenancy support. Unit tests: 118/118 passing. CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT (after fixing Issues #7-9). Sprint 4 at 83% completion. |
 | 2026-02-20 19:15 | QA | All 9 tasks complete. Comprehensive testing: 172/172 unit tests passing (go test + go vet clean), 12 core API endpoints verified (tests, test-runs, alerts, alert-rules, monitoring), all 6 services healthy (API, worker, postgres, redis, minio, dashboard), worker operational (30s polling, no crash loops), multi-tenancy isolation confirmed (org_id enforcement verified), security review (SQL injection prevention, RBAC enforcement, no hardcoded secrets). Found 3 medium bugs: Bug #1 (posture SQL column error), Bug #2 (seed data UUID format errors), Bug #3 (manual deployment steps required). QA_REPORT.md published. Result: APPROVED FOR DEPLOYMENT (after addressing Issues #7-9). **Sprint 4 COMPLETE (100%).** |
+| 2026-02-20 19:50 | PM | **Sprint 4 COMPLETE (100%).** Sprint transition: advanced to Sprint 5 (Policy Management). ALL agents disabled. SA enabled and triggered immediately to start Sprint 5 design (policies, versioning, sign-offs, templates, mapping to controls). |
