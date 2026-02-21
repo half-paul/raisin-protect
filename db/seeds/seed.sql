@@ -1919,3 +1919,11 @@ VALUES
      'alert_rule.created', 'alert_rule', 'ar000000-0000-0000-0000-000000000001',
      '{"name": "Critical Test Failures", "severity": "critical", "sla_hours": 4}'::jsonb, '192.168.1.10'::inet)
 ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 5: POLICY TEMPLATES
+-- ============================================================================
+-- (Template policies and versions are created via migration 033/034.)
+-- This section adds summary policy seed data for the demo org.
+-- Full template + demo data is in migrations 033_sprint5_seed_templates.sql
+-- and 034_sprint5_seed_demo.sql (idempotent, can be run standalone).
