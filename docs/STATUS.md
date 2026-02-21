@@ -74,9 +74,9 @@
 | SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
 | DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
 | DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete: 21 REST endpoints (risk CRUD+status, assessments+recalc, treatments+complete, controls CRUD, heat map, gaps, search, stats). 50 risk unit tests passing (261 total). Docker build clean. |
-| DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
-| CR | 0/10 (0%) | 💤 DISABLED | Waiting for code commits from DEV-BE/DEV-FE. |
-| QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
+| DEV-FE | 0/9 (0%) | 🔄 ENABLED | Dependencies met (11 BE tasks complete). Starting risk register dashboard implementation. |
+| CR | 0/10 (0%) | 🔄 ENABLED | Dependencies met (11 BE tasks complete). Starting code review of risk management backend. |
+| QA | 0/9 (0%) | 💤 DISABLED | Waiting for CR approval. Will enable when CR completes review. |
 
 **Overall Sprint Completion:** 22/50 tasks (44%)
 
@@ -86,7 +86,7 @@ SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11
                                                                                               ↘ DEV-FE [UNBLOCKED - 0/9 - ENABLED] → QA [BLOCKED - 0/9 - DISABLED]
 ```
 
-**Critical Path:** DEV-FE (9 dashboard pages), CR (risk code review), QA (risk workflow testing).
+**Critical Path:** DEV-FE (9 risk dashboard pages) and CR (risk backend review) running in parallel. QA waits for CR completion.
 
 ## Blockers
 None currently.
@@ -149,3 +149,4 @@ None currently.
 | 2026-02-21 00:55 | DBE | Sprint 6 migrations complete: 9 migrations (035-043). 8 new enums (risk_category, risk_status, likelihood_level, impact_level, treatment_type, treatment_status, risk_assessment_type, control_effectiveness) + 18 audit_action extensions + evidence_link_target_type extension. 3 scoring helper functions (likelihood_to_score, impact_to_score, risk_score_severity). 4 tables (risks, risk_assessments, risk_treatments, risk_controls) with full indexes, triggers, CHECK constraints, and heat map composite indexes. Deferred FK for evidence_links.risk_id with updated CHECK constraint. 230 risk templates across 13 categories (30 cyber, 25 operational, 25 compliance, 20 data privacy, 25 technology, 20 third-party, 15 financial, 15 legal, 15 reputational, 15 HR, 10 strategic, 10 physical, 5 environmental). 5 demo active risks (ransomware critical/20→12, phishing high/15→8, PCI medium/12→6, legacy ERP accepted/16→12, vendor low/9→4) with 10 assessments (inherent+residual pairs), 5 treatment plans (EDR verified, backups in-progress, insurance verified, training implemented, Raisin Shield in-progress), 7 risk-control mappings with effectiveness ratings, and 8 audit log entries. DEV-BE unblocked. |
 | 2026-02-21 01:50 | PM | Sprint 6 agent lifecycle update — 22% complete (11/50 tasks). **SA DISABLED** (all tasks done, sprint <75%). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 11 risk API endpoints (CRUD, assessments, treatments, heat map, scoring engine, gap detection, notifications). Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-21 02:05 | DEV-BE | All 11 tasks complete. Implemented 21 REST endpoints: risk CRUD (5 — list, get, create, update, archive), status transitions (1 — with acceptance workflow), assessments (3 — list, create, recalculate), treatments (4 — list, create, update, complete with auto-transition to monitoring), risk-to-control linkage (4 — list, link, update effectiveness, unlink), heat map (1 — 5×5 grid with risk drill-down), gap detection (1 — 5 gap types with recommendations), search (1 — full-text with match context), stats (1 — comprehensive dashboard statistics). Scoring engine: likelihood × impact formula (1–25 range), severity bands (critical/high/medium/low), appetite breach detection. 6 new handler files, 1 model file. 50 risk unit tests passing (261 total). Docker build clean. No new services needed — docker-compose.yml unchanged. DEV-FE/CR/QA unblocked. |
+| 2026-02-21 02:50 | PM | Sprint 6 agent lifecycle update — 44% complete (22/50 tasks). **DEV-BE DISABLED** (all 11 tasks complete). **DEV-FE and CR both ENABLED** and triggered (dependencies met: 11 BE tasks complete > threshold). Critical path: DEV-FE (9 risk dashboard pages) and CR (risk backend security audit) running in parallel. QA remains disabled (waits for CR completion). Gateway timeout on trigger (agents will run on schedule). |
