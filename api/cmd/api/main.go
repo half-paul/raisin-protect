@@ -300,6 +300,59 @@ func main() {
 				monitoring.GET("/summary", handlers.GetMonitoringSummary)
 				monitoring.GET("/alert-queue", handlers.GetAlertQueue)
 			}
+
+			// === Sprint 5: Policy Management ===
+
+			// Policies (CRUD + status transitions)
+			policies := protected.Group("/policies")
+			{
+				policies.GET("", handlers.ListPolicies)
+				policies.POST("", middleware.RequireRoles(models.PolicyCreateRoles...), handlers.CreatePolicy)
+				policies.GET("/search", handlers.SearchPolicies)
+				policies.GET("/stats", handlers.GetPolicyStats)
+
+				policies.GET("/:id", handlers.GetPolicy)
+				policies.PUT("/:id", handlers.UpdatePolicy) // owner check in handler
+				policies.POST("/:id/archive", middleware.RequireRoles(models.PolicyArchiveRoles...), handlers.ArchivePolicy)
+				policies.POST("/:id/submit-for-review", handlers.SubmitForReview) // owner check in handler
+				policies.POST("/:id/publish", middleware.RequireRoles(models.PolicyPublishRoles...), handlers.PublishPolicy)
+
+				// Policy Versions
+				policies.GET("/:id/versions", handlers.ListPolicyVersions)
+				policies.GET("/:id/versions/compare", handlers.CompareVersions)
+				policies.GET("/:id/versions/:version_number", handlers.GetPolicyVersion)
+				policies.POST("/:id/versions", handlers.CreatePolicyVersion) // owner check in handler
+
+				// Policy Sign-offs
+				policies.GET("/:id/signoffs", handlers.ListPolicySignoffs)
+				policies.POST("/:id/signoffs/remind", handlers.RemindSignoffs) // owner check in handler
+				policies.POST("/:id/signoffs/:signoff_id/approve", handlers.ApproveSignoff) // signer check in handler
+				policies.POST("/:id/signoffs/:signoff_id/reject", handlers.RejectSignoff)   // signer check in handler
+				policies.POST("/:id/signoffs/:signoff_id/withdraw", handlers.WithdrawSignoff) // requester check in handler
+
+				// Policy-to-Control Mapping
+				policies.GET("/:id/controls", handlers.ListPolicyControls)
+				policies.POST("/:id/controls", handlers.LinkPolicyControl) // owner check in handler
+				policies.POST("/:id/controls/bulk", handlers.BulkLinkPolicyControls) // owner check in handler
+				policies.DELETE("/:id/controls/:control_id", handlers.UnlinkPolicyControl) // owner check in handler
+			}
+
+			// Pending sign-offs (cross-policy, per-user)
+			protected.GET("/signoffs/pending", handlers.ListPendingSignoffs)
+
+			// Policy Templates
+			templates := protected.Group("/policy-templates")
+			{
+				templates.GET("", handlers.ListPolicyTemplates)
+				templates.POST("/:id/clone", middleware.RequireRoles(models.PolicyCreateRoles...), handlers.ClonePolicyTemplate)
+			}
+
+			// Policy Gap Detection
+			policyGap := protected.Group("/policy-gap")
+			{
+				policyGap.GET("", middleware.RequireRoles(models.PolicyGapRoles...), handlers.GetPolicyGap)
+				policyGap.GET("/by-framework", middleware.RequireRoles(models.PolicyGapRoles...), handlers.GetPolicyGapByFramework)
+			}
 		}
 	}
 
