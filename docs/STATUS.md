@@ -73,7 +73,7 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
 | DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
-| DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
+| DEV-BE | 0/11 (0%) | 🟢 ENABLED | Dependencies met (SA + DBE complete). 11 risk API tasks queued. Triggered to run. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code commits from DEV-BE/DEV-FE. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
@@ -82,8 +82,8 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [UNBLOCKED - 0/11 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
-                                                                                                  ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] → QA [BLOCKED - 0/9 - DISABLED]
+SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [ENABLED - 0/11 - RUNNING] → CR [BLOCKED - 0/10 - DISABLED]
+                                                                                              ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] → QA [BLOCKED - 0/9 - DISABLED]
 ```
 
 **Critical Path:** DEV-BE must implement risk API endpoints (11 tasks).
@@ -147,3 +147,4 @@ None currently.
 | 2026-02-20 23:50 | PM | **Sprint 5 COMPLETE (100%).** Sprint transition: advanced to Sprint 6 (Risk Register). ALL agents DISABLED (SA, DBE, DEV-BE, DEV-FE, CR, QA). **SA ENABLED** and triggered immediately to start Sprint 6 design (risks, risk assessments, treatments, scoring, heat map). |
 | 2026-02-21 00:50 | PM | Sprint 6 agent lifecycle update — 8% complete (4/50 tasks). **SA DISABLED** (all tasks complete, sprint <75%). **DBE ENABLED and TRIGGERED** (dependencies met: SA complete with all 4 tasks done, 7 DBE tasks queued). Critical path: DBE must deliver risk register schema (enums, tables, seed data) to unblock DEV-BE. Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-21 00:55 | DBE | Sprint 6 migrations complete: 9 migrations (035-043). 8 new enums (risk_category, risk_status, likelihood_level, impact_level, treatment_type, treatment_status, risk_assessment_type, control_effectiveness) + 18 audit_action extensions + evidence_link_target_type extension. 3 scoring helper functions (likelihood_to_score, impact_to_score, risk_score_severity). 4 tables (risks, risk_assessments, risk_treatments, risk_controls) with full indexes, triggers, CHECK constraints, and heat map composite indexes. Deferred FK for evidence_links.risk_id with updated CHECK constraint. 230 risk templates across 13 categories (30 cyber, 25 operational, 25 compliance, 20 data privacy, 25 technology, 20 third-party, 15 financial, 15 legal, 15 reputational, 15 HR, 10 strategic, 10 physical, 5 environmental). 5 demo active risks (ransomware critical/20→12, phishing high/15→8, PCI medium/12→6, legacy ERP accepted/16→12, vendor low/9→4) with 10 assessments (inherent+residual pairs), 5 treatment plans (EDR verified, backups in-progress, insurance verified, training implemented, Raisin Shield in-progress), 7 risk-control mappings with effectiveness ratings, and 8 audit log entries. DEV-BE unblocked. |
+| 2026-02-21 01:50 | PM | Sprint 6 agent lifecycle update — 22% complete (11/50 tasks). **SA DISABLED** (all tasks done, sprint <75%). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 11 risk API endpoints (CRUD, assessments, treatments, heat map, scoring engine, gap detection, notifications). Gateway timeout on trigger (agent will run on schedule). |
