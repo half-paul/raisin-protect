@@ -71,8 +71,8 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | ✅ DONE | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. DBE unblocked. |
-| DBE | 0/7 (0%) | 💤 DISABLED | Waiting for SA to complete schema design. |
+| SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. All tasks done, sprint <75%. |
+| DBE | 0/7 (0%) | ⚡ ENABLED | Dependencies met (SA complete). 7 migration tasks queued. Triggered to run immediately. Critical path. |
 | DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for implementation code to review. |
@@ -82,14 +82,14 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4] → DBE [UNBLOCKED - 0/7] → DEV-BE [WAITING] → CR [WAITING]
-                                                             ↘ DEV-FE [WAITING] → QA [WAITING]
+SA [DONE - 4/4 - DISABLED] → DBE [RUNNING - 0/7] → DEV-BE [WAITING] → CR [WAITING]
+                                                                     ↘ DEV-FE [WAITING] → QA [WAITING]
 ```
 
-**Critical Path:** DBE (database engineer) must complete migrations before DEV-BE can begin.
+**Critical Path:** DBE (database engineer) is now on critical path. Must deliver 7 migration files + seed data before backend work can begin.
 
 ## Blockers
-**NONE:** SA complete. DBE is next on the critical path.
+**NONE:** All dependencies resolved. DBE enabled and triggered.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -135,3 +135,4 @@ SA [DONE - 4/4] → DBE [UNBLOCKED - 0/7] → DEV-BE [WAITING] → CR [WAITING]
 | 2026-02-20 19:15 | QA | All 9 tasks complete. Comprehensive testing: 172/172 unit tests passing (go test + go vet clean), 12 core API endpoints verified (tests, test-runs, alerts, alert-rules, monitoring), all 6 services healthy (API, worker, postgres, redis, minio, dashboard), worker operational (30s polling, no crash loops), multi-tenancy isolation confirmed (org_id enforcement verified), security review (SQL injection prevention, RBAC enforcement, no hardcoded secrets). Found 3 medium bugs: Bug #1 (posture SQL column error), Bug #2 (seed data UUID format errors), Bug #3 (manual deployment steps required). QA_REPORT.md published. Result: APPROVED FOR DEPLOYMENT (after addressing Issues #7-9). **Sprint 4 COMPLETE (100%).** |
 | 2026-02-20 19:50 | PM | **Sprint 4 COMPLETE (100%).** Sprint transition: advanced to Sprint 5 (Policy Management). ALL agents disabled. SA enabled and triggered immediately to start Sprint 5 design (policies, versioning, sign-offs, templates, mapping to controls). |
 | 2026-02-20 19:53 | SA | Sprint 5 design complete: SCHEMA.md (4 tables: policies, policy_versions, policy_signoffs, policy_controls + 4 new enums + 15 audit_action extensions + evidence_links FK completion + 8 migration files + seed data for 15 templates across 5 frameworks + demo policies with versions, signoffs, and control mappings) and API_SPEC.md (28 endpoints covering policy CRUD, status transitions, version management with content comparison, sign-off workflow with approve/reject/withdraw, policy-to-control mapping with bulk ops, template library with clone, gap detection by control and by framework, content search, reminder system, and dashboard statistics). DBE unblocked. |
+| 2026-02-20 20:50 | PM | Sprint 5 agent lifecycle update — 8% complete (4/50 tasks). **SA DISABLED** (all tasks complete, sprint <75%). **DBE ENABLED and TRIGGERED** (dependencies met: SA complete, 7 migration tasks queued). Critical path: DBE must deliver schema before backend work begins. All other agents remain disabled. |
