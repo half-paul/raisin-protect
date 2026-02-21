@@ -72,7 +72,7 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
-| DBE | 0/7 (0%) | 💤 DISABLED | Waiting for SA to complete schema design. |
+| DBE | 0/7 (0%) | 🏃 ACTIVE | ENABLED. 7 migration tasks queued (risk enums, tables, seed data). Critical path. |
 | DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code commits from DEV-BE/DEV-FE. |
@@ -82,8 +82,8 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [UNBLOCKED - 0/7 - DISABLED] → DEV-BE [BLOCKED - 0/11 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
-                                                                                                     ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] → QA [BLOCKED - 0/9 - DISABLED]
+SA [DONE - 4/4 - DISABLED] → DBE [UNBLOCKED - 0/7 - ACTIVE] → DEV-BE [BLOCKED - 0/11 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
+                                                                                                   ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] → QA [BLOCKED - 0/9 - DISABLED]
 ```
 
 **Critical Path:** DBE must complete migrations to unblock DEV-BE.
@@ -145,3 +145,4 @@ None currently.
 | 2026-02-20 23:04 | CR | All 10 tasks complete. Comprehensive security audit: 3 CRITICAL issues found (missing RBAC checks in ArchivePolicy + PublishPolicy endpoints, XSS vulnerability from dangerouslySetInnerHTML + weak regex-based HTML sanitization). Filed Issues #10-12. Multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed (all parameterized queries), proper RBAC on 8/10 policy endpoints, audit logging present. Reviewed 8 handler files + 1 model + 1 frontend page + 8 migrations (~8,600 LOC). 146/146 unit tests passing. Result: CONDITIONAL APPROVAL — code is well-structured but MUST fix 3 critical issues before deployment. CODE_REVIEW.md published. Sprint 5 at 82% completion. |
 | 2026-02-20 23:10 | QA | All 9 tasks complete. Comprehensive testing: 211/211 unit tests passing, go vet clean, Docker services healthy (6/6 running). E2E testing: 5 comprehensive spec files created (33.3 KB, 50+ test cases covering CRUD, versioning, sign-off workflow, control mapping, templates) with security tests for Issues #10-12. **E2E NOT EXECUTED** — Sprint 5 migrations (027-034) not applied to running database (policy tables do not exist). Security: 3 CRITICAL issues confirmed (RBAC missing on ArchivePolicy/PublishPolicy, XSS vulnerability in policy content rendering). Environmental finding: manual migrations required before E2E execution. Result: CONDITIONAL APPROVAL — deployment BLOCKED by security issues + missing migrations. QA_REPORT.md published (18.6 KB deployment checklist). **Sprint 5 COMPLETE (100%).** |
 | 2026-02-20 23:50 | PM | **Sprint 5 COMPLETE (100%).** Sprint transition: advanced to Sprint 6 (Risk Register). ALL agents DISABLED (SA, DBE, DEV-BE, DEV-FE, CR, QA). **SA ENABLED** and triggered immediately to start Sprint 6 design (risks, risk assessments, treatments, scoring, heat map). |
+| 2026-02-21 00:50 | PM | Sprint 6 agent lifecycle update — 8% complete (4/50 tasks). **SA DISABLED** (all tasks complete, sprint <75%). **DBE ENABLED and TRIGGERED** (dependencies met: SA complete with all 4 tasks done, 7 DBE tasks queued). Critical path: DBE must deliver risk register schema (enums, tables, seed data) to unblock DEV-BE. Gateway timeout on trigger (agent will run on schedule). |
