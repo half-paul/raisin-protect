@@ -6,10 +6,10 @@
 ## Sprint 6 Tasks
 
 ### System Architect
-- [ ] Design Sprint 6 schema (risks, risk_assessments, risk_treatments, risk_controls)
-- [ ] Write Sprint 6 API spec (risk CRUD, assessments, treatments, heat map, linkage)
-- [ ] Write docs/sprints/sprint-6/SCHEMA.md
-- [ ] Write docs/sprints/sprint-6/API_SPEC.md
+- [x] Design Sprint 6 schema (risks, risk_assessments, risk_treatments, risk_controls)
+- [x] Write Sprint 6 API spec (risk CRUD, assessments, treatments, heat map, linkage)
+- [x] Write docs/sprints/sprint-6/SCHEMA.md
+- [x] Write docs/sprints/sprint-6/API_SPEC.md
 
 ### Database Engineer
 - [ ] Write migration: risk-related enums (risk_category, risk_status, likelihood_level, impact_level, treatment_type, treatment_status)
@@ -71,29 +71,30 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 0/4 (0%) | 💤 DISABLED → ⏰ ENABLED | Sprint 6 started. Will design risk register schema + API spec. |
+| SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
 | DBE | 0/7 (0%) | 💤 DISABLED | Waiting for SA to complete schema design. |
 | DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code commits from DEV-BE/DEV-FE. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
 
-**Overall Sprint Completion:** 0/50 tasks (0%)
+**Overall Sprint Completion:** 4/50 tasks (8%)
 
 ## Dependency Chain Status
 ```
-SA [PENDING - 0/4 - ENABLED] → DBE [BLOCKED - 0/7 - DISABLED] → DEV-BE [BLOCKED - 0/11 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
+SA [DONE - 4/4 - DISABLED] → DBE [UNBLOCKED - 0/7 - DISABLED] → DEV-BE [BLOCKED - 0/11 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
                                                                                                      ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] → QA [BLOCKED - 0/9 - DISABLED]
 ```
 
-**Critical Path:** SA must complete schema + API spec design to unblock DBE.
+**Critical Path:** DBE must complete migrations to unblock DEV-BE.
 
 ## Blockers
-None currently. Sprint 6 just started.
+None currently.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-20 23:55 | SA | Sprint 6 design complete: SCHEMA.md (4 tables: risks, risk_assessments, risk_treatments, risk_controls + 8 new enums + 18 audit_action extensions + 3 scoring helper functions + evidence_links FK extension + heat map/gap/trend query patterns + 200+ template risks + demo data with 5 active risks, assessments, treatments, and control mappings) and API_SPEC.md (21 endpoints covering risk CRUD + status transitions, assessments with scoring formulas, treatment lifecycle with effectiveness review, risk-to-control linkage with effectiveness tracking, 5×5 heat map aggregation, gap detection with 5 gap types, search, and statistics dashboard). 9 migration files (035-043). DBE unblocked. |
 | 2026-02-20 03:22 | PM | Project plan and status created |
 | 2026-02-20 03:25 | SA | Sprint 1 schema, API spec, and Docker topology designed |
 | 2026-02-20 04:01 | PM | Sprint 1 status update — 8% complete, DBE is critical path |
