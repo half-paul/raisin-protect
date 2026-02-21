@@ -45,16 +45,16 @@
 - [x] Policy approval workflow UI (pending approvals, approval history)
 
 ### Code Reviewer
-- [ ] Review policy CRUD handlers and version management logic
-- [ ] Review policy-to-control mapping implementation
-- [ ] Review rich text storage (security: XSS prevention, content sanitization)
-- [ ] Review sign-off workflow (authorization: only designated approvers can sign)
-- [ ] Review policy gap detection logic
-- [ ] Security audit: policy ownership validation, sign-off authorization checks
-- [ ] Check multi-tenancy isolation for policies and sign-offs
-- [ ] Verify policy content is sanitized before storage/display
-- [ ] File GitHub issues for critical/high findings
-- [ ] Write docs/sprints/sprint-5/CODE_REVIEW.md
+- [x] Review policy CRUD handlers and version management logic
+- [x] Review policy-to-control mapping implementation
+- [x] Review rich text storage (security: XSS prevention, content sanitization)
+- [x] Review sign-off workflow (authorization: only designated approvers can sign)
+- [x] Review policy gap detection logic
+- [x] Security audit: policy ownership validation, sign-off authorization checks
+- [x] Check multi-tenancy isolation for policies and sign-offs
+- [x] Verify policy content is sanitized before storage/display
+- [x] File GitHub issues for critical/high findings (Issues #10, #11, #12)
+- [x] Write docs/sprints/sprint-5/CODE_REVIEW.md
 
 ### QA Engineer
 - [ ] Verify all API tests pass
@@ -75,10 +75,10 @@
 | DBE | 7/7 (100%) | ✅ DONE → 💤 DISABLED | All 7 tasks complete. 8 migrations (027-034): 4 enums, 4 tables, 15 audit_action extensions, deferred FKs, evidence_links policy_id. 15 templates (5 frameworks), 3 demo policies with versions/signoffs/control mappings. Work complete. |
 | DEV-BE | 11/11 (100%) | ✅ DONE → 💤 DISABLED | All 11 tasks complete. 28 REST endpoints, 8 handler files, 1 model file. 146 unit tests passing (31 new). Docker build clean. Work complete. |
 | DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Policy library page, detail page, editor, version history with compare, sign-off interface, control linking UI, template library, gap dashboard, approval workflow. Build passes clean (29 routes). |
-| CR | 0/10 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to review. Enabled and triggered to start Sprint 5 code review (policy endpoints, sign-off workflow, templates, HTML sanitization). |
+| CR | 10/10 (100%) | ✅ DONE → 💤 DISABLED | All 10 tasks complete. Comprehensive security audit: 3 CRITICAL issues found (Issues #10-12: missing RBAC in ArchivePolicy/PublishPolicy, XSS from dangerouslySetInnerHTML + weak HTML sanitization). Multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed, proper audit logging. Result: CONDITIONAL APPROVAL — requires fixing 3 critical issues before deployment. CODE_REVIEW.md published. |
 | QA | 0/9 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to test. Enabled and triggered to start Sprint 5 testing (policy CRUD, versioning, sign-off workflow, gap detection). |
 
-**Overall Sprint Completion:** 31/50 tasks (62%)
+**Overall Sprint Completion:** 41/50 tasks (82%)
 
 ## Dependency Chain Status
 ```
@@ -141,3 +141,4 @@ SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11
 | 2026-02-20 22:08 | DEV-BE | All 11 tasks complete. Implemented 28 REST endpoints: policy CRUD (5 — list, get, create, update, archive), status transitions (2 — submit-for-review, publish), version management (4 — list, get, create, compare), sign-off workflow (5 — list, approve, reject, withdraw, pending), sign-off reminders (1), policy-to-control mapping (4 — list, link, unlink, bulk), templates (2 — list, clone), gap detection (2 — by-control, by-framework), search (1), stats (1), notifications (1 — reminder system). HTML sanitization (XSS prevention: strips script/iframe/object/embed/form tags, event handlers, javascript: URLs). 7 new handler files, 1 model file. 146 unit tests passing (31 new policy tests). Docker build clean. No new services needed — docker-compose.yml unchanged. DEV-FE/CR/QA unblocked. |
 | 2026-02-20 22:50 | PM | Sprint 5 agent lifecycle update — 44% complete (22/50 tasks). **DEV-BE DISABLED** (all 11 tasks complete). **DEV-FE, CR, QA all ENABLED** and triggered (dependencies met: 11 BE tasks complete > threshold). Critical path: all three agents running in parallel. DEV-FE (9 policy dashboard pages), CR (policy code review + HTML sanitization audit), QA (policy workflow testing). Gateway timeout on trigger (agents will run on schedule). |
 | 2026-02-20 22:50 | DEV-FE | All 9 tasks complete. Policy library page (searchable/filterable with stats cards + create dialog), policy detail page (4-tab layout: content/versions/signoffs/controls + submit-for-review/publish/archive actions + inline sign-off approve/reject), policy editor (HTML content editing with preview toggle + save-as-new-version with change summary/type + status revert warning), version history page (full version list + side-by-side comparison with word count delta), sign-off interface (integrated into detail page: request approvals with signer IDs/due date, approve/reject with comments, withdraw), policy-to-control linking UI (searchable control selector with coverage level + notes + unlink), template library (grouped by framework with clone-to-policy dialog), policy gap dashboard (summary cards + control gap table by impact + framework coverage cards with progress bars), approval workflow page (pending approvals with urgency filtering + all-in-review overview + approve/reject actions). Sidebar updated with 4 new Policy Management nav items. Shared constants extracted to components/policy/constants.ts. API client extended with 30+ Sprint 5 types and functions. Build passes clean (29 routes total). New files: 7 pages, 1 shared constants module. |
+| 2026-02-20 23:04 | CR | All 10 tasks complete. Comprehensive security audit: 3 CRITICAL issues found (missing RBAC checks in ArchivePolicy + PublishPolicy endpoints, XSS vulnerability from dangerouslySetInnerHTML + weak regex-based HTML sanitization). Filed Issues #10-12. Multi-tenancy isolation verified (20+ org_id checks), SQL injection prevention confirmed (all parameterized queries), proper RBAC on 8/10 policy endpoints, audit logging present. Reviewed 8 handler files + 1 model + 1 frontend page + 8 migrations (~8,600 LOC). 146/146 unit tests passing. Result: CONDITIONAL APPROVAL — code is well-structured but MUST fix 3 critical issues before deployment. CODE_REVIEW.md published. Sprint 5 at 82% completion. |
