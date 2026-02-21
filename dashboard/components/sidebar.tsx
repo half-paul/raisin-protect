@@ -26,6 +26,10 @@ import {
   X,
   Grid3X3,
   BarChart3,
+  Activity,
+  Bell,
+  PlayCircle,
+  Settings2,
 } from 'lucide-react';
 
 interface NavItem {
@@ -60,7 +64,7 @@ const navigation: NavSection[] = [
         label: 'Posture Overview',
         href: '/posture',
         icon: Shield,
-        roles: ['ciso', 'compliance_manager'],
+        roles: ['ciso', 'compliance_manager', 'security_engineer'],
       },
     ],
   },
@@ -109,16 +113,28 @@ const navigation: NavSection[] = [
     title: 'Monitoring',
     items: [
       {
-        label: 'Alerts',
-        href: '/alerts',
-        icon: AlertTriangle,
+        label: 'Monitoring',
+        href: '/monitoring',
+        icon: Activity,
         roles: ['ciso', 'compliance_manager', 'security_engineer', 'devops_engineer'],
       },
       {
-        label: 'Monitoring',
-        href: '/monitoring',
-        icon: Monitor,
-        roles: ['security_engineer', 'devops_engineer'],
+        label: 'Alert Queue',
+        href: '/alerts',
+        icon: Bell,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'devops_engineer', 'it_admin'],
+      },
+      {
+        label: 'Test Runs',
+        href: '/test-runs',
+        icon: PlayCircle,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'devops_engineer'],
+      },
+      {
+        label: 'Alert Rules',
+        href: '/alert-rules',
+        icon: Settings2,
+        roles: ['ciso', 'compliance_manager', 'security_engineer'],
       },
     ],
   },

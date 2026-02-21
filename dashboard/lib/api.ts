@@ -1,5 +1,8 @@
 /**
- * API client helpers for Sprint 2: Frameworks & Controls
+ * API client helpers for Raisin Protect Dashboard
+ * Sprint 2: Frameworks & Controls
+ * Sprint 3: Evidence Management
+ * Sprint 4: Continuous Monitoring Engine
  */
 
 import { authFetch } from './auth';
@@ -760,4 +763,475 @@ export function createEvidenceEvaluation(id: string, body: {
 
 export function searchEvidence(params?: Record<string, string>) {
   return apiGet<EvidenceArtifact[]>('/api/v1/evidence/search', params);
+}
+
+// ========== Sprint 4: Continuous Monitoring Types ==========
+
+export type TestType =
+  | 'configuration'
+  | 'access_control'
+  | 'endpoint'
+  | 'vulnerability'
+  | 'data_protection'
+  | 'network'
+  | 'logging'
+  | 'custom';
+
+export type TestStatus = 'draft' | 'active' | 'paused' | 'deprecated';
+export type TestSeverity = 'critical' | 'high' | 'medium' | 'low' | 'informational';
+export type TestResultStatus = 'pass' | 'fail' | 'error' | 'skip' | 'warning';
+export type TestRunStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+export type TestRunTrigger = 'scheduled' | 'manual' | 'on_change' | 'webhook';
+
+export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low';
+export type AlertStatus = 'open' | 'acknowledged' | 'in_progress' | 'resolved' | 'suppressed' | 'closed';
+export type AlertDeliveryChannel = 'slack' | 'email' | 'webhook' | 'in_app';
+
+export interface TestDefinition {
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  test_type: TestType;
+  severity: TestSeverity;
+  status: TestStatus;
+  control?: {
+    id: string;
+    identifier: string;
+    title: string;
+    category?: string;
+    status?: string;
+  };
+  schedule_cron?: string | null;
+  schedule_interval_min?: number | null;
+  next_run_at?: string | null;
+  last_run_at?: string | null;
+  timeout_seconds?: number;
+  retry_count?: number;
+  retry_delay_seconds?: number;
+  test_config?: Record<string, unknown>;
+  test_script?: string | null;
+  test_script_language?: string | null;
+  tags: string[];
+  created_by?: { id: string; name: string };
+  latest_result?: {
+    id?: string;
+    status: TestResultStatus;
+    message?: string;
+    tested_at?: string;
+    duration_ms?: number;
+  } | null;
+  result_summary?: {
+    total_runs: number;
+    last_24h: Record<TestResultStatus, number>;
+  };
+  active_alerts?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TestRun {
+  id: string;
+  run_number: number;
+  status: TestRunStatus;
+  trigger_type: TestRunTrigger;
+  started_at?: string | null;
+  completed_at?: string | null;
+  duration_ms?: number | null;
+  total_tests: number;
+  passed: number;
+  failed: number;
+  errors: number;
+  skipped: number;
+  warnings: number;
+  triggered_by?: { id: string; name: string } | null;
+  trigger_metadata?: Record<string, unknown>;
+  worker_id?: string | null;
+  error_message?: string | null;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface TestResult {
+  id: string;
+  test_run_id?: string;
+  run_number?: number;
+  test: {
+    id: string;
+    identifier: string;
+    title: string;
+    test_type: TestType;
+    severity?: TestSeverity;
+  };
+  control?: {
+    id: string;
+    identifier: string;
+    title: string;
+  };
+  status: TestResultStatus;
+  severity: TestSeverity;
+  message?: string;
+  details?: Record<string, unknown>;
+  output_log?: string;
+  error_message?: string | null;
+  duration_ms?: number;
+  alert_generated?: boolean;
+  alert_id?: string | null;
+  started_at?: string;
+  completed_at?: string;
+  created_at: string;
+}
+
+export interface Alert {
+  id: string;
+  alert_number: number;
+  title: string;
+  description?: string;
+  severity: AlertSeverity;
+  status: AlertStatus;
+  control?: {
+    id: string;
+    identifier: string;
+    title: string;
+    category?: string;
+  };
+  test?: {
+    id: string;
+    identifier: string;
+    title: string;
+    test_type?: TestType;
+  };
+  test_result?: {
+    id: string;
+    status: TestResultStatus;
+    message?: string;
+    details?: Record<string, unknown>;
+    tested_at?: string;
+  };
+  alert_rule?: { id: string; name: string } | null;
+  assigned_to?: { id: string; name: string; email?: string } | null;
+  assigned_at?: string | null;
+  assigned_by?: { id: string; name: string } | null;
+  sla_deadline?: string | null;
+  sla_breached?: boolean;
+  hours_remaining?: number | null;
+  resolved_by?: { id: string; name: string } | null;
+  resolved_at?: string | null;
+  resolution_notes?: string | null;
+  suppressed_until?: string | null;
+  suppression_reason?: string | null;
+  delivery_channels?: AlertDeliveryChannel[];
+  delivered_at?: Record<string, string>;
+  tags?: string[];
+  metadata?: Record<string, unknown>;
+  control_identifier?: string;
+  test_identifier?: string;
+  assigned_to_name?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AlertRule {
+  id: string;
+  name: string;
+  description?: string;
+  enabled: boolean;
+  match_test_types?: TestType[] | null;
+  match_severities?: TestSeverity[] | null;
+  match_result_statuses?: TestResultStatus[] | null;
+  match_control_ids?: string[] | null;
+  match_tags?: string[] | null;
+  consecutive_failures: number;
+  cooldown_minutes: number;
+  alert_severity: AlertSeverity;
+  alert_title_template?: string | null;
+  auto_assign_to?: string | null;
+  sla_hours?: number | null;
+  delivery_channels: AlertDeliveryChannel[];
+  slack_webhook_url?: string;
+  email_recipients?: string[];
+  webhook_url?: string;
+  webhook_headers?: Record<string, string>;
+  priority: number;
+  alerts_generated?: number;
+  created_by?: { id: string; name: string };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface HeatmapControl {
+  id: string;
+  identifier: string;
+  title: string;
+  category: string;
+  health_status: 'healthy' | 'failing' | 'error' | 'warning' | 'untested';
+  latest_result?: {
+    status: TestResultStatus;
+    severity: TestSeverity;
+    message?: string;
+    tested_at?: string;
+  } | null;
+  active_alerts: number;
+  tests_count: number;
+}
+
+export interface HeatmapData {
+  summary: {
+    total_controls: number;
+    healthy: number;
+    failing: number;
+    error: number;
+    warning: number;
+    untested: number;
+  };
+  controls: HeatmapControl[];
+}
+
+export interface PostureFramework {
+  framework_id: string;
+  framework_name: string;
+  framework_version: string;
+  org_framework_id: string;
+  total_mapped_controls: number;
+  passing: number;
+  failing: number;
+  untested: number;
+  posture_score: number;
+  trend?: {
+    '7d_ago': number;
+    '30d_ago': number;
+    direction: 'improving' | 'declining' | 'stable';
+  };
+}
+
+export interface PostureData {
+  overall_score: number;
+  frameworks: PostureFramework[];
+}
+
+export interface MonitoringSummary {
+  overall_posture_score: number;
+  controls: {
+    total_active: number;
+    healthy: number;
+    failing: number;
+    untested: number;
+    health_rate: number;
+  };
+  tests: {
+    total_active: number;
+    last_run?: {
+      run_number: number;
+      status: string;
+      completed_at?: string;
+      passed: number;
+      failed: number;
+      errors: number;
+    } | null;
+    pass_rate_24h: number;
+  };
+  alerts: {
+    open: number;
+    acknowledged: number;
+    in_progress: number;
+    sla_breached: number;
+    resolved_today: number;
+    by_severity: Record<AlertSeverity, number>;
+  };
+  recent_activity: {
+    type: string;
+    alert_number?: number;
+    run_number?: number;
+    title?: string;
+    severity?: string;
+    passed?: number;
+    failed?: number;
+    resolved_by?: string;
+    timestamp: string;
+  }[];
+}
+
+export interface AlertQueueData {
+  queue_summary: {
+    active: number;
+    resolved: number;
+    suppressed: number;
+    closed: number;
+    sla_breached: number;
+  };
+  alerts: Alert[];
+}
+
+// ========== Sprint 4: Monitoring API Functions ==========
+
+// ---- Tests ----
+
+export function listTests(params?: Record<string, string>) {
+  return apiGet<TestDefinition[]>('/api/v1/tests', params);
+}
+
+export function getTest(id: string) {
+  return apiGet<TestDefinition>(`/api/v1/tests/${id}`);
+}
+
+export function createTest(body: Partial<TestDefinition>) {
+  return apiPost<TestDefinition>('/api/v1/tests', body);
+}
+
+export function updateTest(id: string, body: Partial<TestDefinition>) {
+  return apiPut<TestDefinition>(`/api/v1/tests/${id}`, body);
+}
+
+export function changeTestStatus(id: string, status: string) {
+  return apiPut<{ id: string; status: string; previous_status: string; next_run_at?: string; message: string }>(
+    `/api/v1/tests/${id}/status`,
+    { status }
+  );
+}
+
+export function deleteTest(id: string) {
+  return apiDelete<{ id: string; status: string; message: string }>(`/api/v1/tests/${id}`);
+}
+
+export function getTestResults(testId: string, params?: Record<string, string>) {
+  return apiGet<{ test: { id: string; identifier: string; title: string }; results: TestResult[] }>(
+    `/api/v1/tests/${testId}/results`,
+    params
+  );
+}
+
+// ---- Test Runs ----
+
+export function createTestRun(body?: { test_ids?: string[]; trigger_metadata?: Record<string, unknown> }) {
+  return apiPost<TestRun>('/api/v1/test-runs', body || {});
+}
+
+export function listTestRuns(params?: Record<string, string>) {
+  return apiGet<TestRun[]>('/api/v1/test-runs', params);
+}
+
+export function getTestRun(id: string) {
+  return apiGet<TestRun>(`/api/v1/test-runs/${id}`);
+}
+
+export function cancelTestRun(id: string) {
+  return apiPost<{ id: string; status: string; previous_status: string; message: string }>(
+    `/api/v1/test-runs/${id}/cancel`,
+    {}
+  );
+}
+
+export function listTestRunResults(runId: string, params?: Record<string, string>) {
+  return apiGet<TestResult[]>(`/api/v1/test-runs/${runId}/results`, params);
+}
+
+export function getTestRunResult(runId: string, resultId: string) {
+  return apiGet<TestResult>(`/api/v1/test-runs/${runId}/results/${resultId}`);
+}
+
+// ---- Control Test Results ----
+
+export function getControlTestResults(controlId: string, params?: Record<string, string>) {
+  return apiGet<{
+    control: { id: string; identifier: string; title: string };
+    health_status: string;
+    tests_count: number;
+    results: TestResult[];
+  }>(`/api/v1/controls/${controlId}/test-results`, params);
+}
+
+// ---- Alerts ----
+
+export function listAlerts(params?: Record<string, string>) {
+  return apiGet<Alert[]>('/api/v1/alerts', params);
+}
+
+export function getAlert(id: string) {
+  return apiGet<Alert>(`/api/v1/alerts/${id}`);
+}
+
+export function changeAlertStatus(id: string, status: string) {
+  return apiPut<{ id: string; alert_number: number; status: string; previous_status: string; message: string }>(
+    `/api/v1/alerts/${id}/status`,
+    { status }
+  );
+}
+
+export function assignAlert(id: string, assignedTo: string) {
+  return apiPut<Alert>(`/api/v1/alerts/${id}/assign`, { assigned_to: assignedTo });
+}
+
+export function resolveAlert(id: string, resolutionNotes: string) {
+  return apiPut<Alert>(`/api/v1/alerts/${id}/resolve`, { resolution_notes: resolutionNotes });
+}
+
+export function suppressAlert(id: string, suppressedUntil: string, suppressionReason: string) {
+  return apiPut<Alert>(`/api/v1/alerts/${id}/suppress`, {
+    suppressed_until: suppressedUntil,
+    suppression_reason: suppressionReason,
+  });
+}
+
+export function closeAlert(id: string, resolutionNotes?: string) {
+  return apiPut<Alert>(`/api/v1/alerts/${id}/close`, { resolution_notes: resolutionNotes });
+}
+
+export function redeliverAlert(id: string, channels?: string[]) {
+  return apiPost<{ id: string; alert_number: number; delivery_results: Record<string, unknown>; message: string }>(
+    `/api/v1/alerts/${id}/deliver`,
+    channels ? { channels } : {}
+  );
+}
+
+export function testAlertDelivery(body: {
+  channel: string;
+  slack_webhook_url?: string;
+  email_recipients?: string[];
+  webhook_url?: string;
+  webhook_headers?: Record<string, string>;
+}) {
+  return apiPost<{ channel: string; success: boolean; message: string }>(
+    '/api/v1/alerts/test-delivery',
+    body
+  );
+}
+
+// ---- Alert Rules ----
+
+export function listAlertRules(params?: Record<string, string>) {
+  return apiGet<AlertRule[]>('/api/v1/alert-rules', params);
+}
+
+export function getAlertRule(id: string) {
+  return apiGet<AlertRule>(`/api/v1/alert-rules/${id}`);
+}
+
+export function createAlertRule(body: Partial<AlertRule>) {
+  return apiPost<AlertRule>('/api/v1/alert-rules', body);
+}
+
+export function updateAlertRule(id: string, body: Partial<AlertRule>) {
+  return apiPut<AlertRule>(`/api/v1/alert-rules/${id}`, body);
+}
+
+export function deleteAlertRule(id: string) {
+  return apiDelete<{ id: string; message: string }>(`/api/v1/alert-rules/${id}`);
+}
+
+// ---- Monitoring Dashboard ----
+
+export function getMonitoringHeatmap(params?: Record<string, string>) {
+  return apiGet<HeatmapData>('/api/v1/monitoring/heatmap', params);
+}
+
+export function getMonitoringPosture() {
+  return apiGet<PostureData>('/api/v1/monitoring/posture');
+}
+
+export function getMonitoringSummary() {
+  return apiGet<MonitoringSummary>('/api/v1/monitoring/summary');
+}
+
+export function getAlertQueue(params?: Record<string, string>) {
+  return apiGet<AlertQueueData>('/api/v1/monitoring/alert-queue', params);
 }
