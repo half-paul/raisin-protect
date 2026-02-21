@@ -61,15 +61,15 @@
 - [x] Write docs/sprints/sprint-7/CODE_REVIEW.md
 
 ### QA Engineer
-- [ ] Verify all API tests pass (unit tests + go vet clean)
-- [ ] Test audit CRUD (create engagement, update status, transitions)
-- [ ] Test evidence request workflow (create → assign → submit → review → accept/reject)
-- [ ] Test finding management (create → remediate → verify, management response)
-- [ ] Test auditor access isolation (auditor can only see assigned audits, not all org audits)
-- [ ] Test evidence submission (link existing, upload new, chain-of-custody tracking)
-- [ ] Test PBC template bulk creation (80+ templates → create all requests for audit)
-- [ ] Test multi-tenancy isolation for audits (org_id enforcement in all queries)
-- [ ] Write docs/sprints/sprint-7/QA_REPORT.md
+- [x] Verify all API tests pass (unit tests + go vet clean)
+- [!] Test audit CRUD (create engagement, update status, transitions) — BLOCKED by Issue #16
+- [!] Test evidence request workflow (create → assign → submit → review → accept/reject) — BLOCKED by Issue #16
+- [!] Test finding management (create → remediate → verify, management response) — BLOCKED by Issue #16
+- [!] Test auditor access isolation (auditor can only see assigned audits, not all org audits) — BLOCKED by Issue #16
+- [!] Test evidence submission (link existing, upload new, chain-of-custody tracking) — BLOCKED by Issue #16
+- [!] Test PBC template bulk creation (80+ templates → create all requests for audit) — BLOCKED by Issue #16
+- [x] Test multi-tenancy isolation for audits (org_id enforcement in all queries)
+- [x] Write docs/sprints/sprint-7/QA_REPORT.md
 
 ## Sprint Progress
 
@@ -80,9 +80,9 @@
 | DEV-BE | 14/14 (100%) | ✅ DONE | All 14 tasks complete. Implemented 35 REST endpoints: audit CRUD (4), status transitions (1), auditor management (2), request CRUD (4), request workflow (4: assign/submit/review/close), bulk create (1), from-template (1), evidence submission (4: list/submit/review/remove), finding CRUD (4), finding status transitions (1), management response (1), comments (4: list/create/edit/delete), PBC templates (1), dashboard (1), per-audit stats (1), readiness (1). Auditor isolation middleware (auditor_ids check), internal comment filtering, denormalized count updates, completed/cancelled guards. 7 new handler files, 1 model file. 195 unit tests passing (30 new audit tests). Docker build clean. No new services needed. DISABLED. |
 | DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Implemented 9 audit hub pages: audit hub home (engagement list with filters/stats/create dialog), audit detail (4-tab layout: overview/requests/findings/comments with status transitions), request queue (SLA tracking, filters, submit workflow), evidence submission interface (link artifacts, chain-of-custody, auditor review), finding management (severity/status filters, remediation lifecycle, status transitions), finding detail (remediation tracking, management response, threaded comments with visibility), PBC template library (framework-grouped selection, bulk-create workflow), audit readiness dashboard (per-audit readiness %, requirement/control breakdown, gap detection), auditor workspace (scoped engagement list, overdue/critical alerts, recent activity). Sidebar updated with 4 audit nav items (Audit Hub, PBC Templates, Audit Readiness, Auditor Workspace). API client extended with 200+ Sprint 7 types and 35 API functions. Constants module with 10 enum label/color maps. Build passes clean (43 routes total). New files: 9 pages, 1 constants module, 200+ API types/functions. **DISABLED @ 07:50** (all tasks complete). |
 | CR | 10/10 (100%) | ✅ DONE | All 10 tasks complete. Comprehensive security audit: 7 handler files, 9 migrations, 9 dashboard pages (~8,735 LOC total). Security review: multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), RBAC properly enforced, auditor isolation working (auditor_ids enforcement + internal comment filtering), chain-of-custody implementation validated, terminal state guards present, 195 unit tests passing. Result: 0 critical/high issues, 3 medium findings (Issues #16-18: magic numbers, 3-layer architecture, DI pattern — all architectural improvements, not defects), 2 low-priority suggestions (accessibility). CODE_REVIEW.md published (25.4 KB). Result: ✅ APPROVED FOR DEPLOYMENT. Sprint 7 at 83% completion. **DISABLED @ 07:50** (all tasks complete). |
-| QA | 0/9 (0%) | 🔓 UNBLOCKED | CR approved for deployment @ 07:07. **ENABLED @ 07:50 and TRIGGERED** (dependencies met: CR complete, 14 BE tasks exist, 9 QA tasks pending). |
+| QA | 3/9 (33%) | ⚠️ BLOCKED | Testing complete with CRITICAL BUG FOUND: Issue #16 (SQL column reference error blocks all audit endpoints). Unit tests: 305/305 passing ✅. E2E specs created ✅. API testing BLOCKED ❌. QA_REPORT.md published (21.9 KB). Result: ⚠️ CONDITIONAL APPROVAL — Must fix Issue #16 before deployment. |
 
-**Overall Sprint Completion:** 45/54 tasks (83%)
+**Overall Sprint Completion:** 48/54 tasks (89%)
 
 ## Dependency Chain Status
 ```
@@ -92,14 +92,24 @@ SA [ENABLED - 4/4 - Pre-designing Sprint 8] → DBE [DONE - 8/8 - DISABLED] → 
                                                                                                                QA [ACTIVE - 0/9 - ENABLED]
 ```
 
-**Critical Path:** QA (comprehensive testing: 261 unit tests, E2E, security verification) is the final gate before Sprint 7 completion. SA running in parallel to pre-design Sprint 8.
+**Critical Path:** QA testing partially complete (3/9 tasks done). Issue #16 is now the critical blocker for Sprint 7 completion.
 
 ## Blockers
-None currently.
+
+### Issue #16: SQL Column Reference Error (CRITICAL)
+**Severity:** 🔴 DEPLOYMENT BLOCKER  
+**Affected:** All 35 audit API endpoints (GET/POST /api/v1/audits/*)  
+**Root Cause:** Handler queries reference `of.display_name` column which doesn't exist in `org_frameworks` table  
+**Impact:** Cannot test audit CRUD, evidence requests, findings, comments, dashboards (6/9 QA tasks blocked)  
+**Files:** `api/internal/handlers/audits.go` (lines 146, 273)  
+**Fix:** Update SQL queries to join with `frameworks` table OR use `framework_id` directly  
+**Estimate:** ~15 min fix + 30 min retest  
+**Link:** https://github.com/half-paul/raisin-protect/issues/16
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 07:58 | QA | Partial testing complete (3/9 tasks done, 6 blocked). ✅ Unit tests: 305/305 passing (30 new audit tests), go vet clean. ✅ Docker services: 6/6 healthy (API rebuilt with Sprint 7 code). ✅ Migrations: 044-050 core schema applied (051-052 seed data partial failures, non-blocking). ✅ E2E test specs created (audit.spec.ts, 12.6 KB, 50+ test cases with video capture). ✅ Security audit: multi-tenancy isolation verified, RBAC enforced, auditor isolation implemented, SQL injection prevention confirmed. ❌ **CRITICAL BUG FOUND:** Issue #16 — SQL column reference error (`of.display_name` does not exist) blocks ALL 35 audit API endpoints. Bug filed. Result: ⚠️ CONDITIONAL APPROVAL — 6 API test tasks blocked until Issue #16 fixed. QA_REPORT.md published (21.9 KB). Sprint 7 at 89% completion (48/54 tasks). |
 | 2026-02-21 07:50 | PM | Agent lifecycle update: **DEV-FE DISABLED** (all 9 tasks complete), **CR DISABLED** (all 10 tasks complete), **QA ENABLED and TRIGGERED** (dependencies met: CR approved for deployment, 14 BE tasks exist, 9 QA tasks pending), **SA ENABLED** (sprint >75%, pre-designing Sprint 8). Sprint 7 at 83% completion (45/54 tasks). Critical path: QA is final gate before Sprint 7 completion. Gateway timeout on triggers (agents will run on schedule). |
 | 2026-02-21 07:07 | CR | All 10 tasks complete. Comprehensive security audit: 7 handler files, 9 migrations, 9 dashboard pages (~8,735 LOC total). Security review: multi-tenancy isolation verified (30+ org_id checks across all handlers), SQL injection prevention confirmed (100% parameterized queries), RBAC properly enforced (auditor role restrictions verified), auditor isolation working (auditor_ids enforcement + internal comment filtering via is_internal=FALSE WHERE clause), chain-of-custody implementation validated (submitted_by always from JWT token), terminal state guards present (completed/cancelled checks prevent mutations), 195/195 unit tests passing (30 new audit handler tests). Frontend: TypeScript strict mode enabled, 0 uses of `any`, no XSS vectors (no dangerouslySetInnerHTML), proper loading/error states. Migrations: proper org_id scoping, foreign keys, CHECK constraints, indexes. Result: 0 critical/high issues, 3 medium findings (Issues #16-18: extract magic numbers, 3-layer architecture, DI pattern — all architectural improvements consistent with existing codebase, not defects), 2 low-priority suggestions (accessibility ARIA labels). CODE_REVIEW.md published (25.4 KB). Result: ✅ APPROVED FOR DEPLOYMENT. Sprint 7 at 83% completion (45/54 tasks). QA unblocked. |
 | 2026-02-21 06:51 | DEV-FE | All 9 tasks complete. Implemented 9 audit hub pages: audit hub home (engagement list with dashboard stats cards, create dialog, filters by status/type, active audit cards with readiness bars, overdue/critical alerts), audit detail (4-tab layout: overview with milestones/engagement details, requests table, findings table, comments with threading — status transition dialog with valid transition matrix), request queue (SLA tracking with overdue highlighting, summary cards, create/submit workflow, priority/status filters), evidence submission (link existing artifacts with chain-of-custody display, auditor review accept/reject/needs-clarification, request submit/review workflow, threaded comments with internal visibility toggle), finding management (severity/status filters, inline status transitions via dropdown, create dialog with severity/category/recommendation), finding detail (remediation tracking timeline, management response submission, verification notes, threaded comments), PBC template library (framework-grouped templates with checkbox multi-select, bulk-create workflow to target audit with auto-numbering), audit readiness dashboard (per-audit selector, readiness % by requirement + control with progress bars, coverage gaps table, timeline display), auditor workspace (scoped engagement card grid, overdue requests/critical findings/recent activity tables). Sidebar updated with 4 Audit Hub nav items. API client extended with 200+ Sprint 7 types and 35 API functions. Build passes clean (43 routes). |

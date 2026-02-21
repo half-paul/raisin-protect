@@ -12,14 +12,6 @@ export default defineConfig({
     trace: 'on-first-retry',
     headless: true,
   },
-  reporter: [
-    ['html', { outputFolder: './reports' }],
-    ['list']
-  ],
-  projects: [
-    {
-      name: 'chromium',
-      use: { browserName: 'chromium' },
-    },
-  ],
+  reporter: [['html', { outputFolder: './reports' }], ['list']],
+  projects: [{ name: 'chromium', use: { browserName: 'chromium' } }],
 });
