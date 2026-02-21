@@ -71,7 +71,7 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | 🔄 ENABLED | Sprint 6 complete. Sprint >75%, SA enabled to pre-design Sprint 7 (Audit Hub). |
+| SA | 4/4 (100%) | ✅ DONE | Sprint 6 complete. Sprint 7 pre-design complete (Audit Hub: SCHEMA.md + API_SPEC.md delivered). |
 | DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
 | DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete: 21 REST endpoints (risk CRUD+status, assessments+recalc, treatments+complete, controls CRUD, heat map, gaps, search, stats). 50 risk unit tests passing (261 total). Docker build clean. |
 | DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: risk register list (filterable + mini heat map), risk detail (4-tab: info/assessments/treatments/controls), risk editor (create + edit), assessment interface (likelihood×impact dropdowns + live score preview), heat map visualization (5×5 grid + tooltips + severity legend), treatment plan UI (CRUD + status transitions + complete with effectiveness), control linking (search + link + unlink + effectiveness), risk gap dashboard (6 summary cards + urgency table), treatment progress tracking (completion bars + status breakdown). Sidebar updated with 4 Risk Management nav items. Build passes clean (36 routes). |
@@ -88,7 +88,15 @@ SA [DONE - 4/4 - ENABLED for Sprint 7] → DBE [DONE - 7/7 - DISABLED] → DEV-B
                                                                                                           QA [DONE - 9/9 - DISABLED]
 ```
 
-**Critical Path:** ✅ Sprint 6 COMPLETE. All agents done. SA pre-designing Sprint 7 in parallel.
+**Critical Path:** ✅ Sprint 6 COMPLETE. All agents done. SA Sprint 7 pre-design COMPLETE.
+
+## Sprint 7 Pre-Design (Audit Hub) — SA Complete
+
+### System Architect (Pre-Design)
+- [x] Design Sprint 7 schema (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments)
+- [x] Write Sprint 7 API spec (35 endpoints: audit CRUD, requests, evidence submission, findings, comments, templates, dashboard)
+- [x] Write docs/sprints/sprint-7/SCHEMA.md
+- [x] Write docs/sprints/sprint-7/API_SPEC.md
 
 ## Blockers
 None currently.
@@ -96,6 +104,7 @@ None currently.
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 04:03 | SA | Sprint 7 pre-design complete: SCHEMA.md (5 tables: audits, audit_requests, audit_findings, audit_evidence_links, audit_comments + 9 new enums + 20 audit_action extensions + evidence_links FK extension + auditor access model + chain-of-custody queries + PBC template seeds ~80 templates across SOC2/PCI/ISO/GDPR + demo audit engagement with 8 requests, 4 findings, 5 evidence links, 6 comments) and API_SPEC.md (35 endpoints covering audit engagement CRUD + status transitions, auditor management, evidence request/response workflow with assign/submit/review lifecycle, evidence submission with chain-of-custody, finding management with full remediation lifecycle + management response + risk acceptance + auditor verification, threaded comments with internal visibility, PBC request templates with bulk creation, audit hub dashboard with readiness scores + overdue tracking + critical findings + recent activity, per-audit stats and readiness breakdown). Role-based access matrix: auditors see only their engagements, internal comments hidden from auditors. 9 migration files (044-052). DBE unblocked for Sprint 7. |
 | 2026-02-21 03:50 | QA | All 9 tasks complete. **Sprint 6 COMPLETE (100%).** Comprehensive testing: 261/261 unit tests passing (50 new risk tests), go vet clean, 21 API endpoints verified (risk CRUD, assessments, treatments, heat map, gaps, search), dashboard builds clean (36 routes, +6 risk pages), Docker services healthy (6/6, worker unhealthy pre-existing). Manual migration deployment: Sprint 5 (027-034) + Sprint 6 (035-043) applied successfully, 4 seed files failed with UUID format errors (non-blocking). E2E test suite created: 3 new risk specs (CRUD, assessments, treatments) covering 50+ test cases with video capture configured. Security verification: multi-tenancy isolation confirmed (org_id enforcement tested), SQL injection prevention verified, RBAC enforced. Risk scoring engine validated: 5 test cases (1→25 range), severity bands correct (critical/high/medium/low). 1 environmental finding: manual migrations required (documented in QA report). Result: APPROVED FOR DEPLOYMENT (after addressing Sprint 5 Issues #13-15). QA_REPORT.md published (19.3 KB). Sprint 6 at 100% completion. |
 | 2026-02-21 03:03 | CR | All 10 tasks complete. Comprehensive code review: 6 backend handler files (risks, risk_assessments, risk_treatments, risk_controls, risk_analytics + models/risk), 9 migrations (035-043), 6 frontend pages (~11,200 LOC total). Security audit: multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), RBAC properly enforced (8/10 endpoints), audit logging present. Result: 1 CRITICAL issue (Issue #13: missing RBAC in ArchiveRisk), 1 HIGH issue (Issue #14: no owner ID validation), 1 MEDIUM issue (Issue #15: RecalculateRiskScores authorization). CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT (after fixing Issue #13). Sprint 6 at 82% completion. QA unblocked. |
 | 2026-02-21 03:50 | PM | Agent lifecycle update: **DEV-FE DISABLED** (all 9 tasks done), **CR DISABLED** (all 10 tasks done), **QA ENABLED and TRIGGERED** (CR approved, 9 QA tasks queued). **SA ENABLED** (sprint >75%, pre-designing Sprint 7). Sprint 6 at 82% completion. Critical path: QA (comprehensive testing + E2E) is final gate before Sprint 6 completion. Gateway timeouts on triggers (agents will run on schedule). |
