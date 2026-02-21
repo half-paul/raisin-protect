@@ -77,7 +77,7 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 4 design complete: SCHEMA.md (5 tables, 11 enums, 19 audit actions) + API_SPEC.md (32 endpoints). DBE unblocked. |
 | DBE | 8/8 (100%) | ✅ DONE | All migrations (019-025) and seed data complete. 5 tables, 11 enums, 19 audit actions, deferred FKs. DEV-BE unblocked. |
-| DEV-BE | 0/14 (0%) | 💤 DISABLED | Waiting for DBE to complete Sprint 4 migrations. |
+| DEV-BE | 0/14 (0%) | ⚡ ENABLED | All dependencies met (SA + DBE complete). 14 tasks queued. Critical path. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for DEV-BE to complete ≥5 backend tasks. |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for code to test. |
@@ -86,14 +86,14 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [ENABLED/ACTIVE] → DEV-BE [BLOCKED] → CR [BLOCKED]
-                                                       ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [ENABLED/ACTIVE] → CR [BLOCKED]
+                                                   ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
 **Critical Path:** DEV-BE (must deliver backend endpoints before frontend/QA work begins)
 
 ## Blockers
-**NONE:** DBE complete. DEV-BE is next on the critical path.
+**NONE:** All dependencies cleared. DEV-BE is now active and working on 14 backend tasks.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -131,3 +131,4 @@ SA [DONE] → DBE [ENABLED/ACTIVE] → DEV-BE [BLOCKED] → CR [BLOCKED]
 | 2026-02-20 15:50 | PM | **Sprint 3 COMPLETE (100%).** Sprint transition: advanced to Sprint 4 (Continuous Monitoring Engine). ALL agents disabled. SA enabled and triggered immediately to start Sprint 4 design (tests, alerts, worker, monitoring dashboard). |
 | 2026-02-20 15:52 | SA | Sprint 4 design complete: SCHEMA.md (5 tables: tests, test_runs, test_results, alerts, alert_rules + 11 new enums + 19 audit_action extensions + deferred FK cross-refs + worker architecture notes + query patterns for heatmap/posture/alert queue + 8 seed tests + 4 seed alert rules) and API_SPEC.md (32 endpoints covering test CRUD, test execution/runs/results, alert CRUD/lifecycle/assign/resolve/suppress/close, alert delivery with Slack/email/webhook, alert rule management, monitoring dashboard: heatmap/posture/summary/alert-queue). DBE unblocked. |
 | 2026-02-20 16:50 | PM | Sprint 4 status check — 7% complete (4/54 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete with all 4 tasks done). Critical path: DBE (8 migration tasks queued). All other agents remain disabled awaiting DBE completion. |
+| 2026-02-20 17:50 | PM | Sprint 4 agent lifecycle update — 22% complete (12/54 tasks). DBE DISABLED (all 8 tasks complete). DEV-BE ENABLED and triggered (dependencies met: SA + DBE both complete, 14 backend tasks queued). Critical path: DEV-BE. All other agents remain disabled. |
