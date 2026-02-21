@@ -22,20 +22,20 @@
 - [x] Add seed data: example tests for demo controls, sample alert rules
 
 ### Backend Developer
-- [ ] Test execution worker (background job scheduler)
-- [ ] Test runner engine (execute tests against controls)
-- [ ] Test result storage and history tracking
-- [ ] Alert generation engine (detect → classify → assign)
-- [ ] Alert CRUD endpoints (list, get, update status, assign, resolve)
-- [ ] Alert delivery: Slack webhook integration
-- [ ] Alert delivery: email integration (SMTP)
-- [ ] Alert rule management endpoints (create, update, delete rules)
-- [ ] Monitoring dashboard API: control health heatmap data
-- [ ] Monitoring dashboard API: alert queue (pending, in-progress, resolved)
-- [ ] Monitoring dashboard API: compliance posture score per framework
-- [ ] Alert notification worker (deliver alerts via configured channels)
-- [ ] Unit tests for test runner and alert engine
-- [ ] Update docker-compose.yml for worker service
+- [x] Test execution worker (background job scheduler)
+- [x] Test runner engine (execute tests against controls)
+- [x] Test result storage and history tracking
+- [x] Alert generation engine (detect → classify → assign)
+- [x] Alert CRUD endpoints (list, get, update status, assign, resolve)
+- [x] Alert delivery: Slack webhook integration
+- [x] Alert delivery: email integration (SMTP)
+- [x] Alert rule management endpoints (create, update, delete rules)
+- [x] Monitoring dashboard API: control health heatmap data
+- [x] Monitoring dashboard API: alert queue (pending, in-progress, resolved)
+- [x] Monitoring dashboard API: compliance posture score per framework
+- [x] Alert notification worker (deliver alerts via configured channels)
+- [x] Unit tests for test runner and alert engine
+- [x] Update docker-compose.yml for worker service
 
 ### Frontend Developer
 - [ ] Monitoring dashboard home (control health heatmap)
@@ -77,23 +77,23 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 4 design complete: SCHEMA.md (5 tables, 11 enums, 19 audit actions) + API_SPEC.md (32 endpoints). DBE unblocked. |
 | DBE | 8/8 (100%) | ✅ DONE | All migrations (019-025) and seed data complete. 5 tables, 11 enums, 19 audit actions, deferred FKs. DEV-BE unblocked. |
-| DEV-BE | 0/14 (0%) | ⚡ ENABLED | All dependencies met (SA + DBE complete). 14 tasks queued. Critical path. |
+| DEV-BE | 14/14 (100%) | ✅ DONE | All 14 tasks complete. 32 REST endpoints: tests CRUD (6), test runs (5+cancel), test results (2 cross-resource), alerts CRUD+lifecycle (9), alert delivery (2), alert rules (5), monitoring dashboard (4). MonitoringWorker with alert rule evaluation. 34 unit tests passing. Docker build clean. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for DEV-BE to complete ≥5 backend tasks. |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for code to test. |
 
-**Overall Sprint Completion:** 12/54 tasks (22%)
+**Overall Sprint Completion:** 26/54 tasks (48%)
 
 ## Dependency Chain Status
 ```
-SA [DONE] → DBE [DONE] → DEV-BE [ENABLED/ACTIVE] → CR [BLOCKED]
-                                                   ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [DONE] → DEV-BE [DONE] → CR [UNBLOCKED]
+                                        ↘ DEV-FE [UNBLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DEV-BE (must deliver backend endpoints before frontend/QA work begins)
+**Critical Path:** DEV-FE (9 dashboard pages) and CR (review code) can now start in parallel.
 
 ## Blockers
-**NONE:** All dependencies cleared. DEV-BE is now active and working on 14 backend tasks.
+**NONE:** DEV-BE complete. DEV-FE and CR are unblocked (≥5 BE tasks done).
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -132,3 +132,4 @@ SA [DONE] → DBE [DONE] → DEV-BE [ENABLED/ACTIVE] → CR [BLOCKED]
 | 2026-02-20 15:52 | SA | Sprint 4 design complete: SCHEMA.md (5 tables: tests, test_runs, test_results, alerts, alert_rules + 11 new enums + 19 audit_action extensions + deferred FK cross-refs + worker architecture notes + query patterns for heatmap/posture/alert queue + 8 seed tests + 4 seed alert rules) and API_SPEC.md (32 endpoints covering test CRUD, test execution/runs/results, alert CRUD/lifecycle/assign/resolve/suppress/close, alert delivery with Slack/email/webhook, alert rule management, monitoring dashboard: heatmap/posture/summary/alert-queue). DBE unblocked. |
 | 2026-02-20 16:50 | PM | Sprint 4 status check — 7% complete (4/54 tasks). Agent lifecycle: DBE ENABLED and triggered (dependencies met: SA complete with all 4 tasks done). Critical path: DBE (8 migration tasks queued). All other agents remain disabled awaiting DBE completion. |
 | 2026-02-20 17:50 | PM | Sprint 4 agent lifecycle update — 22% complete (12/54 tasks). DBE DISABLED (all 8 tasks complete). DEV-BE ENABLED and triggered (dependencies met: SA + DBE both complete, 14 backend tasks queued). Critical path: DEV-BE. All other agents remain disabled. |
+| 2026-02-20 17:50 | DEV-BE | All 14 tasks complete. Implemented 32 REST endpoints: tests CRUD (6), test runs (4+cancel), test results (2 cross-resource), alerts CRUD+lifecycle (9 — list, get, status, assign, resolve, suppress, close), alert delivery (2 — redeliver, test-delivery), alert rules (5 — CRUD+delete), monitoring dashboard (4 — heatmap, posture, summary, alert-queue). MonitoringWorker background job: polls due tests, executes, evaluates alert rules with consecutive-failure/cooldown logic, SLA breach detection, suppression expiry. 7 new handler files, 5 new model files, 1 worker file. 34 unit tests passing (118 total). Docker build clean. docker-compose.yml updated with worker service. DEV-FE/CR unblocked. |

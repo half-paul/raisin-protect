@@ -137,6 +137,40 @@ services:
         limits:
           memory: 512M
 
+  worker:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: rp-worker
+    command: ["./api"]
+    environment:
+      RP_PORT: "8091"
+      RP_ENV: ${RP_ENV:-development}
+      RP_DB_URL: postgres://rp:${POSTGRES_PASSWORD:-rp_dev_password}@postgres:5432/raisin_protect?sslmode=disable
+      RP_REDIS_URL: redis://redis:6379
+      RP_JWT_SECRET: ${RP_JWT_SECRET:-dev-jwt-secret-change-in-production}
+      RP_CORS_ORIGINS: ${RP_CORS_ORIGINS:-http://localhost:3010}
+      RP_LOG_LEVEL: ${RP_LOG_LEVEL:-info}
+      RP_MINIO_ENDPOINT: minio:9000
+      RP_MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-rp-admin}
+      RP_MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-changeme-minio}
+      RP_MINIO_BUCKET: rp-evidence
+      RP_MINIO_USE_SSL: "false"
+      WORKER_MODE: "true"
+      WORKER_POLL_INTERVAL: "30s"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - rp-net
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
 volumes:
   rp_postgres_data:
   rp_redis_data:

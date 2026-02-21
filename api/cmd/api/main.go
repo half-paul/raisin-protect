@@ -18,6 +18,7 @@ import (
 	"github.com/half-paul/raisin-protect/api/internal/middleware"
 	"github.com/half-paul/raisin-protect/api/internal/models"
 	"github.com/half-paul/raisin-protect/api/internal/services"
+	"github.com/half-paul/raisin-protect/api/internal/workers"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -238,7 +239,77 @@ func main() {
 			{
 				req.GET("/:id/evidence", handlers.ListRequirementEvidence)
 			}
+
+			// === Sprint 4: Continuous Monitoring Engine ===
+
+			// Tests (test definitions)
+			tests := protected.Group("/tests")
+			{
+				tests.GET("", handlers.ListTests)
+				tests.POST("", middleware.RequireRoles(models.TestCreateRoles...), handlers.CreateTest)
+				tests.GET("/:id", handlers.GetTest)
+				tests.PUT("/:id", middleware.RequireRoles(models.TestCreateRoles...), handlers.UpdateTest)
+				tests.PUT("/:id/status", middleware.RequireRoles(models.TestStatusRoles...), handlers.ChangeTestStatus)
+				tests.DELETE("/:id", middleware.RequireRoles(models.TestDeleteRoles...), handlers.DeleteTest)
+				tests.GET("/:id/results", handlers.ListTestResultsByTest)
+			}
+
+			// Test Runs (execution sweeps)
+			runs := protected.Group("/test-runs")
+			{
+				runs.POST("", middleware.RequireRoles(models.TestRunCreateRoles...), handlers.CreateTestRun)
+				runs.GET("", handlers.ListTestRuns)
+				runs.GET("/:id", handlers.GetTestRun)
+				runs.POST("/:id/cancel", middleware.RequireRoles(models.TestRunCancelRoles...), handlers.CancelTestRun)
+				runs.GET("/:id/results", handlers.ListTestRunResults)
+				runs.GET("/:id/results/:rid", handlers.GetTestRunResult)
+			}
+
+			// Control test results (cross-resource query)
+			ctrl.GET("/:id/test-results", handlers.ListControlTestResults)
+
+			// Alerts
+			alerts := protected.Group("/alerts")
+			{
+				alerts.GET("", handlers.ListAlerts)
+				alerts.GET("/:id", handlers.GetAlert)
+				alerts.PUT("/:id/status", middleware.RequireRoles(models.AlertStatusRoles...), handlers.ChangeAlertStatus)
+				alerts.PUT("/:id/assign", middleware.RequireRoles(models.AlertAssignRoles...), handlers.AssignAlert)
+				alerts.PUT("/:id/resolve", middleware.RequireRoles(models.AlertResolveRoles...), handlers.ResolveAlert)
+				alerts.PUT("/:id/suppress", middleware.RequireRoles(models.AlertSuppressRoles...), handlers.SuppressAlert)
+				alerts.PUT("/:id/close", middleware.RequireRoles(models.AlertSuppressRoles...), handlers.CloseAlert)
+				alerts.POST("/:id/deliver", middleware.RequireRoles(models.AlertDeliveryRoles...), handlers.RedeliverAlert)
+				alerts.POST("/test-delivery", middleware.RequireRoles(models.AlertSuppressRoles...), handlers.TestAlertDelivery)
+			}
+
+			// Alert Rules
+			rules := protected.Group("/alert-rules")
+			{
+				rules.GET("", middleware.RequireRoles(models.AlertRuleViewRoles...), handlers.ListAlertRules)
+				rules.POST("", middleware.RequireRoles(models.AlertRuleCreateRoles...), handlers.CreateAlertRule)
+				rules.GET("/:id", middleware.RequireRoles(models.AlertRuleViewRoles...), handlers.GetAlertRule)
+				rules.PUT("/:id", middleware.RequireRoles(models.AlertRuleCreateRoles...), handlers.UpdateAlertRule)
+				rules.DELETE("/:id", middleware.RequireRoles(models.AlertRuleCreateRoles...), handlers.DeleteAlertRule)
+			}
+
+			// Monitoring Dashboard
+			monitoring := protected.Group("/monitoring")
+			{
+				monitoring.GET("/heatmap", handlers.GetControlHealthHeatmap)
+				monitoring.GET("/posture", handlers.GetCompliancePosture)
+				monitoring.GET("/summary", handlers.GetMonitoringSummary)
+				monitoring.GET("/alert-queue", handlers.GetAlertQueue)
+			}
 		}
+	}
+
+	// Start monitoring worker (background)
+	if database != nil {
+		workerCtx, workerCancel := context.WithCancel(context.Background())
+		defer workerCancel()
+		monitoringWorker := workers.NewMonitoringWorker(database.DB, 30*time.Second)
+		go monitoringWorker.Run(workerCtx)
+		log.Info().Msg("Monitoring worker started in background")
 	}
 
 	// HTTP server
