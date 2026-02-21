@@ -72,8 +72,8 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. All tasks done, sprint <75%. |
-| DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete. 8 migrations (027-034): 4 enums, 4 tables, 15 audit_action extensions, deferred FKs, evidence_links policy_id. 15 templates (5 frameworks), 3 demo policies with versions/signoffs/control mappings. |
-| DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
+| DBE | 7/7 (100%) | ✅ DONE → 💤 DISABLED | All 7 tasks complete. 8 migrations (027-034): 4 enums, 4 tables, 15 audit_action extensions, deferred FKs, evidence_links policy_id. 15 templates (5 frameworks), 3 demo policies with versions/signoffs/control mappings. Work complete. |
+| DEV-BE | 0/11 (0%) | 🟢 ENABLED | DBE complete — 11 tasks queued. Policy API implementation ready to begin. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for implementation code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
@@ -82,14 +82,14 @@
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7] → DEV-BE [WAITING] → CR [WAITING]
-                                                                  ↘ DEV-FE [WAITING] → QA [WAITING]
+SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [ACTIVE - 0/11] → CR [WAITING]
+                                                                                    ↘ DEV-FE [WAITING] → QA [WAITING]
 ```
 
-**Critical Path:** DEV-BE (backend developer) is now on critical path. DBE complete — 8 migration files delivered. DEV-BE unblocked.
+**Critical Path:** DEV-BE (backend developer) is on critical path. All dependencies met — 11 backend tasks queued (policy CRUD, versioning, sign-offs, templates, gap detection).
 
 ## Blockers
-**NONE:** All dependencies resolved. DBE enabled and triggered.
+**NONE:** All dependencies resolved. DEV-BE enabled and triggered (gateway timeout on trigger, will run on schedule).
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -137,3 +137,4 @@ SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7] → DEV-BE [WAITING] → CR [WAI
 | 2026-02-20 19:53 | SA | Sprint 5 design complete: SCHEMA.md (4 tables: policies, policy_versions, policy_signoffs, policy_controls + 4 new enums + 15 audit_action extensions + evidence_links FK completion + 8 migration files + seed data for 15 templates across 5 frameworks + demo policies with versions, signoffs, and control mappings) and API_SPEC.md (28 endpoints covering policy CRUD, status transitions, version management with content comparison, sign-off workflow with approve/reject/withdraw, policy-to-control mapping with bulk ops, template library with clone, gap detection by control and by framework, content search, reminder system, and dashboard statistics). DBE unblocked. |
 | 2026-02-20 20:50 | PM | Sprint 5 agent lifecycle update — 8% complete (4/50 tasks). **SA DISABLED** (all tasks complete, sprint <75%). **DBE ENABLED and TRIGGERED** (dependencies met: SA complete, 7 migration tasks queued). Critical path: DBE must deliver schema before backend work begins. All other agents remain disabled. |
 | 2026-02-20 20:52 | DBE | Sprint 5 migrations complete: 8 migrations (027-034). 4 new enums (policy_category, policy_status, signoff_status, policy_content_format) + 15 audit_action extensions. 4 tables (policies, policy_versions, policy_signoffs, policy_controls) with full indexes, triggers, and CHECK constraints. Deferred FKs for current_version_id and evidence_links.policy_id. 15 policy templates across 5 frameworks (SOC 2, ISO 27001, PCI DSS, GDPR, CCPA) with full HTML content. 3 demo policies (1 published ISP, 1 published ACP, 1 in-review IRP) with versions, sign-offs, and 8 control mappings. DEV-BE unblocked. |
+| 2026-02-20 21:50 | PM | Sprint 5 agent lifecycle update — 22% complete (11/50 tasks). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 28 REST endpoints for policy management (CRUD, versioning, sign-offs, templates, gap detection). All other agents remain disabled. Gateway timeout on trigger (agent will run on schedule). |
