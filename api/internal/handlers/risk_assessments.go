@@ -326,7 +326,14 @@ func CreateRiskAssessment(c *gin.Context) {
 // RecalculateRiskScores recalculates denormalized scores from assessments.
 func RecalculateRiskScores(c *gin.Context) {
 	orgID := middleware.GetOrgID(c)
+	userRole := middleware.GetUserRole(c)
 	riskID := c.Param("id")
+
+	// RBAC: Only authorized roles can recalculate scores
+	if !models.HasRole(userRole, models.RiskRecalcRoles) {
+		c.JSON(http.StatusForbidden, errorResponse("FORBIDDEN", "Not authorized to recalculate risk scores"))
+		return
+	}
 
 	// Check risk exists
 	var identifier string

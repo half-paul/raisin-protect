@@ -242,6 +242,24 @@ func CreateRiskTreatment(c *gin.Context) {
 		ownerID = riskOwnerID
 	}
 
+	// Validate owner belongs to org if explicitly provided
+	if req.OwnerID != nil {
+		var ownerExists bool
+		err = database.DB.QueryRow(
+			`SELECT EXISTS(SELECT 1 FROM users WHERE id = $1 AND org_id = $2 AND status = 'active')`,
+			*req.OwnerID, orgID,
+		).Scan(&ownerExists)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to validate owner_id")
+			c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to validate owner"))
+			return
+		}
+		if !ownerExists {
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR", "owner_id does not exist or does not belong to this organization"))
+			return
+		}
+	}
+
 	// Parse due date
 	var dueDate *time.Time
 	if req.DueDate != nil {

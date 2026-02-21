@@ -17,6 +17,16 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// validateOwnerInOrg checks that the given userID exists and belongs to the specified org.
+func validateOwnerInOrg(userID, orgID string) (bool, error) {
+	var exists bool
+	err := database.DB.QueryRow(
+		`SELECT EXISTS(SELECT 1 FROM users WHERE id = $1 AND org_id = $2 AND status = 'active')`,
+		userID, orgID,
+	).Scan(&exists)
+	return exists, err
+}
+
 // computeAssessmentStatus returns the assessment status based on next_assessment_at.
 func computeAssessmentStatus(nextAssessmentAt *time.Time) string {
 	if nextAssessmentAt == nil {
@@ -587,6 +597,34 @@ func CreateRisk(c *gin.Context) {
 		ownerID = &userID
 	}
 
+	// Validate owner belongs to org
+	if ownerID != nil && *ownerID != userID {
+		exists, err := validateOwnerInOrg(*ownerID, orgID)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to validate owner_id")
+			c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to validate owner"))
+			return
+		}
+		if !exists {
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR", "owner_id does not exist or does not belong to this organization"))
+			return
+		}
+	}
+
+	// Validate secondary owner belongs to org if provided
+	if req.SecondaryOwnerID != nil {
+		exists, err := validateOwnerInOrg(*req.SecondaryOwnerID, orgID)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to validate secondary_owner_id")
+			c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to validate secondary owner"))
+			return
+		}
+		if !exists {
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR", "secondary_owner_id does not exist or does not belong to this organization"))
+			return
+		}
+	}
+
 	riskID := uuid.New().String()
 	now := time.Now()
 
@@ -778,6 +816,18 @@ func UpdateRisk(c *gin.Context) {
 		argN++
 	}
 	if req.OwnerID != nil {
+		// Validate owner belongs to org
+		exists, err := validateOwnerInOrg(*req.OwnerID, orgID)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to validate owner_id")
+			c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to validate owner"))
+			return
+		}
+		if !exists {
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR", "owner_id does not exist or does not belong to this organization"))
+			return
+		}
+
 		oldOwner := currentOwnerID
 		sets = append(sets, fmt.Sprintf("owner_id = $%d", argN))
 		args = append(args, *req.OwnerID)
@@ -791,6 +841,18 @@ func UpdateRisk(c *gin.Context) {
 		}
 	}
 	if req.SecondaryOwnerID != nil {
+		// Validate secondary owner belongs to org
+		exists, err := validateOwnerInOrg(*req.SecondaryOwnerID, orgID)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to validate secondary_owner_id")
+			c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to validate secondary owner"))
+			return
+		}
+		if !exists {
+			c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR", "secondary_owner_id does not exist or does not belong to this organization"))
+			return
+		}
+
 		sets = append(sets, fmt.Sprintf("secondary_owner_id = $%d", argN))
 		args = append(args, *req.SecondaryOwnerID)
 		argN++
@@ -875,7 +937,14 @@ func UpdateRisk(c *gin.Context) {
 // ArchiveRisk archives a risk (soft-delete).
 func ArchiveRisk(c *gin.Context) {
 	orgID := middleware.GetOrgID(c)
+	userRole := middleware.GetUserRole(c)
 	riskID := c.Param("id")
+
+	// RBAC: Only CISO or Compliance Manager can archive risks
+	if !models.HasRole(userRole, models.RiskArchiveRoles) {
+		c.JSON(http.StatusForbidden, errorResponse("FORBIDDEN", "Not authorized to archive risks"))
+		return
+	}
 
 	var currentStatus string
 	err := database.DB.QueryRow("SELECT status FROM risks WHERE id = $1 AND org_id = $2", riskID, orgID).Scan(&currentStatus)

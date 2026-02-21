@@ -7,7 +7,7 @@
  * - Auto-refresh on 401 responses
  */
 
-const API_BASE = '';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090';
 
 // GRC roles from spec §1.2
 export type GrcRole =

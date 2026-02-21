@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import DOMPurify from 'dompurify';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -354,7 +355,7 @@ export default function PolicyDetailPage() {
               {policy.current_version?.content ? (
                 <div
                   className="prose dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: policy.current_version.content }}
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(policy.current_version.content) }}
                 />
               ) : (
                 <p className="text-muted-foreground">No content available.</p>

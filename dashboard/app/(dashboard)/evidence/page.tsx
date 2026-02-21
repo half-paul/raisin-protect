@@ -145,7 +145,17 @@ export default function EvidenceLibraryPage() {
     const file = e.target.files?.[0];
     if (file) selectFile(file);
   }
+  // Maximum file size: 100 MB
+  const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
   function selectFile(file: File) {
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      setUploadError(`File size (${formatFileSize(file.size)}) exceeds maximum allowed (100 MB)`);
+      return;
+    }
+
+    setUploadError(''); // Clear any previous error
     setUploadFile(file);
     if (!uploadForm.title) {
       setUploadForm(f => ({ ...f, title: file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') }));

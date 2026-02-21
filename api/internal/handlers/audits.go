@@ -143,7 +143,7 @@ func ListAudits(c *gin.Context) {
 	offset := (page - 1) * perPage
 	query := fmt.Sprintf(`
 		SELECT a.id, a.title, a.description, a.audit_type, a.status,
-		       a.org_framework_id, COALESCE(of.display_name, ''),
+		       a.org_framework_id, COALESCE(f.name, ''),
 		       a.period_start, a.period_end, a.planned_start, a.planned_end,
 		       a.actual_start, a.actual_end,
 		       a.audit_firm, a.lead_auditor_id,
@@ -154,6 +154,7 @@ func ListAudits(c *gin.Context) {
 		       a.tags, a.created_at, a.updated_at
 		FROM audits a
 		LEFT JOIN org_frameworks of ON a.org_framework_id = of.id
+		LEFT JOIN frameworks f ON of.framework_id = f.id
 		LEFT JOIN users la ON a.lead_auditor_id = la.id
 		LEFT JOIN users il ON a.internal_lead_id = il.id
 		WHERE %s
@@ -270,7 +271,7 @@ func GetAudit(c *gin.Context) {
 
 	err := database.DB.QueryRow(`
 		SELECT a.id, a.title, a.description, a.audit_type, a.status,
-		       a.org_framework_id, COALESCE(of.display_name, ''),
+		       a.org_framework_id, COALESCE(f.name, ''),
 		       a.period_start, a.period_end, a.planned_start, a.planned_end,
 		       a.actual_start, a.actual_end,
 		       a.audit_firm, a.lead_auditor_id,
@@ -284,6 +285,7 @@ func GetAudit(c *gin.Context) {
 		       a.created_at, a.updated_at
 		FROM audits a
 		LEFT JOIN org_frameworks of ON a.org_framework_id = of.id
+		LEFT JOIN frameworks f ON of.framework_id = f.id
 		LEFT JOIN users la ON a.lead_auditor_id = la.id
 		LEFT JOIN users il ON a.internal_lead_id = il.id
 		WHERE a.id = $1 AND a.org_id = $2

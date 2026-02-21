@@ -5,7 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -13,6 +15,89 @@ import (
 	"github.com/half-paul/raisin-protect/api/internal/middleware"
 	"github.com/rs/zerolog/log"
 )
+
+// httpClientWithTimeout is a shared HTTP client with a 10-second timeout for webhook calls.
+var httpClientWithTimeout = &http.Client{Timeout: 10 * time.Second}
+
+// allowedWebhookHeaders is a whitelist of headers that can be set on webhook requests.
+var allowedWebhookHeaders = map[string]bool{
+	"authorization":  true,
+	"content-type":   true,
+	"x-api-key":      true,
+	"x-request-id":   true,
+	"x-correlation-id": true,
+	"user-agent":     true,
+}
+
+// isAllowedWebhookHeader checks if a header is allowed (case-insensitive).
+// Also allows any header starting with "X-Custom-".
+func isAllowedWebhookHeader(header string) bool {
+	lower := strings.ToLower(header)
+	if allowedWebhookHeaders[lower] {
+		return true
+	}
+	if strings.HasPrefix(lower, "x-custom-") {
+		return true
+	}
+	return false
+}
+
+// isPrivateIP checks if an IP address is private/internal.
+func isPrivateIP(ip net.IP) bool {
+	if ip == nil {
+		return false
+	}
+	// Check for loopback
+	if ip.IsLoopback() {
+		return true
+	}
+	// Check for private ranges
+	privateRanges := []string{
+		"10.0.0.0/8",
+		"172.16.0.0/12",
+		"192.168.0.0/16",
+		"169.254.0.0/16", // link-local
+		"127.0.0.0/8",
+		"::1/128",
+		"fc00::/7", // IPv6 unique local
+		"fe80::/10", // IPv6 link-local
+	}
+	for _, cidr := range privateRanges {
+		_, block, _ := net.ParseCIDR(cidr)
+		if block != nil && block.Contains(ip) {
+			return true
+		}
+	}
+	return false
+}
+
+// validateWebhookURL checks that a URL is safe (HTTPS, not private IP).
+func validateWebhookURL(rawURL string) error {
+	if !strings.HasPrefix(rawURL, "https://") {
+		return fmt.Errorf("webhook URL must use HTTPS")
+	}
+
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return fmt.Errorf("invalid URL: %w", err)
+	}
+
+	host := parsed.Hostname()
+
+	// Resolve the hostname to check for private IPs
+	ips, err := net.LookupIP(host)
+	if err != nil {
+		return fmt.Errorf("cannot resolve hostname: %w", err)
+	}
+
+	for _, ip := range ips {
+		if isPrivateIP(ip) {
+			return fmt.Errorf("webhook URL resolves to a private IP address")
+		}
+	}
+
+	return nil
+}
 
 // RedeliverAlert manually re-delivers an alert's notifications.
 func RedeliverAlert(c *gin.Context) {
@@ -100,16 +185,19 @@ func TestAlertDelivery(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", "slack_webhook_url is required for Slack delivery"))
 			return
 		}
-		if !strings.HasPrefix(*req.SlackWebhookURL, "https://") {
-			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", "slack_webhook_url must be HTTPS"))
+		// Validate URL (HTTPS and not private IP)
+		if err := validateWebhookURL(*req.SlackWebhookURL); err != nil {
+			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", err.Error()))
 			return
 		}
-		// Send test message to Slack
+		// Send test message to Slack with timeout
 		payload := map[string]interface{}{
 			"text": "🧪 *Raisin Protect — Test Alert*\nThis is a test notification. If you see this, your Slack integration is working!",
 		}
 		body, _ := json.Marshal(payload)
-		resp, err := http.Post(*req.SlackWebhookURL, "application/json", bytes.NewReader(body))
+		httpReq, _ := http.NewRequest("POST", *req.SlackWebhookURL, bytes.NewReader(body))
+		httpReq.Header.Set("Content-Type", "application/json")
+		resp, err := httpClientWithTimeout.Do(httpReq)
 		if err != nil {
 			c.JSON(http.StatusUnprocessableEntity, errorResponse("UNPROCESSABLE",
 				fmt.Sprintf("Failed to deliver to Slack: %s", err.Error())))
@@ -135,9 +223,18 @@ func TestAlertDelivery(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", "webhook_url is required for webhook delivery"))
 			return
 		}
-		if !strings.HasPrefix(*req.WebhookURL, "https://") {
-			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", "webhook_url must be HTTPS"))
+		// Validate URL (HTTPS and not private IP)
+		if err := validateWebhookURL(*req.WebhookURL); err != nil {
+			c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST", err.Error()))
 			return
+		}
+		// Validate headers (only allow whitelisted headers)
+		for k := range req.WebhookHeaders {
+			if !isAllowedWebhookHeader(k) {
+				c.JSON(http.StatusBadRequest, errorResponse("BAD_REQUEST",
+					fmt.Sprintf("Header '%s' is not allowed. Allowed: Authorization, Content-Type, X-API-Key, X-Request-ID, X-Correlation-ID, User-Agent, X-Custom-*", k)))
+				return
+			}
 		}
 		// Send test payload to webhook
 		payload := map[string]interface{}{
@@ -150,8 +247,7 @@ func TestAlertDelivery(c *gin.Context) {
 		for k, v := range req.WebhookHeaders {
 			httpReq.Header.Set(k, v)
 		}
-		client := &http.Client{Timeout: 10 * time.Second}
-		resp, err := client.Do(httpReq)
+		resp, err := httpClientWithTimeout.Do(httpReq)
 		if err != nil {
 			c.JSON(http.StatusUnprocessableEntity, errorResponse("UNPROCESSABLE",
 				fmt.Sprintf("Failed to deliver to webhook: %s", err.Error())))

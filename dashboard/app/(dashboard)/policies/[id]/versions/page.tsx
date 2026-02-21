@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import DOMPurify from 'dompurify';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -212,7 +213,7 @@ export default function PolicyVersionHistoryPage() {
                         className={`prose dark:prose-invert prose-sm max-w-none p-4 border rounded-md max-h-[500px] overflow-y-auto ${
                           idx === 0 ? 'bg-red-50/50 dark:bg-red-950/10' : 'bg-green-50/50 dark:bg-green-950/10'
                         }`}
-                        dangerouslySetInnerHTML={{ __html: ver.content || '<p>(No content)</p>' }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(ver.content || '<p>(No content)</p>') }}
                       />
                     </div>
                   ))}

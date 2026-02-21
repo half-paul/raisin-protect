@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -63,6 +64,23 @@ func ConfirmEvidenceUpload(c *gin.Context) {
 			return
 		}
 		actualSize = actual
+
+		// Validate file size matches declared size (allow 1% tolerance for encoding overhead)
+		if fileSize > 0 {
+			tolerance := fileSize / 100 // 1% tolerance
+			if tolerance < 1024 {
+				tolerance = 1024 // minimum 1KB tolerance
+			}
+			sizeDiff := actualSize - fileSize
+			if sizeDiff < 0 {
+				sizeDiff = -sizeDiff
+			}
+			if sizeDiff > tolerance {
+				c.JSON(http.StatusUnprocessableEntity, errorResponse("VALIDATION_ERROR",
+					fmt.Sprintf("Uploaded file size (%d bytes) does not match declared size (%d bytes)", actualSize, fileSize)))
+				return
+			}
+		}
 	} else {
 		actualSize = fileSize // no MinIO in dev/test
 	}

@@ -15,33 +15,25 @@ import (
 	"github.com/half-paul/raisin-protect/api/internal/middleware"
 	"github.com/half-paul/raisin-protect/api/internal/models"
 	"github.com/lib/pq"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
 )
 
-// HTML sanitizer: strip dangerous tags/attributes.
-var (
-	scriptTagRe   = regexp.MustCompile(`(?i)<script[^>]*>[\s\S]*?</script>`)
-	iframeTagRe   = regexp.MustCompile(`(?i)<iframe[^>]*>[\s\S]*?</iframe>`)
-	objectTagRe   = regexp.MustCompile(`(?i)<object[^>]*>[\s\S]*?</object>`)
-	embedTagRe    = regexp.MustCompile(`(?i)<embed[^>]*>[\s\S]*?</embed>`)
-	formTagRe     = regexp.MustCompile(`(?i)<form[^>]*>[\s\S]*?</form>`)
-	inputTagRe    = regexp.MustCompile(`(?i)<input[^>]*>`)
-	eventAttrRe   = regexp.MustCompile(`(?i)\s+on\w+\s*=\s*["'][^"']*["']`)
-	jsURLRe       = regexp.MustCompile(`(?i)(href|src)\s*=\s*["']\s*(javascript|data|vbscript)\s*:`)
-	styleExprRe   = regexp.MustCompile(`(?i)style\s*=\s*["'][^"']*(expression|url|import)[^"']*["']`)
-)
+// HTML sanitizer using bluemonday for secure XSS prevention.
+// Allows common formatting tags but strips scripts, event handlers, and dangerous elements.
+var policySanitizer = bluemonday.UGCPolicy()
+
+func init() {
+	// UGCPolicy allows user-generated content formatting (p, h1-h6, ul, ol, li, b, i, a, etc.)
+	// but strips scripts, iframes, forms, and event handlers.
+	// Customize if needed:
+	policySanitizer.AllowAttrs("class").Globally()
+	policySanitizer.AllowAttrs("id").Globally()
+	policySanitizer.AllowAttrs("style").Globally() // Allow inline styles (bluemonday sanitizes dangerous CSS)
+}
 
 func sanitizeHTML(content string) string {
-	content = scriptTagRe.ReplaceAllString(content, "")
-	content = iframeTagRe.ReplaceAllString(content, "")
-	content = objectTagRe.ReplaceAllString(content, "")
-	content = embedTagRe.ReplaceAllString(content, "")
-	content = formTagRe.ReplaceAllString(content, "")
-	content = inputTagRe.ReplaceAllString(content, "")
-	content = eventAttrRe.ReplaceAllString(content, "")
-	content = jsURLRe.ReplaceAllString(content, "")
-	content = styleExprRe.ReplaceAllString(content, "")
-	return content
+	return policySanitizer.Sanitize(content)
 }
 
 func countWords(s string) int {
@@ -753,7 +745,14 @@ func UpdatePolicy(c *gin.Context) {
 // ArchivePolicy archives a policy.
 func ArchivePolicy(c *gin.Context) {
 	orgID := middleware.GetOrgID(c)
+	userRole := middleware.GetUserRole(c)
 	policyID := c.Param("id")
+
+	// RBAC: Only CISO or Compliance Manager can archive policies
+	if !models.HasRole(userRole, models.PolicyArchiveRoles) {
+		c.JSON(http.StatusForbidden, errorResponse("FORBIDDEN", "Not authorized to archive policies"))
+		return
+	}
 
 	var currentStatus string
 	err := database.DB.QueryRow(`SELECT status FROM policies WHERE id = $1 AND org_id = $2`, policyID, orgID).Scan(&currentStatus)
@@ -945,7 +944,14 @@ func SubmitForReview(c *gin.Context) {
 // PublishPolicy publishes an approved policy.
 func PublishPolicy(c *gin.Context) {
 	orgID := middleware.GetOrgID(c)
+	userRole := middleware.GetUserRole(c)
 	policyID := c.Param("id")
+
+	// RBAC: Only CISO or Compliance Manager can publish policies
+	if !models.HasRole(userRole, models.PolicyPublishRoles) {
+		c.JSON(http.StatusForbidden, errorResponse("FORBIDDEN", "Not authorized to publish policies"))
+		return
+	}
 
 	var currentStatus string
 	var reviewFreqDays *int

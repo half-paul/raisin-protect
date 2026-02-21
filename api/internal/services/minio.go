@@ -65,10 +65,10 @@ func (s *MinIOService) EnsureBucket(ctx context.Context) error {
 }
 
 // GenerateUploadURL creates a presigned PUT URL for uploading a file.
+// Note: Content-Type enforcement happens at upload confirmation time via VerifyObjectExists,
+// as MinIO's PresignedPutObject doesn't support Content-Type query param enforcement for PUT.
+// The client must set the correct Content-Type header when uploading.
 func (s *MinIOService) GenerateUploadURL(objectKey, contentType string) (string, error) {
-	reqParams := make(url.Values)
-	reqParams.Set("Content-Type", contentType)
-
 	presignedURL, err := s.client.PresignedPutObject(context.Background(), s.bucket, objectKey, s.uploadTTL)
 	if err != nil {
 		return "", fmt.Errorf("failed to generate upload URL: %w", err)

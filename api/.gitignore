@@ -1,0 +1,52 @@
+# Go .gitignore for Raisin Protect API
+
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+api
+main
+
+# Build output
+/bin/
+/build/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Debug
+__debug_bin*
+debug.test
+
+# Air (live reload)
+tmp/
+
+# Compiled templates or generated code
+*_gen.go
+
+# Local dev database
+*.db
+*.sqlite
