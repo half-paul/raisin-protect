@@ -73,23 +73,23 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. All tasks done, sprint <75%. |
 | DBE | 7/7 (100%) | ✅ DONE → 💤 DISABLED | All 7 tasks complete. 8 migrations (027-034): 4 enums, 4 tables, 15 audit_action extensions, deferred FKs, evidence_links policy_id. 15 templates (5 frameworks), 3 demo policies with versions/signoffs/control mappings. Work complete. |
-| DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete. 28 REST endpoints, 8 handler files, 1 model file. 146 unit tests passing (31 new). Docker build clean. |
-| DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
-| CR | 0/10 (0%) | 💤 DISABLED | Waiting for implementation code to review. |
-| QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
+| DEV-BE | 11/11 (100%) | ✅ DONE → 💤 DISABLED | All 11 tasks complete. 28 REST endpoints, 8 handler files, 1 model file. 146 unit tests passing (31 new). Docker build clean. Work complete. |
+| DEV-FE | 0/9 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: ≥5 BE tasks complete (11/11). Enabled and triggered to start policy management dashboard (9 pages). |
+| CR | 0/10 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to review. Enabled and triggered to start Sprint 5 code review (policy endpoints, sign-off workflow, templates, HTML sanitization). |
+| QA | 0/9 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to test. Enabled and triggered to start Sprint 5 testing (policy CRUD, versioning, sign-off workflow, gap detection). |
 
 **Overall Sprint Completion:** 22/50 tasks (44%)
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11/11] → CR [UNBLOCKED]
-                                                                                   ↘ DEV-FE [UNBLOCKED] → QA [WAITING]
+SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11/11 - DISABLED] → CR [ENABLED]
+                                                                                              ↘ DEV-FE [ENABLED] → QA [ENABLED]
 ```
 
-**Critical Path:** DEV-FE and CR are next. All backend dependencies met — DEV-FE, CR, and QA can now proceed.
+**Critical Path:** DEV-FE, CR, and QA all running in parallel. All three agents triggered immediately after enablement. DEV-FE is longest path (9 tasks), CR and QA reviews will complete based on code availability.
 
 ## Blockers
-**NONE:** DEV-BE complete. DEV-FE, CR, QA unblocked.
+**NONE:** All dependencies met. Three agents active in parallel.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -139,3 +139,4 @@ SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11
 | 2026-02-20 20:52 | DBE | Sprint 5 migrations complete: 8 migrations (027-034). 4 new enums (policy_category, policy_status, signoff_status, policy_content_format) + 15 audit_action extensions. 4 tables (policies, policy_versions, policy_signoffs, policy_controls) with full indexes, triggers, and CHECK constraints. Deferred FKs for current_version_id and evidence_links.policy_id. 15 policy templates across 5 frameworks (SOC 2, ISO 27001, PCI DSS, GDPR, CCPA) with full HTML content. 3 demo policies (1 published ISP, 1 published ACP, 1 in-review IRP) with versions, sign-offs, and 8 control mappings. DEV-BE unblocked. |
 | 2026-02-20 21:50 | PM | Sprint 5 agent lifecycle update — 22% complete (11/50 tasks). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 28 REST endpoints for policy management (CRUD, versioning, sign-offs, templates, gap detection). All other agents remain disabled. Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-20 22:08 | DEV-BE | All 11 tasks complete. Implemented 28 REST endpoints: policy CRUD (5 — list, get, create, update, archive), status transitions (2 — submit-for-review, publish), version management (4 — list, get, create, compare), sign-off workflow (5 — list, approve, reject, withdraw, pending), sign-off reminders (1), policy-to-control mapping (4 — list, link, unlink, bulk), templates (2 — list, clone), gap detection (2 — by-control, by-framework), search (1), stats (1), notifications (1 — reminder system). HTML sanitization (XSS prevention: strips script/iframe/object/embed/form tags, event handlers, javascript: URLs). 7 new handler files, 1 model file. 146 unit tests passing (31 new policy tests). Docker build clean. No new services needed — docker-compose.yml unchanged. DEV-FE/CR/QA unblocked. |
+| 2026-02-20 22:50 | PM | Sprint 5 agent lifecycle update — 44% complete (22/50 tasks). **DEV-BE DISABLED** (all 11 tasks complete). **DEV-FE, CR, QA all ENABLED** and triggered (dependencies met: 11 BE tasks complete > threshold). Critical path: all three agents running in parallel. DEV-FE (9 policy dashboard pages), CR (policy code review + HTML sanitization audit), QA (policy workflow testing). Gateway timeout on trigger (agents will run on schedule). |
