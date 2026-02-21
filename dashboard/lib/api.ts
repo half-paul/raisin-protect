@@ -4,6 +4,8 @@
  * Sprint 3: Evidence Management
  * Sprint 4: Continuous Monitoring Engine
  * Sprint 5: Policy Management
+ * Sprint 6: Risk Management
+ * Sprint 7: Audit Hub
  */
 
 import { authFetch } from './auth';
@@ -2180,4 +2182,538 @@ export function searchRisks(params: Record<string, string>) {
 
 export function getRiskStats() {
   return apiGet<RiskStats>('/api/v1/risks/stats');
+}
+
+// ========== Sprint 7: Audit Hub Types ==========
+
+export type AuditStatus = 'planning' | 'fieldwork' | 'review' | 'draft_report' | 'management_response' | 'final_report' | 'completed' | 'cancelled';
+export type AuditType = 'soc2_type1' | 'soc2_type2' | 'iso27001_certification' | 'iso27001_surveillance' | 'pci_dss_roc' | 'pci_dss_saq' | 'gdpr_dpia' | 'hipaa_assessment' | 'nist_assessment' | 'internal_audit' | 'vendor_assessment' | 'custom';
+export type RequestStatus = 'open' | 'in_progress' | 'submitted' | 'accepted' | 'rejected' | 'closed';
+export type RequestPriority = 'critical' | 'high' | 'medium' | 'low';
+export type FindingSeverity = 'critical' | 'high' | 'medium' | 'low' | 'informational';
+export type FindingStatus = 'identified' | 'acknowledged' | 'remediation_planned' | 'remediation_in_progress' | 'remediation_complete' | 'verified' | 'risk_accepted' | 'closed';
+export type EvidenceSubmissionStatus = 'pending_review' | 'accepted' | 'rejected' | 'needs_clarification';
+export type CommentTargetType = 'audit' | 'request' | 'finding';
+export type CommentVisibility = 'external' | 'internal';
+
+export interface AuditMilestone {
+  name: string;
+  target_date: string;
+  completed_at: string | null;
+}
+
+export interface Audit {
+  id: string;
+  title: string;
+  description: string;
+  audit_type: AuditType;
+  status: AuditStatus;
+  org_framework_id: string | null;
+  framework_name: string | null;
+  period_start: string | null;
+  period_end: string | null;
+  planned_start: string | null;
+  planned_end: string | null;
+  actual_start: string | null;
+  actual_end: string | null;
+  audit_firm: string | null;
+  lead_auditor_id: string | null;
+  lead_auditor_name: string | null;
+  internal_lead_id: string | null;
+  internal_lead_name: string | null;
+  auditor_ids: string[];
+  milestones: AuditMilestone[];
+  report_type: string | null;
+  report_url: string | null;
+  report_issued_at: string | null;
+  total_requests: number;
+  open_requests: number;
+  total_findings: number;
+  open_findings: number;
+  tags: string[];
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditRequest {
+  id: string;
+  audit_id: string;
+  title: string;
+  description: string;
+  priority: RequestPriority;
+  status: RequestStatus;
+  control_id: string | null;
+  control_title: string | null;
+  requirement_id: string | null;
+  requirement_title: string | null;
+  requested_by: string | null;
+  requested_by_name: string | null;
+  assigned_to: string | null;
+  assigned_to_name: string | null;
+  due_date: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+  reviewer_notes: string | null;
+  reference_number: string | null;
+  evidence_count: number;
+  evidence?: AuditEvidenceLink[];
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditEvidenceLink {
+  link_id: string;
+  artifact_id: string;
+  artifact_title: string;
+  file_name?: string;
+  file_size?: number;
+  mime_type?: string;
+  evidence_type?: string;
+  evidence_status?: string;
+  submitted_by: string;
+  submitted_by_name: string;
+  submitted_at: string;
+  submission_notes: string | null;
+  status: EvidenceSubmissionStatus;
+  reviewed_by: string | null;
+  reviewed_by_name: string | null;
+  reviewed_at: string | null;
+  review_notes: string | null;
+}
+
+export interface AuditFinding {
+  id: string;
+  audit_id: string;
+  title: string;
+  description: string;
+  severity: FindingSeverity;
+  category: string;
+  status: FindingStatus;
+  control_id: string | null;
+  control_title: string | null;
+  requirement_id: string | null;
+  requirement_title: string | null;
+  found_by: string | null;
+  found_by_name: string | null;
+  remediation_owner_id: string | null;
+  remediation_owner_name: string | null;
+  remediation_plan: string | null;
+  remediation_due_date: string | null;
+  remediation_started_at: string | null;
+  remediation_completed_at: string | null;
+  verified_at: string | null;
+  verified_by: string | null;
+  verified_by_name: string | null;
+  verification_notes: string | null;
+  reference_number: string | null;
+  recommendation: string | null;
+  management_response: string | null;
+  risk_accepted: boolean;
+  risk_acceptance_reason: string | null;
+  comment_count: number;
+  tags: string[];
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditComment {
+  id: string;
+  audit_id: string;
+  target_type: CommentTargetType;
+  target_id: string;
+  author_id: string;
+  author_name: string;
+  author_role: string;
+  body: string;
+  parent_comment_id: string | null;
+  is_internal: boolean;
+  edited_at: string | null;
+  replies?: AuditComment[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditRequestTemplate {
+  id: string;
+  title: string;
+  description: string;
+  audit_type: string;
+  framework: string;
+  category: string;
+  default_priority: RequestPriority;
+  tags: string[];
+}
+
+export interface AuditDashboard {
+  summary: {
+    active_audits: number;
+    completed_audits: number;
+    total_open_requests: number;
+    total_overdue_requests: number;
+    total_open_findings: number;
+    critical_findings: number;
+    high_findings: number;
+  };
+  active_audits: {
+    id: string;
+    title: string;
+    audit_type: AuditType;
+    status: AuditStatus;
+    planned_end: string | null;
+    days_remaining: number | null;
+    readiness_pct: number;
+    total_requests: number;
+    open_requests: number;
+    total_findings: number;
+    open_findings: number;
+    next_milestone: { name: string; target_date: string; days_until: number } | null;
+  }[];
+  overdue_requests: {
+    id: string;
+    title: string;
+    audit_title: string;
+    due_date: string;
+    days_overdue: number;
+    assigned_to_name: string | null;
+    priority: RequestPriority;
+  }[];
+  critical_findings: {
+    id: string;
+    title: string;
+    audit_title: string;
+    severity: FindingSeverity;
+    status: FindingStatus;
+    remediation_due_date: string | null;
+    remediation_owner_name: string | null;
+  }[];
+  recent_activity: {
+    type: string;
+    title: string;
+    audit_title: string;
+    actor_name: string;
+    timestamp: string;
+    old_status?: string;
+    new_status?: string;
+  }[];
+}
+
+export interface AuditStats {
+  audit_id: string;
+  title: string;
+  status: AuditStatus;
+  readiness: {
+    total_requests: number;
+    accepted: number;
+    submitted: number;
+    in_progress: number;
+    open: number;
+    rejected: number;
+    overdue: number;
+    readiness_pct: number;
+  };
+  findings: {
+    total: number;
+    by_severity: Record<string, number>;
+    by_status: Record<string, number>;
+    overdue_remediation: number;
+  };
+  evidence: {
+    total_submitted: number;
+    accepted: number;
+    pending_review: number;
+    rejected: number;
+  };
+  timeline: {
+    planned_start: string | null;
+    planned_end: string | null;
+    actual_start: string | null;
+    days_elapsed: number;
+    days_remaining: number | null;
+    milestones_completed: number;
+    milestones_total: number;
+    next_milestone: { name: string; target_date: string; days_until: number } | null;
+  };
+  activity: {
+    comments_count: number;
+    last_activity_at: string | null;
+  };
+}
+
+export interface AuditReadiness {
+  audit_id: string;
+  overall_readiness_pct: number;
+  by_requirement: {
+    requirement_id: string;
+    requirement_title: string;
+    total_requests: number;
+    accepted_requests: number;
+    readiness_pct: number;
+  }[];
+  by_control: {
+    control_id: string;
+    control_title: string;
+    total_requests: number;
+    accepted_requests: number;
+    readiness_pct: number;
+  }[];
+  gaps: {
+    requirement_id: string;
+    requirement_title: string;
+    issue: string;
+    description: string;
+  }[];
+}
+
+// ========== Sprint 7: Audit Hub API Functions ==========
+
+// ---- Audits ----
+
+export function listAudits(params?: Record<string, string>) {
+  return apiGet<Audit[]>('/api/v1/audits', params);
+}
+
+export function getAudit(id: string) {
+  return apiGet<Audit>(`/api/v1/audits/${id}`);
+}
+
+export function createAudit(body: {
+  title: string;
+  description?: string;
+  audit_type: string;
+  org_framework_id?: string;
+  period_start?: string;
+  period_end?: string;
+  planned_start?: string;
+  planned_end?: string;
+  audit_firm?: string;
+  lead_auditor_id?: string;
+  auditor_ids?: string[];
+  internal_lead_id?: string;
+  milestones?: { name: string; target_date: string }[];
+  report_type?: string;
+  tags?: string[];
+}) {
+  return apiPost<Audit>('/api/v1/audits', body);
+}
+
+export function updateAudit(id: string, body: Partial<{
+  title: string;
+  description: string;
+  org_framework_id: string;
+  period_start: string;
+  period_end: string;
+  planned_start: string;
+  planned_end: string;
+  audit_firm: string;
+  lead_auditor_id: string;
+  internal_lead_id: string;
+  milestones: { name: string; target_date: string }[];
+  report_type: string;
+  tags: string[];
+}>) {
+  return apiPut<Audit>(`/api/v1/audits/${id}`, body);
+}
+
+export function transitionAuditStatus(id: string, body: { status: string; notes?: string }) {
+  return apiPut<Audit>(`/api/v1/audits/${id}/status`, body);
+}
+
+export function addAuditor(auditId: string, userId: string) {
+  return apiPost<Audit>(`/api/v1/audits/${auditId}/auditors`, { user_id: userId });
+}
+
+export function removeAuditor(auditId: string, userId: string) {
+  return apiDelete<Audit>(`/api/v1/audits/${auditId}/auditors/${userId}`);
+}
+
+// ---- Audit Requests ----
+
+export function listAuditRequests(auditId: string, params?: Record<string, string>) {
+  return apiGet<AuditRequest[]>(`/api/v1/audits/${auditId}/requests`, params);
+}
+
+export function getAuditRequest(auditId: string, requestId: string) {
+  return apiGet<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}`);
+}
+
+export function createAuditRequest(auditId: string, body: {
+  title: string;
+  description: string;
+  priority?: string;
+  control_id?: string;
+  requirement_id?: string;
+  assigned_to?: string;
+  due_date?: string;
+  reference_number?: string;
+  tags?: string[];
+}) {
+  return apiPost<AuditRequest>(`/api/v1/audits/${auditId}/requests`, body);
+}
+
+export function updateAuditRequest(auditId: string, requestId: string, body: Partial<{
+  title: string;
+  description: string;
+  priority: string;
+  due_date: string;
+  reference_number: string;
+  tags: string[];
+}>) {
+  return apiPut<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}`, body);
+}
+
+export function assignAuditRequest(auditId: string, requestId: string, assignedTo: string) {
+  return apiPut<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}/assign`, { assigned_to: assignedTo });
+}
+
+export function submitAuditRequest(auditId: string, requestId: string, notes?: string) {
+  return apiPut<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}/submit`, { notes });
+}
+
+export function reviewAuditRequest(auditId: string, requestId: string, body: { decision: string; notes?: string }) {
+  return apiPut<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}/review`, body);
+}
+
+export function closeAuditRequest(auditId: string, requestId: string, reason?: string) {
+  return apiPut<AuditRequest>(`/api/v1/audits/${auditId}/requests/${requestId}/close`, { reason });
+}
+
+export function bulkCreateAuditRequests(auditId: string, body: {
+  requests: {
+    title: string;
+    description: string;
+    priority?: string;
+    due_date?: string;
+    reference_number?: string;
+  }[];
+}) {
+  return apiPost<{ created: number; requests: AuditRequest[] }>(`/api/v1/audits/${auditId}/requests/bulk`, body);
+}
+
+export function createRequestsFromTemplate(auditId: string, body: {
+  template_ids: string[];
+  default_due_date?: string;
+  auto_number?: boolean;
+  number_prefix?: string;
+}) {
+  return apiPost<{ created: number; requests: AuditRequest[] }>(`/api/v1/audits/${auditId}/requests/from-template`, body);
+}
+
+// ---- Evidence Submission ----
+
+export function listRequestEvidence(auditId: string, requestId: string) {
+  return apiGet<AuditEvidenceLink[]>(`/api/v1/audits/${auditId}/requests/${requestId}/evidence`);
+}
+
+export function submitRequestEvidence(auditId: string, requestId: string, body: { artifact_id: string; notes?: string }) {
+  return apiPost<AuditEvidenceLink>(`/api/v1/audits/${auditId}/requests/${requestId}/evidence`, body);
+}
+
+export function reviewRequestEvidence(auditId: string, requestId: string, linkId: string, body: { status: string; notes?: string }) {
+  return apiPut<AuditEvidenceLink>(`/api/v1/audits/${auditId}/requests/${requestId}/evidence/${linkId}/review`, body);
+}
+
+export function removeRequestEvidence(auditId: string, requestId: string, linkId: string) {
+  return apiDelete<{ message: string }>(`/api/v1/audits/${auditId}/requests/${requestId}/evidence/${linkId}`);
+}
+
+// ---- Audit Findings ----
+
+export function listAuditFindings(auditId: string, params?: Record<string, string>) {
+  return apiGet<AuditFinding[]>(`/api/v1/audits/${auditId}/findings`, params);
+}
+
+export function getAuditFinding(auditId: string, findingId: string) {
+  return apiGet<AuditFinding>(`/api/v1/audits/${auditId}/findings/${findingId}`);
+}
+
+export function createAuditFinding(auditId: string, body: {
+  title: string;
+  description: string;
+  severity: string;
+  category: string;
+  control_id?: string;
+  requirement_id?: string;
+  remediation_owner_id?: string;
+  remediation_due_date?: string;
+  reference_number?: string;
+  recommendation?: string;
+  tags?: string[];
+}) {
+  return apiPost<AuditFinding>(`/api/v1/audits/${auditId}/findings`, body);
+}
+
+export function updateAuditFinding(auditId: string, findingId: string, body: Partial<{
+  title: string;
+  description: string;
+  severity: string;
+  category: string;
+  recommendation: string;
+  reference_number: string;
+  tags: string[];
+}>) {
+  return apiPut<AuditFinding>(`/api/v1/audits/${auditId}/findings/${findingId}`, body);
+}
+
+export function transitionFindingStatus(auditId: string, findingId: string, body: {
+  status: string;
+  remediation_plan?: string;
+  remediation_due_date?: string;
+  remediation_owner_id?: string;
+  management_response?: string;
+  verification_notes?: string;
+  risk_acceptance_reason?: string;
+  notes?: string;
+}) {
+  return apiPut<AuditFinding>(`/api/v1/audits/${auditId}/findings/${findingId}/status`, body);
+}
+
+export function submitManagementResponse(auditId: string, findingId: string, body: { management_response: string }) {
+  return apiPut<AuditFinding>(`/api/v1/audits/${auditId}/findings/${findingId}/management-response`, body);
+}
+
+// ---- Audit Comments ----
+
+export function listAuditComments(auditId: string, params?: Record<string, string>) {
+  return apiGet<AuditComment[]>(`/api/v1/audits/${auditId}/comments`, params);
+}
+
+export function createAuditComment(auditId: string, body: {
+  target_type: string;
+  target_id: string;
+  body: string;
+  parent_comment_id?: string;
+  is_internal?: boolean;
+}) {
+  return apiPost<AuditComment>(`/api/v1/audits/${auditId}/comments`, body);
+}
+
+export function editAuditComment(auditId: string, commentId: string, body: { body: string }) {
+  return apiPut<AuditComment>(`/api/v1/audits/${auditId}/comments/${commentId}`, body);
+}
+
+export function deleteAuditComment(auditId: string, commentId: string) {
+  return apiDelete<{ message: string }>(`/api/v1/audits/${auditId}/comments/${commentId}`);
+}
+
+// ---- PBC Templates ----
+
+export function listAuditRequestTemplates(params?: Record<string, string>) {
+  return apiGet<AuditRequestTemplate[]>('/api/v1/audit-request-templates', params);
+}
+
+// ---- Audit Dashboard & Analytics ----
+
+export function getAuditDashboard() {
+  return apiGet<AuditDashboard>('/api/v1/audits/dashboard');
+}
+
+export function getAuditStats(auditId: string) {
+  return apiGet<AuditStats>(`/api/v1/audits/${auditId}/stats`);
+}
+
+export function getAuditReadiness(auditId: string) {
+  return apiGet<AuditReadiness>(`/api/v1/audits/${auditId}/readiness`);
 }

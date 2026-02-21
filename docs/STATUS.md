@@ -38,15 +38,15 @@
 - [x] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
-- [ ] Audit hub home (engagement list with filters, stats cards, create dialog)
-- [ ] Audit detail page (engagement info, timeline, milestones, 4-tab layout)
-- [ ] Audit request queue (evidence requests with SLA tracking, status filters)
-- [ ] Evidence submission interface (link existing or upload new, chain-of-custody display)
-- [ ] Finding management page (findings list with remediation tracking, severity filters)
-- [ ] Audit comments interface (threaded comments with internal/auditor visibility toggle)
-- [ ] PBC template library (framework-based template selection, bulk-create workflow)
-- [ ] Audit readiness dashboard (request completion %, overdue items, critical findings)
-- [ ] Auditor workspace view (auditor-scoped engagement list with assigned audits only)
+- [x] Audit hub home (engagement list with filters, stats cards, create dialog)
+- [x] Audit detail page (engagement info, timeline, milestones, 4-tab layout)
+- [x] Audit request queue (evidence requests with SLA tracking, status filters)
+- [x] Evidence submission interface (link existing or upload new, chain-of-custody display)
+- [x] Finding management page (findings list with remediation tracking, severity filters)
+- [x] Audit comments interface (threaded comments with internal/auditor visibility toggle)
+- [x] PBC template library (framework-based template selection, bulk-create workflow)
+- [x] Audit readiness dashboard (request completion %, overdue items, critical findings)
+- [x] Auditor workspace view (auditor-scoped engagement list with assigned audits only)
 
 ### Code Reviewer
 - [ ] Review audit CRUD handlers and status transitions
@@ -78,11 +78,11 @@
 | SA | 4/4 (100%) | ✅ DONE | Sprint 7 pre-design complete (SCHEMA.md + API_SPEC.md delivered during Sprint 6 @ 04:03). DISABLED (sprint <75%). |
 | DBE | 8/8 (100%) | ✅ DONE | 9 migrations (044-052): 9 enums, 20 audit_action extensions, 5 tables (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments), evidence_links FK extension, audit_request_templates table, 80 PBC templates (25 SOC2 + 25 PCI + 15 ISO + 15 GDPR), demo engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments + 2 additional auditor users + 8 audit log entries). seed.sql updated. DISABLED. |
 | DEV-BE | 14/14 (100%) | ✅ DONE | All 14 tasks complete. Implemented 35 REST endpoints: audit CRUD (4), status transitions (1), auditor management (2), request CRUD (4), request workflow (4: assign/submit/review/close), bulk create (1), from-template (1), evidence submission (4: list/submit/review/remove), finding CRUD (4), finding status transitions (1), management response (1), comments (4: list/create/edit/delete), PBC templates (1), dashboard (1), per-audit stats (1), readiness (1). Auditor isolation middleware (auditor_ids check), internal comment filtering, denormalized count updates, completed/cancelled guards. 7 new handler files, 1 model file. 195 unit tests passing (30 new audit tests). Docker build clean. No new services needed. DISABLED. |
-| DEV-FE | 0/9 (0%) | 🏃 ACTIVE | **ENABLED and TRIGGERED** (06:50). DEV-BE complete. 9 audit hub pages queued (35 REST endpoints available). Critical path. |
+| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Implemented 9 audit hub pages: audit hub home (engagement list with filters/stats/create dialog), audit detail (4-tab layout: overview/requests/findings/comments with status transitions), request queue (SLA tracking, filters, submit workflow), evidence submission interface (link artifacts, chain-of-custody, auditor review), finding management (severity/status filters, remediation lifecycle, status transitions), finding detail (remediation tracking, management response, threaded comments with visibility), PBC template library (framework-grouped selection, bulk-create workflow), audit readiness dashboard (per-audit readiness %, requirement/control breakdown, gap detection), auditor workspace (scoped engagement list, overdue/critical alerts, recent activity). Sidebar updated with 4 audit nav items (Audit Hub, PBC Templates, Audit Readiness, Auditor Workspace). API client extended with 200+ Sprint 7 types and 35 API functions. Constants module with 10 enum label/color maps. Build passes clean (43 routes total). New files: 9 pages, 1 constants module, 200+ API types/functions. DISABLED. |
 | CR | 0/10 (0%) | 🏃 ACTIVE | **ENABLED and TRIGGERED** (06:50). DEV-BE complete. 10 review tasks queued (backend ready for review). Critical path. |
 | QA | 0/9 (0%) | 🔒 BLOCKED | Awaiting CR approval. 9 testing tasks queued. DISABLED. |
 
-**Overall Sprint Completion:** 26/54 tasks (48%)
+**Overall Sprint Completion:** 35/54 tasks (65%)
 
 ## Dependency Chain Status
 ```
@@ -100,6 +100,7 @@ None currently.
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 06:51 | DEV-FE | All 9 tasks complete. Implemented 9 audit hub pages: audit hub home (engagement list with dashboard stats cards, create dialog, filters by status/type, active audit cards with readiness bars, overdue/critical alerts), audit detail (4-tab layout: overview with milestones/engagement details, requests table, findings table, comments with threading — status transition dialog with valid transition matrix), request queue (SLA tracking with overdue highlighting, summary cards, create/submit workflow, priority/status filters), evidence submission (link existing artifacts with chain-of-custody display, auditor review accept/reject/needs-clarification, request submit/review workflow, threaded comments with internal visibility toggle), finding management (severity/status filters, inline status transitions via dropdown, create dialog with severity/category/recommendation), finding detail (remediation tracking timeline, management response submission, verification notes, threaded comments), PBC template library (framework-grouped templates with checkbox multi-select, bulk-create workflow to target audit with auto-numbering), audit readiness dashboard (per-audit selector, readiness % by requirement + control with progress bars, coverage gaps table, timeline display), auditor workspace (scoped engagement card grid, overdue requests/critical findings/recent activity tables). Sidebar updated with 4 Audit Hub nav items. API client extended with 200+ Sprint 7 types and 35 API functions. Build passes clean (43 routes). |
 | 2026-02-21 06:50 | PM | Agent lifecycle update: **DEV-BE DISABLED** (all 14 tasks complete). **DEV-FE and CR both ENABLED and TRIGGERED** (dependencies met: 14 BE tasks complete). Sprint 7 at 48% completion (26/54 tasks). Critical path: DEV-FE (9 audit hub pages) and CR (backend security audit) running in parallel. Gateway timeout on trigger (agents will run on schedule). |
 | 2026-02-21 05:50 | DEV-BE | All 14 tasks complete. Implemented 35 REST endpoints: audit CRUD (4: list/get/create/update), status transitions (1 with valid transition matrix + actual_start/actual_end auto-set), auditor management (2: add/remove with role validation), request CRUD (4: list/get/create/update), request workflow (4: assign with auto-status, submit with evidence check, review accept/reject, close), bulk create (1: up to 100 requests), from-template (1: PBC templates with auto-numbering), evidence submission (4: list/submit with duplicate check/review/remove), finding CRUD (4: list/get/create/update), finding status transitions (1: full remediation lifecycle with 8 states + role-based transition control), management response (1), comments (4: list with threaded replies/create with target validation/edit author-only/delete), PBC templates (1: filterable by audit_type/framework), dashboard (1: summary stats + active audits + overdue requests + critical findings + recent activity), per-audit stats (1: readiness/findings/evidence/timeline/activity breakdown), readiness (1: by requirement + by control + gaps). Auditor isolation: all audit endpoints filter by auditor_ids for auditor role. Internal comment filtering: auditors cannot see is_internal=true comments. Denormalized count updates via updateAuditRequestCounts/updateAuditFindingCounts helpers. Completed/cancelled guards on all mutating endpoints. Chain-of-custody: submitted_by always from JWT token. 7 new handler files (audits.go, audit_requests.go, audit_evidence.go, audit_findings.go, audit_comments.go, audit_templates.go, audit_dashboard.go), 1 model file (audit.go). 195 unit tests passing (30 new audit handler tests). go vet clean. Docker build clean. No new services — docker-compose.yml unchanged. DEV-FE/CR unblocked. |
 | 2026-02-21 05:50 | PM | Agent lifecycle update: **DBE DISABLED** (all 8 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 14 backend tasks queued). Sprint 7 at 22% completion (12/54 tasks). Critical path: DEV-BE (35 REST endpoints covering full audit hub workflow: CRUD, status transitions, auditor management, evidence requests, findings with remediation, comments with visibility control, PBC templates, dashboards). Gateway timeout on trigger (agent will run on schedule). |

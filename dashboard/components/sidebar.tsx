@@ -200,13 +200,31 @@ const navigation: NavSection[] = [
     ],
   },
   {
-    title: 'Audit',
+    title: 'Audit Hub',
     items: [
       {
         label: 'Audit Hub',
         href: '/audit',
         icon: ClipboardCheck,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'it_admin', 'auditor'],
+      },
+      {
+        label: 'PBC Templates',
+        href: '/audit-templates',
+        icon: BookOpen,
         roles: ['ciso', 'compliance_manager', 'auditor'],
+      },
+      {
+        label: 'Audit Readiness',
+        href: '/audit-readiness',
+        icon: Target,
+        roles: ['ciso', 'compliance_manager', 'security_engineer'],
+      },
+      {
+        label: 'Auditor Workspace',
+        href: '/audit/workspace',
+        icon: CheckSquare,
+        roles: ['auditor'],
       },
     ],
   },
