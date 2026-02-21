@@ -1470,3 +1470,452 @@ VALUES
      'evidence.evaluated', 'evidence_evaluation', 'ev000000-0000-0000-0000-000000000002',
      '{"artifact_title": "Quarterly Access Review Report", "verdict": "sufficient", "confidence": "high"}'::jsonb, '192.168.1.10'::inet)
 ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 4: TEST DEFINITIONS
+-- ============================================================================
+
+INSERT INTO tests (
+    id, org_id, identifier, title, description, test_type, severity, status,
+    control_id, schedule_cron, timeout_seconds, test_config, tags, created_by
+) VALUES
+    -- MFA enforcement check
+    (
+        't0000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-AC-001',
+        'MFA Enforcement Verification',
+        'Verifies that multi-factor authentication is enforced for all users in the identity provider.',
+        'access_control',
+        'critical',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-001' LIMIT 1),
+        '0 * * * *',
+        120,
+        '{"provider": "okta", "check": "mfa_enforced", "expected": true}'::JSONB,
+        ARRAY['mfa', 'access-control', 'pci', 'soc2'],
+        (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1)
+    ),
+    -- Access review freshness check
+    (
+        't0000000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-AC-002',
+        'Quarterly Access Review Completeness',
+        'Verifies that access reviews have been completed within the required quarterly cadence.',
+        'access_control',
+        'high',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-003' LIMIT 1),
+        '0 8 * * 1',
+        60,
+        '{"cadence_days": 90, "check": "review_completed_within_cadence"}'::JSONB,
+        ARRAY['access-review', 'quarterly', 'soc2'],
+        (SELECT id FROM users WHERE email = 'compliance@acme.example.com' LIMIT 1)
+    ),
+    -- Encryption at rest check
+    (
+        't0000000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-DP-001',
+        'Encryption at Rest — S3 Buckets',
+        'Checks all S3 buckets have default encryption enabled (AES-256 or KMS).',
+        'data_protection',
+        'critical',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-DP-001' LIMIT 1),
+        '0 */2 * * *',
+        180,
+        '{"provider": "aws", "service": "s3", "check": "default_encryption", "expected_algorithms": ["AES256", "aws:kms"]}'::JSONB,
+        ARRAY['encryption', 'aws', 's3', 'pci', 'data-protection'],
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1)
+    ),
+    -- CloudTrail logging enabled check
+    (
+        't0000000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-LM-001',
+        'CloudTrail Multi-Region Logging',
+        'Verifies AWS CloudTrail is enabled in all regions with S3 log delivery.',
+        'logging',
+        'high',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-LM-001' LIMIT 1),
+        '0 */4 * * *',
+        120,
+        '{"provider": "aws", "service": "cloudtrail", "check": "multi_region_enabled", "expected": true}'::JSONB,
+        ARRAY['logging', 'aws', 'cloudtrail', 'pci', 'soc2'],
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1)
+    ),
+    -- Vulnerability scan age check
+    (
+        't0000000-0000-0000-0000-000000000005',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-VM-001',
+        'Monthly Vulnerability Scan Freshness',
+        'Checks that a vulnerability scan was completed within the last 30 days.',
+        'vulnerability',
+        'high',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-VM-001' LIMIT 1),
+        '0 9 * * *',
+        60,
+        '{"cadence_days": 30, "check": "scan_completed_within_cadence", "scanner": "qualys"}'::JSONB,
+        ARRAY['vulnerability', 'qualys', 'pci', 'monthly'],
+        (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1)
+    ),
+    -- Firewall rules audit
+    (
+        't0000000-0000-0000-0000-000000000006',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-NW-001',
+        'Security Group — No Open Inbound 0.0.0.0/0',
+        'Checks that no security groups allow unrestricted inbound access on sensitive ports.',
+        'network',
+        'critical',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-NW-001' LIMIT 1),
+        '0 * * * *',
+        120,
+        '{"provider": "aws", "service": "ec2", "check": "no_open_ingress", "restricted_ports": [22, 3389, 3306, 5432]}'::JSONB,
+        ARRAY['network', 'aws', 'firewall', 'pci'],
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1)
+    ),
+    -- Endpoint compliance check (mapped to CTRL-SA-001 since CTRL-EP doesn't exist)
+    (
+        't0000000-0000-0000-0000-000000000007',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-EP-001',
+        'Endpoint Disk Encryption',
+        'Verifies that all managed endpoints have full-disk encryption enabled.',
+        'endpoint',
+        'high',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-SA-001' LIMIT 1),
+        '0 */6 * * *',
+        180,
+        '{"provider": "jamf", "check": "filevault_enabled", "expected": true}'::JSONB,
+        ARRAY['endpoint', 'encryption', 'jamf', 'soc2'],
+        (SELECT id FROM users WHERE email = 'it@acme.example.com' LIMIT 1)
+    ),
+    -- Configuration baseline check
+    (
+        't0000000-0000-0000-0000-000000000008',
+        'a0000000-0000-0000-0000-000000000001',
+        'TST-CFG-001',
+        'Password Policy — Minimum Complexity',
+        'Verifies that password policy meets minimum complexity requirements (length, character types).',
+        'configuration',
+        'medium',
+        'active',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-002' LIMIT 1),
+        '0 8 * * *',
+        60,
+        '{"provider": "okta", "check": "password_policy", "min_length": 12, "require_uppercase": true, "require_number": true, "require_special": true}'::JSONB,
+        ARRAY['configuration', 'password', 'okta', 'pci'],
+        (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1)
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 4: SAMPLE TEST RUN (completed sweep)
+-- ============================================================================
+
+INSERT INTO test_runs (
+    id, org_id, status, trigger_type, started_at, completed_at, duration_ms,
+    total_tests, passed, failed, errors, skipped, warnings,
+    triggered_by, worker_id
+) VALUES
+    (
+        'tr000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'completed',
+        'scheduled',
+        '2026-02-20 16:00:00+00',
+        '2026-02-20 16:03:42+00',
+        222000,
+        8, 5, 2, 1, 0, 0,
+        NULL,
+        'worker-1'
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 4: SAMPLE TEST RESULTS
+-- ============================================================================
+
+INSERT INTO test_results (
+    id, org_id, test_run_id, test_id, control_id, status, severity,
+    message, details, started_at, completed_at, duration_ms, alert_generated
+) VALUES
+    -- TST-AC-001: PASS
+    (
+        'res00000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000001',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-001' LIMIT 1),
+        'pass', 'critical',
+        'MFA is enforced for all 47 users. No exceptions found.',
+        '{"total_users": 47, "mfa_enabled": 47, "exceptions": 0}'::JSONB,
+        '2026-02-20 16:00:00+00', '2026-02-20 16:00:12+00', 12000, FALSE
+    ),
+    -- TST-AC-002: PASS
+    (
+        'res00000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000002',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-003' LIMIT 1),
+        'pass', 'high',
+        'Quarterly access review completed 12 days ago. Within 90-day cadence.',
+        '{"last_review_date": "2026-02-08", "days_since_review": 12, "cadence_days": 90}'::JSONB,
+        '2026-02-20 16:00:12+00', '2026-02-20 16:00:18+00', 6000, FALSE
+    ),
+    -- TST-DP-001: FAIL — 2 unencrypted S3 buckets
+    (
+        'res00000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000003',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-DP-001' LIMIT 1),
+        'fail', 'critical',
+        '2 of 15 S3 buckets lack default encryption. Non-compliant with PCI DSS 3.4.',
+        '{"total_buckets": 15, "encrypted": 13, "unencrypted": ["staging-logs-2026", "temp-upload-buffer"], "expected_algorithms": ["AES256", "aws:kms"]}'::JSONB,
+        '2026-02-20 16:00:18+00', '2026-02-20 16:00:45+00', 27000, TRUE
+    ),
+    -- TST-LM-001: PASS
+    (
+        'res00000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000004',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-LM-001' LIMIT 1),
+        'pass', 'high',
+        'CloudTrail enabled in all 4 active regions. S3 log delivery confirmed.',
+        '{"regions_checked": 4, "regions_enabled": 4, "s3_delivery": true, "trail_name": "org-main-trail"}'::JSONB,
+        '2026-02-20 16:00:45+00', '2026-02-20 16:01:02+00', 17000, FALSE
+    ),
+    -- TST-VM-001: PASS
+    (
+        'res00000-0000-0000-0000-000000000005',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000005',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-VM-001' LIMIT 1),
+        'pass', 'high',
+        'Last vulnerability scan completed 5 days ago. Within 30-day cadence.',
+        '{"last_scan_date": "2026-02-15", "days_since_scan": 5, "cadence_days": 30, "scanner": "qualys"}'::JSONB,
+        '2026-02-20 16:01:02+00', '2026-02-20 16:01:10+00', 8000, FALSE
+    ),
+    -- TST-NW-001: FAIL — open security group found
+    (
+        'res00000-0000-0000-0000-000000000006',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000006',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-NW-001' LIMIT 1),
+        'fail', 'critical',
+        '1 security group allows inbound 0.0.0.0/0 on port 22 (SSH). Immediate remediation required.',
+        '{"total_security_groups": 23, "violations": [{"sg_id": "sg-0abc123def456", "sg_name": "dev-bastion-sg", "port": 22, "source": "0.0.0.0/0"}]}'::JSONB,
+        '2026-02-20 16:01:10+00', '2026-02-20 16:01:35+00', 25000, TRUE
+    ),
+    -- TST-EP-001: ERROR — integration timeout
+    (
+        'res00000-0000-0000-0000-000000000007',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000007',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-SA-001' LIMIT 1),
+        'error', 'high',
+        'Jamf API connection timed out after 180 seconds.',
+        '{"provider": "jamf", "error_type": "timeout", "timeout_seconds": 180}'::JSONB,
+        '2026-02-20 16:01:35+00', '2026-02-20 16:04:35+00', 180000, FALSE
+    ),
+    -- TST-CFG-001: PASS
+    (
+        'res00000-0000-0000-0000-000000000008',
+        'a0000000-0000-0000-0000-000000000001',
+        'tr000000-0000-0000-0000-000000000001',
+        't0000000-0000-0000-0000-000000000008',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-002' LIMIT 1),
+        'pass', 'medium',
+        'Password policy meets all minimum complexity requirements.',
+        '{"min_length": 12, "actual_min_length": 14, "uppercase": true, "numbers": true, "special_chars": true}'::JSONB,
+        '2026-02-20 16:04:35+00', '2026-02-20 16:04:42+00', 7000, FALSE
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 4: ALERT RULES
+-- ============================================================================
+
+INSERT INTO alert_rules (
+    id, org_id, name, description, enabled,
+    match_test_types, match_severities, match_result_statuses,
+    consecutive_failures, cooldown_minutes,
+    alert_severity, sla_hours,
+    delivery_channels, email_recipients,
+    priority, created_by
+) VALUES
+    -- Critical failures → immediate alert, Slack + email
+    (
+        'ar000000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'Critical Test Failures',
+        'Alert immediately on any critical test failure. Delivered via Slack and email to security team.',
+        TRUE,
+        NULL,
+        ARRAY['critical']::test_severity[],
+        ARRAY['fail']::test_result_status[],
+        1, 60,
+        'critical', 4,
+        ARRAY['slack', 'email', 'in_app']::alert_delivery_channel[],
+        ARRAY['security@acme.example.com', 'ciso@acme.example.com'],
+        10,
+        (SELECT id FROM users WHERE email = 'ciso@acme.example.com' LIMIT 1)
+    ),
+    -- High failures → alert after 2 consecutive, email
+    (
+        'ar000000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'High Severity Failures',
+        'Alert on high-severity test failures after 2 consecutive failures. Email notification to compliance team.',
+        TRUE,
+        NULL,
+        ARRAY['high']::test_severity[],
+        ARRAY['fail']::test_result_status[],
+        2, 120,
+        'high', 24,
+        ARRAY['email', 'in_app']::alert_delivery_channel[],
+        ARRAY['compliance@acme.example.com'],
+        20,
+        (SELECT id FROM users WHERE email = 'compliance@acme.example.com' LIMIT 1)
+    ),
+    -- Medium failures → alert after 3 consecutive, in-app only
+    (
+        'ar000000-0000-0000-0000-000000000003',
+        'a0000000-0000-0000-0000-000000000001',
+        'Medium Severity Findings',
+        'Alert on medium-severity findings after 3 consecutive failures. In-app notification only.',
+        TRUE,
+        NULL,
+        ARRAY['medium']::test_severity[],
+        ARRAY['fail']::test_result_status[],
+        3, 360,
+        'medium', 72,
+        ARRAY['in_app']::alert_delivery_channel[],
+        NULL,
+        30,
+        (SELECT id FROM users WHERE email = 'compliance@acme.example.com' LIMIT 1)
+    ),
+    -- Test execution errors → alert on infra issues
+    (
+        'ar000000-0000-0000-0000-000000000004',
+        'a0000000-0000-0000-0000-000000000001',
+        'Test Execution Errors',
+        'Alert when tests cannot execute (infrastructure issues, timeouts, connection failures).',
+        TRUE,
+        NULL,
+        NULL,
+        ARRAY['error']::test_result_status[],
+        3, 240,
+        'high', 24,
+        ARRAY['email', 'in_app']::alert_delivery_channel[],
+        ARRAY['devops@acme.example.com'],
+        15,
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1)
+    )
+ON CONFLICT DO NOTHING;
+
+-- ============================================================================
+-- SPRINT 4: SAMPLE ALERTS (from the test run above)
+-- ============================================================================
+
+INSERT INTO alerts (
+    id, org_id, title, description, severity, status,
+    test_id, test_result_id, control_id, alert_rule_id,
+    assigned_to, assigned_at, assigned_by,
+    sla_deadline, sla_breached,
+    delivery_channels, tags
+) VALUES
+    -- Alert from S3 encryption failure (TST-DP-001)
+    (
+        'alt00000-0000-0000-0000-000000000001',
+        'a0000000-0000-0000-0000-000000000001',
+        'Encryption at Rest — S3 Buckets FAILED',
+        '2 of 15 S3 buckets lack default encryption. Non-compliant with PCI DSS 3.4. Buckets: staging-logs-2026, temp-upload-buffer.',
+        'critical',
+        'open',
+        't0000000-0000-0000-0000-000000000003',
+        'res00000-0000-0000-0000-000000000003',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-DP-001' LIMIT 1),
+        'ar000000-0000-0000-0000-000000000001',
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1),
+        '2026-02-20 16:00:45+00',
+        (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1),
+        '2026-02-20 20:00:45+00',
+        FALSE,
+        ARRAY['slack', 'email', 'in_app']::alert_delivery_channel[],
+        ARRAY['encryption', 'aws', 's3', 'pci', 'critical']
+    ),
+    -- Alert from open security group (TST-NW-001)
+    (
+        'alt00000-0000-0000-0000-000000000002',
+        'a0000000-0000-0000-0000-000000000001',
+        'Security Group — No Open Inbound 0.0.0.0/0 FAILED',
+        '1 security group (dev-bastion-sg) allows unrestricted SSH access from 0.0.0.0/0. Immediate remediation required.',
+        'critical',
+        'acknowledged',
+        't0000000-0000-0000-0000-000000000006',
+        'res00000-0000-0000-0000-000000000006',
+        (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-NW-001' LIMIT 1),
+        'ar000000-0000-0000-0000-000000000001',
+        (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1),
+        '2026-02-20 16:01:35+00',
+        (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1),
+        '2026-02-20 20:01:35+00',
+        FALSE,
+        ARRAY['slack', 'email', 'in_app']::alert_delivery_channel[],
+        ARRAY['network', 'aws', 'firewall', 'ssh', 'critical']
+    )
+ON CONFLICT DO NOTHING;
+
+-- Link test results back to their alerts
+UPDATE test_results SET alert_id = 'alt00000-0000-0000-0000-000000000001'
+WHERE id = 'res00000-0000-0000-0000-000000000003';
+
+UPDATE test_results SET alert_id = 'alt00000-0000-0000-0000-000000000002'
+WHERE id = 'res00000-0000-0000-0000-000000000006';
+
+-- ============================================================================
+-- SPRINT 4: AUDIT LOG ENTRIES (test and alert activity)
+-- ============================================================================
+
+INSERT INTO audit_log (org_id, actor_id, action, resource_type, resource_id, metadata, ip_address)
+VALUES
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
+     'test.created', 'test', 't0000000-0000-0000-0000-000000000001',
+     '{"identifier": "TST-AC-001", "title": "MFA Enforcement Verification", "type": "access_control", "severity": "critical"}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', NULL,
+     'test_run.started', 'test_run', 'tr000000-0000-0000-0000-000000000001',
+     '{"trigger": "scheduled", "total_tests": 8, "worker": "worker-1"}'::jsonb, '10.0.1.50'::inet),
+    ('a0000000-0000-0000-0000-000000000001', NULL,
+     'test_run.completed', 'test_run', 'tr000000-0000-0000-0000-000000000001',
+     '{"passed": 5, "failed": 2, "errors": 1, "duration_ms": 222000}'::jsonb, '10.0.1.50'::inet),
+    ('a0000000-0000-0000-0000-000000000001', NULL,
+     'alert.created', 'alert', 'alt00000-0000-0000-0000-000000000001',
+     '{"title": "Encryption at Rest — S3 Buckets FAILED", "severity": "critical", "rule": "Critical Test Failures"}'::jsonb, '10.0.1.50'::inet),
+    ('a0000000-0000-0000-0000-000000000001', NULL,
+     'alert.created', 'alert', 'alt00000-0000-0000-0000-000000000002',
+     '{"title": "Security Group — No Open Inbound 0.0.0.0/0 FAILED", "severity": "critical", "rule": "Critical Test Failures"}'::jsonb, '10.0.1.50'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
+     'alert.assigned', 'alert', 'alt00000-0000-0000-0000-000000000001',
+     '{"assigned_to": "devops@acme.example.com", "severity": "critical"}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000005',
+     'alert.acknowledged', 'alert', 'alt00000-0000-0000-0000-000000000002',
+     '{"title": "Security Group — No Open Inbound 0.0.0.0/0 FAILED", "previous_status": "open"}'::jsonb, '192.168.1.10'::inet),
+    ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000004',
+     'alert_rule.created', 'alert_rule', 'ar000000-0000-0000-0000-000000000001',
+     '{"name": "Critical Test Failures", "severity": "critical", "sla_hours": 4}'::jsonb, '192.168.1.10'::inet)
+ON CONFLICT DO NOTHING;

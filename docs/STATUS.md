@@ -12,14 +12,14 @@
 - [x] Write docs/sprints/sprint-4/API_SPEC.md
 
 ### Database Engineer
-- [ ] Write migration: test-related enums (test_type, test_status, test_severity, test_result_status)
-- [ ] Write migration: tests table (test definitions with schedules)
-- [ ] Write migration: test_runs table (execution history)
-- [ ] Write migration: test_results table (individual test outputs with pass/fail)
-- [ ] Write migration: alert-related enums (alert_severity, alert_status, alert_delivery_channel)
-- [ ] Write migration: alerts table (generated alerts with classification)
-- [ ] Write migration: alert_rules table (alert generation rules)
-- [ ] Add seed data: example tests for demo controls, sample alert rules
+- [x] Write migration: test-related enums (test_type, test_status, test_severity, test_result_status)
+- [x] Write migration: tests table (test definitions with schedules)
+- [x] Write migration: test_runs table (execution history)
+- [x] Write migration: test_results table (individual test outputs with pass/fail)
+- [x] Write migration: alert-related enums (alert_severity, alert_status, alert_delivery_channel)
+- [x] Write migration: alerts table (generated alerts with classification)
+- [x] Write migration: alert_rules table (alert generation rules)
+- [x] Add seed data: example tests for demo controls, sample alert rules
 
 ### Backend Developer
 - [ ] Test execution worker (background job scheduler)
@@ -76,13 +76,13 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 4 design complete: SCHEMA.md (5 tables, 11 enums, 19 audit actions) + API_SPEC.md (32 endpoints). DBE unblocked. |
-| DBE | 0/8 (0%) | ⚡ ENABLED | Enabled at 16:50. Dependencies met (SA complete). 8 migration tasks queued: test enums (4), tables (3), seed data (1). |
+| DBE | 8/8 (100%) | ✅ DONE | All migrations (019-025) and seed data complete. 5 tables, 11 enums, 19 audit actions, deferred FKs. DEV-BE unblocked. |
 | DEV-BE | 0/14 (0%) | 💤 DISABLED | Waiting for DBE to complete Sprint 4 migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for DEV-BE to complete ≥5 backend tasks. |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for code to test. |
 
-**Overall Sprint Completion:** 4/54 tasks (7%)
+**Overall Sprint Completion:** 12/54 tasks (22%)
 
 ## Dependency Chain Status
 ```
@@ -90,10 +90,10 @@ SA [DONE] → DBE [ENABLED/ACTIVE] → DEV-BE [BLOCKED] → CR [BLOCKED]
                                                        ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** DBE (must deliver migrations before backend work begins)
+**Critical Path:** DEV-BE (must deliver backend endpoints before frontend/QA work begins)
 
 ## Blockers
-**NONE:** DBE is now active and working on Sprint 4 migrations.
+**NONE:** DBE complete. DEV-BE is next on the critical path.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
