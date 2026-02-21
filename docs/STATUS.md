@@ -6,10 +6,10 @@
 ## Sprint 4 Tasks
 
 ### System Architect
-- [ ] Design Sprint 4 schema (tests, test_runs, test_results, alerts, alert_rules)
-- [ ] Write Sprint 4 API spec (test execution, alert engine, alert delivery, monitoring dashboard)
-- [ ] Write docs/sprints/sprint-4/SCHEMA.md
-- [ ] Write docs/sprints/sprint-4/API_SPEC.md
+- [x] Design Sprint 4 schema (tests, test_runs, test_results, alerts, alert_rules)
+- [x] Write Sprint 4 API spec (test execution, alert engine, alert delivery, monitoring dashboard)
+- [x] Write docs/sprints/sprint-4/SCHEMA.md
+- [x] Write docs/sprints/sprint-4/API_SPEC.md
 
 ### Database Engineer
 - [ ] Write migration: test-related enums (test_type, test_status, test_severity, test_result_status)
@@ -75,22 +75,22 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 0/4 (0%) | 🟢 ENABLED | Sprint 4 design starting. Schema + API spec for continuous monitoring engine (tests, alerts, worker). |
+| SA | 4/4 (100%) | ✅ DONE | Sprint 4 design complete: SCHEMA.md (5 tables, 11 enums, 19 audit actions) + API_SPEC.md (32 endpoints). DBE unblocked. |
 | DBE | 0/8 (0%) | 💤 DISABLED | Waiting for SA to complete Sprint 4 schema design. |
 | DEV-BE | 0/14 (0%) | 💤 DISABLED | Waiting for DBE to complete Sprint 4 migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for DEV-BE to complete ≥5 backend tasks. |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for code to test. |
 
-**Overall Sprint Completion:** 0/54 tasks (0%)
+**Overall Sprint Completion:** 4/54 tasks (7%)
 
 ## Dependency Chain Status
 ```
-SA [ACTIVE] → DBE [BLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED]
-                                                 ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
+SA [DONE] → DBE [UNBLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED]
+                                                  ↘ DEV-FE [BLOCKED] → QA [BLOCKED]
 ```
 
-**Critical Path:** SA (must design schema + API spec before any other work can begin)
+**Critical Path:** DBE (must deliver migrations before backend work begins)
 
 ## Blockers
 **NONE:** Sprint 4 just started. SA designing monitoring engine architecture.
@@ -129,3 +129,4 @@ SA [ACTIVE] → DBE [BLOCKED] → DEV-BE [BLOCKED] → CR [BLOCKED]
 | 2026-02-20 15:03 | CR | All 9 tasks complete. Comprehensive code review: MinIO integration (presigned URLs, bucket config), evidence handlers (3,200 lines backend), dashboard (2,800 lines frontend), migrations (5 files), tests (28 unit tests). Security audit: multi-tenancy isolation verified, MIME type whitelist, file size limits, RBAC enforcement, SQL injection prevention, audit logging. Result: 0 critical/high issues, 3 medium findings (Issues #4-6: presigned URL Content-Type enforcement, file size validation, client-side checks), 3 low-priority suggestions. CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT. |
 | 2026-02-20 15:08 | QA | All 9 tasks complete. Sprint 3 testing PASSED: 84/84 unit tests passing, E2E API tests passing (5/5), dashboard builds clean (14 routes), go vet clean, MinIO service healthy. Created Playwright E2E test suite with video capture. Security verification: multi-tenancy isolation confirmed, SQL injection prevention verified, no hardcoded secrets. 1 environmental finding (manual migrations required, non-blocking). Result: APPROVED FOR DEPLOYMENT. QA_REPORT.md published. Sprint 3 at 100% completion. |
 | 2026-02-20 15:50 | PM | **Sprint 3 COMPLETE (100%).** Sprint transition: advanced to Sprint 4 (Continuous Monitoring Engine). ALL agents disabled. SA enabled and triggered immediately to start Sprint 4 design (tests, alerts, worker, monitoring dashboard). |
+| 2026-02-20 15:52 | SA | Sprint 4 design complete: SCHEMA.md (5 tables: tests, test_runs, test_results, alerts, alert_rules + 11 new enums + 19 audit_action extensions + deferred FK cross-refs + worker architecture notes + query patterns for heatmap/posture/alert queue + 8 seed tests + 4 seed alert rules) and API_SPEC.md (32 endpoints covering test CRUD, test execution/runs/results, alert CRUD/lifecycle/assign/resolve/suppress/close, alert delivery with Slack/email/webhook, alert rule management, monitoring dashboard: heatmap/posture/summary/alert-queue). DBE unblocked. |
