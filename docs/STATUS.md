@@ -71,22 +71,24 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | ✅ DONE | Sprint 6 schema + API spec complete. 4 tables, 8 enums, 21 endpoints, 200+ template risks. DBE unblocked. |
+| SA | 4/4 (100%) | 🔄 ENABLED | Sprint 6 complete. Sprint >75%, SA enabled to pre-design Sprint 7 (Audit Hub). |
 | DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
 | DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete: 21 REST endpoints (risk CRUD+status, assessments+recalc, treatments+complete, controls CRUD, heat map, gaps, search, stats). 50 risk unit tests passing (261 total). Docker build clean. |
 | DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: risk register list (filterable + mini heat map), risk detail (4-tab: info/assessments/treatments/controls), risk editor (create + edit), assessment interface (likelihood×impact dropdowns + live score preview), heat map visualization (5×5 grid + tooltips + severity legend), treatment plan UI (CRUD + status transitions + complete with effectiveness), control linking (search + link + unlink + effectiveness), risk gap dashboard (6 summary cards + urgency table), treatment progress tracking (completion bars + status breakdown). Sidebar updated with 4 Risk Management nav items. Build passes clean (36 routes). |
 | CR | 10/10 (100%) | ✅ DONE | Comprehensive code review complete. 0 critical/high issues in implementation, 1 critical RBAC issue (Issue #13: missing authorization in ArchiveRisk), 1 high issue (Issue #14: no owner ID validation), 1 medium issue (Issue #15: RecalculateRiskScores authorization). Multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), audit logging present. Result: APPROVED FOR DEPLOYMENT (after fixing Issue #13). CODE_REVIEW.md published (11,200 LOC reviewed). |
-| QA | 0/9 (0%) | 💤 DISABLED | Waiting for CR approval. Will enable when CR completes review. |
+| QA | 0/9 (0%) | 🔄 ENABLED | CR complete, QA enabled and triggered. Will test 261 unit tests, 21 API endpoints, 9 dashboard pages, E2E flows. |
 
 **Overall Sprint Completion:** 41/50 tasks (82%)
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11/11 - DISABLED] → CR [UNBLOCKED - 0/10 - ENABLED]
-                                                                                              ↘ DEV-FE [UNBLOCKED - 0/9 - ENABLED] → QA [BLOCKED - 0/9 - DISABLED]
+SA [DONE - 4/4 - ENABLED for Sprint 7] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11/11 - DISABLED] → CR [DONE - 10/10 - DISABLED]
+                                                                                                          ↘ DEV-FE [DONE - 9/9 - DISABLED] ↗
+                                                                                                                                            ↓
+                                                                                                          QA [UNBLOCKED - 0/9 - ENABLED & TRIGGERED]
 ```
 
-**Critical Path:** DEV-FE (9 risk dashboard pages) and CR (risk backend review) running in parallel. QA waits for CR completion.
+**Critical Path:** QA is now the final critical path. SA pre-designing Sprint 7 in parallel.
 
 ## Blockers
 None currently.
@@ -95,6 +97,7 @@ None currently.
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
 | 2026-02-21 03:03 | CR | All 10 tasks complete. Comprehensive code review: 6 backend handler files (risks, risk_assessments, risk_treatments, risk_controls, risk_analytics + models/risk), 9 migrations (035-043), 6 frontend pages (~11,200 LOC total). Security audit: multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), RBAC properly enforced (8/10 endpoints), audit logging present. Result: 1 CRITICAL issue (Issue #13: missing RBAC in ArchiveRisk), 1 HIGH issue (Issue #14: no owner ID validation), 1 MEDIUM issue (Issue #15: RecalculateRiskScores authorization). CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT (after fixing Issue #13). Sprint 6 at 82% completion. QA unblocked. |
+| 2026-02-21 03:50 | PM | Agent lifecycle update: **DEV-FE DISABLED** (all 9 tasks done), **CR DISABLED** (all 10 tasks done), **QA ENABLED and TRIGGERED** (CR approved, 9 QA tasks queued). **SA ENABLED** (sprint >75%, pre-designing Sprint 7). Sprint 6 at 82% completion. Critical path: QA (comprehensive testing + E2E) is final gate before Sprint 6 completion. Gateway timeouts on triggers (agents will run on schedule). |
 | 2026-02-20 23:55 | SA | Sprint 6 design complete: SCHEMA.md (4 tables: risks, risk_assessments, risk_treatments, risk_controls + 8 new enums + 18 audit_action extensions + 3 scoring helper functions + evidence_links FK extension + heat map/gap/trend query patterns + 200+ template risks + demo data with 5 active risks, assessments, treatments, and control mappings) and API_SPEC.md (21 endpoints covering risk CRUD + status transitions, assessments with scoring formulas, treatment lifecycle with effectiveness review, risk-to-control linkage with effectiveness tracking, 5×5 heat map aggregation, gap detection with 5 gap types, search, and statistics dashboard). 9 migration files (035-043). DBE unblocked. |
 | 2026-02-20 03:22 | PM | Project plan and status created |
 | 2026-02-20 03:25 | SA | Sprint 1 schema, API spec, and Docker topology designed |
