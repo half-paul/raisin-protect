@@ -1,102 +1,98 @@
 # Raisin Protect — Status
 
-## Current Sprint: 6 — Risk Register
-**Started:** 2026-02-21 00:00
+## Current Sprint: 7 — Audit Hub
+**Started:** 2026-02-21 04:50
 
-## Sprint 6 Tasks
+## Sprint 7 Tasks
 
 ### System Architect
-- [x] Design Sprint 6 schema (risks, risk_assessments, risk_treatments, risk_controls)
-- [x] Write Sprint 6 API spec (risk CRUD, assessments, treatments, heat map, linkage)
-- [x] Write docs/sprints/sprint-6/SCHEMA.md
-- [x] Write docs/sprints/sprint-6/API_SPEC.md
+- [x] Design Sprint 7 schema (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments)
+- [x] Write Sprint 7 API spec (35 endpoints: audit CRUD, requests, evidence submission, findings, comments, templates, dashboard)
+- [x] Write docs/sprints/sprint-7/SCHEMA.md
+- [x] Write docs/sprints/sprint-7/API_SPEC.md
 
 ### Database Engineer
-- [x] Write migration: risk-related enums (risk_category, risk_status, likelihood_level, impact_level, treatment_type, treatment_status)
-- [x] Write migration: risks table (risk definitions with ownership and categorization)
-- [x] Write migration: risk_assessments table (likelihood + impact scoring with formulas)
-- [x] Write migration: risk_treatments table (mitigation plans and tracking)
-- [x] Write migration: risk_controls table (link risks to controls)
-- [x] Add seed data: example risks per category (operational, financial, strategic, compliance)
-- [x] Add seed data: risk assessment templates and scoring formulas
+- [ ] Write migration: audit enums (audit_status, audit_type, request_status, finding_severity, finding_status, remediation_status, evidence_submission_status, comment_target_type, comment_visibility)
+- [ ] Write migration: audits table (audit engagements with timeline, framework, firm, auditor access control)
+- [ ] Write migration: audit_requests table (evidence requests from auditors with SLA tracking)
+- [ ] Write migration: audit_findings table (deficiencies with remediation tracking)
+- [ ] Write migration: audit_evidence_links table (chain-of-custody for evidence submission)
+- [ ] Write migration: audit_comments table (threaded discussion with visibility control)
+- [ ] Add seed data: PBC templates (80+ templates across SOC2/PCI/ISO/GDPR)
+- [ ] Add seed data: demo audit engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments)
 
 ### Backend Developer
-- [x] Risk CRUD endpoints (create, get, list, update, archive)
-- [x] Risk assessment endpoints (create assessment, update scores, recalculate)
-- [x] Risk scoring engine (likelihood × impact with configurable formulas)
-- [x] Risk heat map data endpoint (aggregate by likelihood/impact)
-- [x] Risk-to-control linkage (link risk to controls, unlink, list mappings)
-- [x] Risk treatment workflow (create treatment plan, track progress, complete)
-- [x] Risk gap detection (identify risks without treatment plans)
-- [x] Risk search and filtering (by category, status, score range, owner)
-- [x] Risk notifications (email/Slack when high/critical risks created)
-- [x] Unit tests for risk handlers and scoring engine
-- [x] Update docker-compose.yml if needed (no new services expected)
+- [ ] Audit CRUD endpoints (list, get, create, update)
+- [ ] Audit status transition endpoints (start, advance, complete, cancel)
+- [ ] Auditor management endpoints (add auditors, remove auditors)
+- [ ] Audit request CRUD (list, create, update, delete)
+- [ ] Evidence request workflow (assign, submit, review, accept, reject)
+- [ ] Evidence submission endpoints (link evidence, submit new, chain-of-custody)
+- [ ] Audit finding CRUD (list, create, update, delete)
+- [ ] Finding remediation workflow (create plan, update progress, verify)
+- [ ] Audit comment CRUD (list, create, update, delete, visibility control)
+- [ ] PBC template endpoints (list templates, bulk-create requests)
+- [ ] Audit dashboard endpoint (readiness, overdue, critical findings, recent activity)
+- [ ] Per-audit stats endpoint (request counts, finding breakdown, evidence readiness)
+- [ ] Unit tests for audit handlers
+- [ ] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
-- [x] Risk register page (list of risks with filters, heat map preview)
-- [x] Risk detail page (current assessment, treatment plans, linked controls)
-- [x] Risk editor (create/edit risk with category, description, owner)
-- [x] Risk assessment interface (likelihood/impact sliders with score calculation)
-- [x] Risk heat map visualization (2D grid: likelihood vs impact)
-- [x] Risk treatment plan UI (create treatment, assign owner, track progress)
-- [x] Risk-to-control linking UI (search controls, create mappings)
-- [x] Risk gap dashboard (risks without treatments, high risks without controls)
-- [x] Treatment progress tracking (timeline view, completion status)
+- [ ] Audit hub home (engagement list with filters, stats cards, create dialog)
+- [ ] Audit detail page (engagement info, timeline, milestones, 4-tab layout)
+- [ ] Audit request queue (evidence requests with SLA tracking, status filters)
+- [ ] Evidence submission interface (link existing or upload new, chain-of-custody display)
+- [ ] Finding management page (findings list with remediation tracking, severity filters)
+- [ ] Audit comments interface (threaded comments with internal/auditor visibility toggle)
+- [ ] PBC template library (framework-based template selection, bulk-create workflow)
+- [ ] Audit readiness dashboard (request completion %, overdue items, critical findings)
+- [ ] Auditor workspace view (auditor-scoped engagement list with assigned audits only)
 
 ### Code Reviewer
-- [x] Review risk CRUD handlers and assessment logic
-- [x] Review risk-to-control mapping implementation
-- [x] Review scoring engine (formula validation, edge cases)
-- [x] Review treatment workflow (authorization: only risk owners can update)
-- [x] Review heat map data generation logic
-- [x] Security audit: risk ownership validation, treatment authorization checks
-- [x] Check multi-tenancy isolation for risks and assessments
-- [x] Verify risk scoring formulas are configurable and auditable
-- [x] File GitHub issues for critical/high findings
-- [x] Write docs/sprints/sprint-6/CODE_REVIEW.md
+- [ ] Review audit CRUD handlers and status transitions
+- [ ] Review evidence request/submission workflow (assign → submit → review cycle)
+- [ ] Review finding remediation logic (create plan → track progress → verify)
+- [ ] Security audit: auditor access isolation (auditor can only see assigned audits)
+- [ ] Review chain-of-custody implementation for evidence submission
+- [ ] Verify RBAC enforcement (auditor role restrictions, internal vs auditor permissions)
+- [ ] Check multi-tenancy isolation for audit data (org_id enforcement)
+- [ ] Review comment visibility controls (internal comments hidden from auditors)
+- [ ] File GitHub issues for critical/high findings
+- [ ] Write docs/sprints/sprint-7/CODE_REVIEW.md
 
 ### QA Engineer
-- [x] Verify all API tests pass
-- [x] Test risk CRUD (create, edit, archive, search)
-- [x] Test risk assessment workflow (score calculation, formula changes)
-- [x] Test risk heat map (correct bucketing, aggregation)
-- [x] Test risk-to-control mapping (link, unlink, gap detection)
-- [x] Test risk treatment workflow (create → assign → track → complete)
-- [x] Test heat map visualization (correct positioning, tooltips)
-- [x] Test multi-tenancy isolation for risks
-- [x] Write docs/sprints/sprint-6/QA_REPORT.md
+- [ ] Verify all API tests pass (unit tests + go vet clean)
+- [ ] Test audit CRUD (create engagement, update status, transitions)
+- [ ] Test evidence request workflow (create → assign → submit → review → accept/reject)
+- [ ] Test finding management (create → remediate → verify, management response)
+- [ ] Test auditor access isolation (auditor can only see assigned audits, not all org audits)
+- [ ] Test evidence submission (link existing, upload new, chain-of-custody tracking)
+- [ ] Test PBC template bulk creation (80+ templates → create all requests for audit)
+- [ ] Test multi-tenancy isolation for audits (org_id enforcement in all queries)
+- [ ] Write docs/sprints/sprint-7/QA_REPORT.md
 
 ## Sprint Progress
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 4/4 (100%) | ✅ DONE | Sprint 6 complete. Sprint 7 pre-design complete (Audit Hub: SCHEMA.md + API_SPEC.md delivered). |
-| DBE | 7/7 (100%) | ✅ DONE | All 7 tasks complete: 9 migrations (035-043), 230 risk templates, 5 demo risks with assessments/treatments/controls. |
-| DEV-BE | 11/11 (100%) | ✅ DONE | All 11 tasks complete: 21 REST endpoints (risk CRUD+status, assessments+recalc, treatments+complete, controls CRUD, heat map, gaps, search, stats). 50 risk unit tests passing (261 total). Docker build clean. |
-| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete: risk register list (filterable + mini heat map), risk detail (4-tab: info/assessments/treatments/controls), risk editor (create + edit), assessment interface (likelihood×impact dropdowns + live score preview), heat map visualization (5×5 grid + tooltips + severity legend), treatment plan UI (CRUD + status transitions + complete with effectiveness), control linking (search + link + unlink + effectiveness), risk gap dashboard (6 summary cards + urgency table), treatment progress tracking (completion bars + status breakdown). Sidebar updated with 4 Risk Management nav items. Build passes clean (36 routes). |
-| CR | 10/10 (100%) | ✅ DONE | Comprehensive code review complete. 0 critical/high issues in implementation, 1 critical RBAC issue (Issue #13: missing authorization in ArchiveRisk), 1 high issue (Issue #14: no owner ID validation), 1 medium issue (Issue #15: RecalculateRiskScores authorization). Multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), audit logging present. Result: APPROVED FOR DEPLOYMENT (after fixing Issue #13). CODE_REVIEW.md published (11,200 LOC reviewed). |
-| QA | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Comprehensive testing: 261/261 unit tests passing (50 new risk tests), 21 API endpoints verified, dashboard builds clean (36 routes), go vet clean, Docker services healthy (6/6 running, worker unhealthy pre-existing). E2E test suite created (3 new risk specs: CRUD, assessments, treatments). Security: multi-tenancy isolation verified, SQL injection prevention confirmed, no hardcoded secrets, RBAC enforced (with 3 known Sprint 5 issues #13-15). 1 environmental finding: Sprint 5+6 migrations require manual deployment (seed data UUID errors, non-blocking). Result: APPROVED FOR DEPLOYMENT (after addressing Sprint 5 Issue #13). QA_REPORT.md published (19.3 KB). |
+| SA | 4/4 (100%) | ✅ DONE | Sprint 7 pre-design complete (SCHEMA.md + API_SPEC.md delivered during Sprint 6 @ 04:03). |
+| DBE | 0/8 (0%) | 🔄 ACTIVE | ENABLED 04:50. Dependencies met: SA complete. 9 migrations queued (044-052): audit enums, 5 tables, PBC templates, demo engagement. Critical path. |
+| DEV-BE | 0/14 (0%) | 🔒 BLOCKED | Awaiting DBE completion (audit schema migrations). 35 REST endpoints queued. |
+| DEV-FE | 0/9 (0%) | 🔒 BLOCKED | Awaiting DEV-BE (≥5 endpoints needed). 9 audit hub pages queued. |
+| CR | 0/10 (0%) | 🔒 BLOCKED | Awaiting code commits from DEV-BE and DEV-FE. 10 review tasks queued. |
+| QA | 0/9 (0%) | 🔒 BLOCKED | Awaiting CR approval. 9 testing tasks queued. |
 
-**Overall Sprint Completion:** 50/50 tasks (100%)
+**Overall Sprint Completion:** 4/54 tasks (7%)
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - ENABLED for Sprint 7] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11/11 - DISABLED] → CR [DONE - 10/10 - DISABLED]
-                                                                                                          ↘ DEV-FE [DONE - 9/9 - DISABLED] ↗
-                                                                                                                                            ↓
-                                                                                                          QA [DONE - 9/9 - DISABLED]
+SA [DONE - 4/4 - DISABLED] → DBE [ACTIVE - 0/8 - ENABLED] → DEV-BE [BLOCKED - 0/14 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
+                                                                                                 ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] ↗
+                                                                                                                                     ↓
+                                                                                                 QA [BLOCKED - 0/9 - DISABLED]
 ```
 
-**Critical Path:** ✅ Sprint 6 COMPLETE. All agents done. SA Sprint 7 pre-design COMPLETE.
-
-## Sprint 7 Pre-Design (Audit Hub) — SA Complete
-
-### System Architect (Pre-Design)
-- [x] Design Sprint 7 schema (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments)
-- [x] Write Sprint 7 API spec (35 endpoints: audit CRUD, requests, evidence submission, findings, comments, templates, dashboard)
-- [x] Write docs/sprints/sprint-7/SCHEMA.md
-- [x] Write docs/sprints/sprint-7/API_SPEC.md
+**Critical Path:** DBE (must deliver audit schema to unblock DEV-BE).
 
 ## Blockers
 None currently.
@@ -104,6 +100,7 @@ None currently.
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 04:50 | PM | **SPRINT 6 COMPLETE (100%).** Sprint transition: advanced to Sprint 7 (Audit Hub). ALL agents disabled. DBE enabled and triggered immediately (dependencies met: SA pre-design complete at 04:03 with SCHEMA.md + API_SPEC.md). Sprint 7 at 7% completion. Critical path: DBE (9 migrations: 044-052 for audit enums, 5 tables, 80+ PBC templates, demo engagement). |
 | 2026-02-21 04:03 | SA | Sprint 7 pre-design complete: SCHEMA.md (5 tables: audits, audit_requests, audit_findings, audit_evidence_links, audit_comments + 9 new enums + 20 audit_action extensions + evidence_links FK extension + auditor access model + chain-of-custody queries + PBC template seeds ~80 templates across SOC2/PCI/ISO/GDPR + demo audit engagement with 8 requests, 4 findings, 5 evidence links, 6 comments) and API_SPEC.md (35 endpoints covering audit engagement CRUD + status transitions, auditor management, evidence request/response workflow with assign/submit/review lifecycle, evidence submission with chain-of-custody, finding management with full remediation lifecycle + management response + risk acceptance + auditor verification, threaded comments with internal visibility, PBC request templates with bulk creation, audit hub dashboard with readiness scores + overdue tracking + critical findings + recent activity, per-audit stats and readiness breakdown). Role-based access matrix: auditors see only their engagements, internal comments hidden from auditors. 9 migration files (044-052). DBE unblocked for Sprint 7. |
 | 2026-02-21 03:50 | QA | All 9 tasks complete. **Sprint 6 COMPLETE (100%).** Comprehensive testing: 261/261 unit tests passing (50 new risk tests), go vet clean, 21 API endpoints verified (risk CRUD, assessments, treatments, heat map, gaps, search), dashboard builds clean (36 routes, +6 risk pages), Docker services healthy (6/6, worker unhealthy pre-existing). Manual migration deployment: Sprint 5 (027-034) + Sprint 6 (035-043) applied successfully, 4 seed files failed with UUID format errors (non-blocking). E2E test suite created: 3 new risk specs (CRUD, assessments, treatments) covering 50+ test cases with video capture configured. Security verification: multi-tenancy isolation confirmed (org_id enforcement tested), SQL injection prevention verified, RBAC enforced. Risk scoring engine validated: 5 test cases (1→25 range), severity bands correct (critical/high/medium/low). 1 environmental finding: manual migrations required (documented in QA report). Result: APPROVED FOR DEPLOYMENT (after addressing Sprint 5 Issues #13-15). QA_REPORT.md published (19.3 KB). Sprint 6 at 100% completion. |
 | 2026-02-21 03:03 | CR | All 10 tasks complete. Comprehensive code review: 6 backend handler files (risks, risk_assessments, risk_treatments, risk_controls, risk_analytics + models/risk), 9 migrations (035-043), 6 frontend pages (~11,200 LOC total). Security audit: multi-tenancy isolation verified (30+ org_id checks), SQL injection prevention confirmed (all parameterized queries), RBAC properly enforced (8/10 endpoints), audit logging present. Result: 1 CRITICAL issue (Issue #13: missing RBAC in ArchiveRisk), 1 HIGH issue (Issue #14: no owner ID validation), 1 MEDIUM issue (Issue #15: RecalculateRiskScores authorization). CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT (after fixing Issue #13). Sprint 6 at 82% completion. QA unblocked. |
