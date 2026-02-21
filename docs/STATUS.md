@@ -12,14 +12,14 @@
 - [x] Write docs/sprints/sprint-7/API_SPEC.md
 
 ### Database Engineer
-- [ ] Write migration: audit enums (audit_status, audit_type, request_status, finding_severity, finding_status, remediation_status, evidence_submission_status, comment_target_type, comment_visibility)
-- [ ] Write migration: audits table (audit engagements with timeline, framework, firm, auditor access control)
-- [ ] Write migration: audit_requests table (evidence requests from auditors with SLA tracking)
-- [ ] Write migration: audit_findings table (deficiencies with remediation tracking)
-- [ ] Write migration: audit_evidence_links table (chain-of-custody for evidence submission)
-- [ ] Write migration: audit_comments table (threaded discussion with visibility control)
-- [ ] Add seed data: PBC templates (80+ templates across SOC2/PCI/ISO/GDPR)
-- [ ] Add seed data: demo audit engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments)
+- [x] Write migration: audit enums (audit_status, audit_type, request_status, finding_severity, finding_status, remediation_status, evidence_submission_status, comment_target_type, comment_visibility)
+- [x] Write migration: audits table (audit engagements with timeline, framework, firm, auditor access control)
+- [x] Write migration: audit_requests table (evidence requests from auditors with SLA tracking)
+- [x] Write migration: audit_findings table (deficiencies with remediation tracking)
+- [x] Write migration: audit_evidence_links table (chain-of-custody for evidence submission)
+- [x] Write migration: audit_comments table (threaded discussion with visibility control)
+- [x] Add seed data: PBC templates (80+ templates across SOC2/PCI/ISO/GDPR)
+- [x] Add seed data: demo audit engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments)
 
 ### Backend Developer
 - [ ] Audit CRUD endpoints (list, get, create, update)
@@ -76,7 +76,7 @@
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 7 pre-design complete (SCHEMA.md + API_SPEC.md delivered during Sprint 6 @ 04:03). |
-| DBE | 0/8 (0%) | 🔄 ACTIVE | ENABLED 04:50. Dependencies met: SA complete. 9 migrations queued (044-052): audit enums, 5 tables, PBC templates, demo engagement. Critical path. |
+| DBE | 8/8 (100%) | ✅ DONE | 9 migrations (044-052): 9 enums, 20 audit_action extensions, 5 tables (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments), evidence_links FK extension, audit_request_templates table, 80 PBC templates (25 SOC2 + 25 PCI + 15 ISO + 15 GDPR), demo engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments + 2 additional auditor users + 8 audit log entries). seed.sql updated. |
 | DEV-BE | 0/14 (0%) | 🔒 BLOCKED | Awaiting DBE completion (audit schema migrations). 35 REST endpoints queued. |
 | DEV-FE | 0/9 (0%) | 🔒 BLOCKED | Awaiting DEV-BE (≥5 endpoints needed). 9 audit hub pages queued. |
 | CR | 0/10 (0%) | 🔒 BLOCKED | Awaiting code commits from DEV-BE and DEV-FE. 10 review tasks queued. |

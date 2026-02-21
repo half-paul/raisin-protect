@@ -1,7 +1,7 @@
 -- Seed Data: seed.sql
--- Description: Demo organization, users, frameworks, requirements, controls, and mappings
+-- Description: Demo organization, users, frameworks, requirements, controls, mappings, and audit data
 -- Created: 2026-02-20
--- Sprint: 1+2 — Full seed for Project Scaffolding, Auth, Frameworks & Controls
+-- Sprint: 1+2+7 — Full seed for Project Scaffolding, Auth, Frameworks, Controls & Audit Hub
 --
 -- Password for all demo users: demo123
 -- Bcrypt hash (cost 12): $2b$12$nykuT6Xga0gKKNVs0HfJOOSbYCiIEFJKtgI26IXe.zseNbA5k6aNS
@@ -47,7 +47,13 @@ VALUES
      'Frank', 'Auditor', 'auditor', 'active'),
     ('b0000000-0000-0000-0000-000000000007', 'a0000000-0000-0000-0000-000000000001',
      'vendor@acme.example.com', '$2b$12$nykuT6Xga0gKKNVs0HfJOOSbYCiIEFJKtgI26IXe.zseNbA5k6aNS',
-     'Grace', 'Vendor', 'vendor_manager', 'active')
+     'Grace', 'Vendor', 'vendor_manager', 'active'),
+    ('b0000000-0000-0000-0000-000000000008', 'a0000000-0000-0000-0000-000000000001',
+     'auditor2@acme.example.com', '$2b$12$nykuT6Xga0gKKNVs0HfJOOSbYCiIEFJKtgI26IXe.zseNbA5k6aNS',
+     'Hannah', 'Auditor', 'auditor', 'active'),
+    ('b0000000-0000-0000-0000-000000000009', 'a0000000-0000-0000-0000-000000000001',
+     'auditor3@acme.example.com', '$2b$12$nykuT6Xga0gKKNVs0HfJOOSbYCiIEFJKtgI26IXe.zseNbA5k6aNS',
+     'Ivan', 'Auditor', 'auditor', 'active')
 ON CONFLICT (org_id, email) DO NOTHING;
 
 -- ============================================================================
