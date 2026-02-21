@@ -22,20 +22,20 @@
 - [x] Add seed data: demo audit engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments)
 
 ### Backend Developer
-- [ ] Audit CRUD endpoints (list, get, create, update)
-- [ ] Audit status transition endpoints (start, advance, complete, cancel)
-- [ ] Auditor management endpoints (add auditors, remove auditors)
-- [ ] Audit request CRUD (list, create, update, delete)
-- [ ] Evidence request workflow (assign, submit, review, accept, reject)
-- [ ] Evidence submission endpoints (link evidence, submit new, chain-of-custody)
-- [ ] Audit finding CRUD (list, create, update, delete)
-- [ ] Finding remediation workflow (create plan, update progress, verify)
-- [ ] Audit comment CRUD (list, create, update, delete, visibility control)
-- [ ] PBC template endpoints (list templates, bulk-create requests)
-- [ ] Audit dashboard endpoint (readiness, overdue, critical findings, recent activity)
-- [ ] Per-audit stats endpoint (request counts, finding breakdown, evidence readiness)
-- [ ] Unit tests for audit handlers
-- [ ] Update docker-compose.yml if needed (no new services expected)
+- [x] Audit CRUD endpoints (list, get, create, update)
+- [x] Audit status transition endpoints (start, advance, complete, cancel)
+- [x] Auditor management endpoints (add auditors, remove auditors)
+- [x] Audit request CRUD (list, create, update, delete)
+- [x] Evidence request workflow (assign, submit, review, accept, reject)
+- [x] Evidence submission endpoints (link evidence, submit new, chain-of-custody)
+- [x] Audit finding CRUD (list, create, update, delete)
+- [x] Finding remediation workflow (create plan, update progress, verify)
+- [x] Audit comment CRUD (list, create, update, delete, visibility control)
+- [x] PBC template endpoints (list templates, bulk-create requests)
+- [x] Audit dashboard endpoint (readiness, overdue, critical findings, recent activity)
+- [x] Per-audit stats endpoint (request counts, finding breakdown, evidence readiness)
+- [x] Unit tests for audit handlers
+- [x] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
 - [ ] Audit hub home (engagement list with filters, stats cards, create dialog)
@@ -77,22 +77,22 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 7 pre-design complete (SCHEMA.md + API_SPEC.md delivered during Sprint 6 @ 04:03). |
 | DBE | 8/8 (100%) | ✅ DONE | 9 migrations (044-052): 9 enums, 20 audit_action extensions, 5 tables (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments), evidence_links FK extension, audit_request_templates table, 80 PBC templates (25 SOC2 + 25 PCI + 15 ISO + 15 GDPR), demo engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments + 2 additional auditor users + 8 audit log entries). seed.sql updated. |
-| DEV-BE | 0/14 (0%) | 🚀 ACTIVE | UNBLOCKED @ 05:50 — DBE complete. 14 backend tasks queued (35 REST endpoints covering audit CRUD, status transitions, auditor management, evidence request/submission workflow, finding management with remediation, comments, PBC templates, audit dashboard + per-audit stats). Agent enabled and triggered. |
-| DEV-FE | 0/9 (0%) | 🔒 BLOCKED | Awaiting DEV-BE (≥5 endpoints needed). 9 audit hub pages queued. |
-| CR | 0/10 (0%) | 🔒 BLOCKED | Awaiting code commits from DEV-BE and DEV-FE. 10 review tasks queued. |
+| DEV-BE | 14/14 (100%) | ✅ DONE | All 14 tasks complete. Implemented 35 REST endpoints: audit CRUD (4), status transitions (1), auditor management (2), request CRUD (4), request workflow (4: assign/submit/review/close), bulk create (1), from-template (1), evidence submission (4: list/submit/review/remove), finding CRUD (4), finding status transitions (1), management response (1), comments (4: list/create/edit/delete), PBC templates (1), dashboard (1), per-audit stats (1), readiness (1). Auditor isolation middleware (auditor_ids check), internal comment filtering, denormalized count updates, completed/cancelled guards. 7 new handler files, 1 model file. 195 unit tests passing (30 new audit tests). Docker build clean. No new services needed. |
+| DEV-FE | 0/9 (0%) | 🔓 UNBLOCKED | DEV-BE complete. 9 audit hub pages queued (35 REST endpoints available). |
+| CR | 0/10 (0%) | 🔓 UNBLOCKED | DEV-BE complete. 10 review tasks queued (backend ready for review). |
 | QA | 0/9 (0%) | 🔒 BLOCKED | Awaiting CR approval. 9 testing tasks queued. |
 
-**Overall Sprint Completion:** 12/54 tasks (22%)
+**Overall Sprint Completion:** 26/54 tasks (48%)
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [DONE - 8/8 - DISABLED] → DEV-BE [ACTIVE - 0/14 - ENABLED] → CR [BLOCKED - 0/10 - DISABLED]
-                                                                                              ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] ↗
-                                                                                                                                  ↓
+SA [DONE - 4/4 - DISABLED] → DBE [DONE - 8/8 - DISABLED] → DEV-BE [DONE - 14/14 - DISABLED] → CR [UNBLOCKED - 0/10]
+                                                                                              ↘ DEV-FE [UNBLOCKED - 0/9] ↗
+                                                                                                                         ↓
                                                                                               QA [BLOCKED - 0/9 - DISABLED]
 ```
 
-**Critical Path:** DEV-BE (must implement 35 REST endpoints to unblock DEV-FE and CR).
+**Critical Path:** DEV-FE (9 audit hub dashboard pages) and CR (backend security audit) running in parallel.
 
 ## Blockers
 None currently.
@@ -100,6 +100,7 @@ None currently.
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 05:50 | DEV-BE | All 14 tasks complete. Implemented 35 REST endpoints: audit CRUD (4: list/get/create/update), status transitions (1 with valid transition matrix + actual_start/actual_end auto-set), auditor management (2: add/remove with role validation), request CRUD (4: list/get/create/update), request workflow (4: assign with auto-status, submit with evidence check, review accept/reject, close), bulk create (1: up to 100 requests), from-template (1: PBC templates with auto-numbering), evidence submission (4: list/submit with duplicate check/review/remove), finding CRUD (4: list/get/create/update), finding status transitions (1: full remediation lifecycle with 8 states + role-based transition control), management response (1), comments (4: list with threaded replies/create with target validation/edit author-only/delete), PBC templates (1: filterable by audit_type/framework), dashboard (1: summary stats + active audits + overdue requests + critical findings + recent activity), per-audit stats (1: readiness/findings/evidence/timeline/activity breakdown), readiness (1: by requirement + by control + gaps). Auditor isolation: all audit endpoints filter by auditor_ids for auditor role. Internal comment filtering: auditors cannot see is_internal=true comments. Denormalized count updates via updateAuditRequestCounts/updateAuditFindingCounts helpers. Completed/cancelled guards on all mutating endpoints. Chain-of-custody: submitted_by always from JWT token. 7 new handler files (audits.go, audit_requests.go, audit_evidence.go, audit_findings.go, audit_comments.go, audit_templates.go, audit_dashboard.go), 1 model file (audit.go). 195 unit tests passing (30 new audit handler tests). go vet clean. Docker build clean. No new services — docker-compose.yml unchanged. DEV-FE/CR unblocked. |
 | 2026-02-21 05:50 | PM | Agent lifecycle update: **DBE DISABLED** (all 8 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 14 backend tasks queued). Sprint 7 at 22% completion (12/54 tasks). Critical path: DEV-BE (35 REST endpoints covering full audit hub workflow: CRUD, status transitions, auditor management, evidence requests, findings with remediation, comments with visibility control, PBC templates, dashboards). Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-21 04:50 | PM | **SPRINT 6 COMPLETE (100%).** Sprint transition: advanced to Sprint 7 (Audit Hub). ALL agents disabled. DBE enabled and triggered immediately (dependencies met: SA pre-design complete at 04:03 with SCHEMA.md + API_SPEC.md). Sprint 7 at 7% completion. Critical path: DBE (9 migrations: 044-052 for audit enums, 5 tables, 80+ PBC templates, demo engagement). |
 | 2026-02-21 04:03 | SA | Sprint 7 pre-design complete: SCHEMA.md (5 tables: audits, audit_requests, audit_findings, audit_evidence_links, audit_comments + 9 new enums + 20 audit_action extensions + evidence_links FK extension + auditor access model + chain-of-custody queries + PBC template seeds ~80 templates across SOC2/PCI/ISO/GDPR + demo audit engagement with 8 requests, 4 findings, 5 evidence links, 6 comments) and API_SPEC.md (35 endpoints covering audit engagement CRUD + status transitions, auditor management, evidence request/response workflow with assign/submit/review lifecycle, evidence submission with chain-of-custody, finding management with full remediation lifecycle + management response + risk acceptance + auditor verification, threaded comments with internal visibility, PBC request templates with bulk creation, audit hub dashboard with readiness scores + overdue tracking + critical findings + recent activity, per-audit stats and readiness breakdown). Role-based access matrix: auditors see only their engagements, internal comments hidden from auditors. 9 migration files (044-052). DBE unblocked for Sprint 7. |

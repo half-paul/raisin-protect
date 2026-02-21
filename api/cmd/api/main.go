@@ -388,6 +388,64 @@ func main() {
 				risks.PUT("/:id/controls/:control_id", handlers.UpdateRiskControl) // owner + role check in handler
 				risks.DELETE("/:id/controls/:control_id", handlers.UnlinkRiskControl) // owner + role check in handler
 			}
+
+			// === Sprint 7: Audit Hub ===
+
+			// Audit Request Templates (PBC list, global)
+			auditTemplates := protected.Group("/audit-request-templates")
+			{
+				auditTemplates.GET("", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.ListAuditRequestTemplates)
+			}
+
+			// Audits (CRUD + status + auditor management)
+			audits := protected.Group("/audits")
+			{
+				audits.GET("", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.ListAudits)
+				audits.POST("", middleware.RequireRoles(models.AuditCreateRoles...), handlers.CreateAudit)
+				audits.GET("/dashboard", middleware.RequireRoles(models.AuditDashboardRoles...), handlers.GetAuditDashboard)
+
+				audits.GET("/:id", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.GetAudit)
+				audits.PUT("/:id", middleware.RequireRoles(models.AuditCreateRoles...), handlers.UpdateAudit)
+				audits.PUT("/:id/status", middleware.RequireRoles(models.AuditCreateRoles...), handlers.ChangeAuditStatus)
+				audits.POST("/:id/auditors", middleware.RequireRoles(models.AuditCreateRoles...), handlers.AddAuditAuditor)
+				audits.DELETE("/:id/auditors/:user_id", middleware.RequireRoles(models.AuditCreateRoles...), handlers.RemoveAuditAuditor)
+
+				// Per-audit stats and readiness
+				audits.GET("/:id/stats", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.GetAuditStats)
+				audits.GET("/:id/readiness", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.GetAuditReadiness)
+
+				// Audit Requests (evidence request/response workflow)
+				audits.GET("/:id/requests", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.ListAuditRequests)
+				audits.GET("/:id/requests/:rid", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.GetAuditRequest)
+				audits.POST("/:id/requests", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.CreateAuditRequest)
+				audits.PUT("/:id/requests/:rid", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.UpdateAuditRequest)
+				audits.PUT("/:id/requests/:rid/assign", middleware.RequireRoles(models.AuditRequestAssignRoles...), handlers.AssignAuditRequest)
+				audits.PUT("/:id/requests/:rid/submit", middleware.RequireRoles(models.AuditEvidenceSubmitRoles...), handlers.SubmitAuditRequest)
+				audits.PUT("/:id/requests/:rid/review", middleware.RequireRoles(models.AuditEvidenceReviewRoles...), handlers.ReviewAuditRequest)
+				audits.PUT("/:id/requests/:rid/close", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.CloseAuditRequest)
+				audits.POST("/:id/requests/bulk", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.BulkCreateAuditRequests)
+				audits.POST("/:id/requests/from-template", middleware.RequireRoles(models.AuditRequestCreateRoles...), handlers.CreateFromTemplate)
+
+				// Evidence submission for requests
+				audits.GET("/:id/requests/:rid/evidence", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.ListRequestEvidence)
+				audits.POST("/:id/requests/:rid/evidence", middleware.RequireRoles(models.AuditEvidenceSubmitRoles...), handlers.SubmitRequestEvidence)
+				audits.PUT("/:id/requests/:rid/evidence/:lid/review", middleware.RequireRoles(models.AuditEvidenceReviewRoles...), handlers.ReviewRequestEvidence)
+				audits.DELETE("/:id/requests/:rid/evidence/:lid", handlers.RemoveRequestEvidence) // auth check in handler
+
+				// Audit Findings
+				audits.GET("/:id/findings", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.ListAuditFindings)
+				audits.GET("/:id/findings/:fid", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.GetAuditFinding)
+				audits.POST("/:id/findings", middleware.RequireRoles(models.AuditFindingCreateRoles...), handlers.CreateAuditFinding)
+				audits.PUT("/:id/findings/:fid", middleware.RequireRoles(models.AuditFindingCreateRoles...), handlers.UpdateAuditFinding)
+				audits.PUT("/:id/findings/:fid/status", handlers.ChangeFindingStatus) // role check in handler per transition
+				audits.PUT("/:id/findings/:fid/management-response", middleware.RequireRoles(models.AuditManagementResponseRoles...), handlers.SubmitManagementResponse)
+
+				// Audit Comments
+				audits.GET("/:id/comments", middleware.RequireRoles(models.AuditHubViewRoles...), handlers.ListAuditComments)
+				audits.POST("/:id/comments", middleware.RequireRoles(models.AuditCommentCreateRoles...), handlers.CreateAuditComment)
+				audits.PUT("/:id/comments/:cid", handlers.UpdateAuditComment) // author check in handler
+				audits.DELETE("/:id/comments/:cid", handlers.DeleteAuditComment) // author + admin check in handler
+			}
 		}
 	}
 
