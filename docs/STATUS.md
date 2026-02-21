@@ -77,22 +77,22 @@
 |-------|----------|--------|-------|
 | SA | 4/4 (100%) | ✅ DONE | Sprint 7 pre-design complete (SCHEMA.md + API_SPEC.md delivered during Sprint 6 @ 04:03). |
 | DBE | 8/8 (100%) | ✅ DONE | 9 migrations (044-052): 9 enums, 20 audit_action extensions, 5 tables (audits, audit_requests, audit_findings, audit_evidence_links, audit_comments), evidence_links FK extension, audit_request_templates table, 80 PBC templates (25 SOC2 + 25 PCI + 15 ISO + 15 GDPR), demo engagement (1 audit + 8 requests + 4 findings + 5 evidence links + 6 comments + 2 additional auditor users + 8 audit log entries). seed.sql updated. |
-| DEV-BE | 0/14 (0%) | 🔒 BLOCKED | Awaiting DBE completion (audit schema migrations). 35 REST endpoints queued. |
+| DEV-BE | 0/14 (0%) | 🚀 ACTIVE | UNBLOCKED @ 05:50 — DBE complete. 14 backend tasks queued (35 REST endpoints covering audit CRUD, status transitions, auditor management, evidence request/submission workflow, finding management with remediation, comments, PBC templates, audit dashboard + per-audit stats). Agent enabled and triggered. |
 | DEV-FE | 0/9 (0%) | 🔒 BLOCKED | Awaiting DEV-BE (≥5 endpoints needed). 9 audit hub pages queued. |
 | CR | 0/10 (0%) | 🔒 BLOCKED | Awaiting code commits from DEV-BE and DEV-FE. 10 review tasks queued. |
 | QA | 0/9 (0%) | 🔒 BLOCKED | Awaiting CR approval. 9 testing tasks queued. |
 
-**Overall Sprint Completion:** 4/54 tasks (7%)
+**Overall Sprint Completion:** 12/54 tasks (22%)
 
 ## Dependency Chain Status
 ```
-SA [DONE - 4/4 - DISABLED] → DBE [ACTIVE - 0/8 - ENABLED] → DEV-BE [BLOCKED - 0/14 - DISABLED] → CR [BLOCKED - 0/10 - DISABLED]
-                                                                                                 ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] ↗
-                                                                                                                                     ↓
-                                                                                                 QA [BLOCKED - 0/9 - DISABLED]
+SA [DONE - 4/4 - DISABLED] → DBE [DONE - 8/8 - DISABLED] → DEV-BE [ACTIVE - 0/14 - ENABLED] → CR [BLOCKED - 0/10 - DISABLED]
+                                                                                              ↘ DEV-FE [BLOCKED - 0/9 - DISABLED] ↗
+                                                                                                                                  ↓
+                                                                                              QA [BLOCKED - 0/9 - DISABLED]
 ```
 
-**Critical Path:** DBE (must deliver audit schema to unblock DEV-BE).
+**Critical Path:** DEV-BE (must implement 35 REST endpoints to unblock DEV-FE and CR).
 
 ## Blockers
 None currently.
@@ -100,6 +100,7 @@ None currently.
 ## Agent Activity Log
 | Timestamp | Agent | Action |
 |-----------|-------|--------|
+| 2026-02-21 05:50 | PM | Agent lifecycle update: **DBE DISABLED** (all 8 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 14 backend tasks queued). Sprint 7 at 22% completion (12/54 tasks). Critical path: DEV-BE (35 REST endpoints covering full audit hub workflow: CRUD, status transitions, auditor management, evidence requests, findings with remediation, comments with visibility control, PBC templates, dashboards). Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-21 04:50 | PM | **SPRINT 6 COMPLETE (100%).** Sprint transition: advanced to Sprint 7 (Audit Hub). ALL agents disabled. DBE enabled and triggered immediately (dependencies met: SA pre-design complete at 04:03 with SCHEMA.md + API_SPEC.md). Sprint 7 at 7% completion. Critical path: DBE (9 migrations: 044-052 for audit enums, 5 tables, 80+ PBC templates, demo engagement). |
 | 2026-02-21 04:03 | SA | Sprint 7 pre-design complete: SCHEMA.md (5 tables: audits, audit_requests, audit_findings, audit_evidence_links, audit_comments + 9 new enums + 20 audit_action extensions + evidence_links FK extension + auditor access model + chain-of-custody queries + PBC template seeds ~80 templates across SOC2/PCI/ISO/GDPR + demo audit engagement with 8 requests, 4 findings, 5 evidence links, 6 comments) and API_SPEC.md (35 endpoints covering audit engagement CRUD + status transitions, auditor management, evidence request/response workflow with assign/submit/review lifecycle, evidence submission with chain-of-custody, finding management with full remediation lifecycle + management response + risk acceptance + auditor verification, threaded comments with internal visibility, PBC request templates with bulk creation, audit hub dashboard with readiness scores + overdue tracking + critical findings + recent activity, per-audit stats and readiness breakdown). Role-based access matrix: auditors see only their engagements, internal comments hidden from auditors. 9 migration files (044-052). DBE unblocked for Sprint 7. |
 | 2026-02-21 03:50 | QA | All 9 tasks complete. **Sprint 6 COMPLETE (100%).** Comprehensive testing: 261/261 unit tests passing (50 new risk tests), go vet clean, 21 API endpoints verified (risk CRUD, assessments, treatments, heat map, gaps, search), dashboard builds clean (36 routes, +6 risk pages), Docker services healthy (6/6, worker unhealthy pre-existing). Manual migration deployment: Sprint 5 (027-034) + Sprint 6 (035-043) applied successfully, 4 seed files failed with UUID format errors (non-blocking). E2E test suite created: 3 new risk specs (CRUD, assessments, treatments) covering 50+ test cases with video capture configured. Security verification: multi-tenancy isolation confirmed (org_id enforcement tested), SQL injection prevention verified, RBAC enforced. Risk scoring engine validated: 5 test cases (1→25 range), severity bands correct (critical/high/medium/low). 1 environmental finding: manual migrations required (documented in QA report). Result: APPROVED FOR DEPLOYMENT (after addressing Sprint 5 Issues #13-15). QA_REPORT.md published (19.3 KB). Sprint 6 at 100% completion. |
