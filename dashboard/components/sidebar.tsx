@@ -30,6 +30,10 @@ import {
   Bell,
   PlayCircle,
   Settings2,
+  FileText,
+  BookOpen,
+  Target,
+  CheckSquare,
 } from 'lucide-react';
 
 interface NavItem {
@@ -105,6 +109,34 @@ const navigation: NavSection[] = [
         label: 'Staleness Alerts',
         href: '/staleness',
         icon: AlertTriangle,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+    ],
+  },
+  {
+    title: 'Policy Management',
+    items: [
+      {
+        label: 'Policies',
+        href: '/policies',
+        icon: FileText,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+      {
+        label: 'Templates',
+        href: '/policy-templates',
+        icon: BookOpen,
+        roles: ['ciso', 'compliance_manager', 'security_engineer'],
+      },
+      {
+        label: 'Approvals',
+        href: '/policy-approvals',
+        icon: CheckSquare,
+      },
+      {
+        label: 'Policy Gaps',
+        href: '/policy-gap',
+        icon: Target,
         roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
       },
     ],

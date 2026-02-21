@@ -34,15 +34,15 @@
 - [x] Update docker-compose.yml if needed (no new services expected)
 
 ### Frontend Developer
-- [ ] Policy library page (list of policies with category filters)
-- [ ] Policy detail page (current version content, metadata, linked controls)
-- [ ] Policy editor (rich text editor for policy content)
-- [ ] Policy version history page (list versions, compare side-by-side)
-- [ ] Policy sign-off interface (request approvals, track status, approve/reject)
-- [ ] Policy-to-control linking UI (search controls, create mappings)
-- [ ] Policy template library (browse templates, clone to new policy)
-- [ ] Policy gap dashboard (controls without policy coverage)
-- [ ] Policy approval workflow UI (pending approvals, approval history)
+- [x] Policy library page (list of policies with category filters)
+- [x] Policy detail page (current version content, metadata, linked controls)
+- [x] Policy editor (rich text editor for policy content)
+- [x] Policy version history page (list versions, compare side-by-side)
+- [x] Policy sign-off interface (request approvals, track status, approve/reject)
+- [x] Policy-to-control linking UI (search controls, create mappings)
+- [x] Policy template library (browse templates, clone to new policy)
+- [x] Policy gap dashboard (controls without policy coverage)
+- [x] Policy approval workflow UI (pending approvals, approval history)
 
 ### Code Reviewer
 - [ ] Review policy CRUD handlers and version management logic
@@ -74,11 +74,11 @@
 | SA | 4/4 (100%) | ✅ DONE → 💤 DISABLED | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. All tasks done, sprint <75%. |
 | DBE | 7/7 (100%) | ✅ DONE → 💤 DISABLED | All 7 tasks complete. 8 migrations (027-034): 4 enums, 4 tables, 15 audit_action extensions, deferred FKs, evidence_links policy_id. 15 templates (5 frameworks), 3 demo policies with versions/signoffs/control mappings. Work complete. |
 | DEV-BE | 11/11 (100%) | ✅ DONE → 💤 DISABLED | All 11 tasks complete. 28 REST endpoints, 8 handler files, 1 model file. 146 unit tests passing (31 new). Docker build clean. Work complete. |
-| DEV-FE | 0/9 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: ≥5 BE tasks complete (11/11). Enabled and triggered to start policy management dashboard (9 pages). |
+| DEV-FE | 9/9 (100%) | ✅ DONE | All 9 tasks complete. Policy library page, detail page, editor, version history with compare, sign-off interface, control linking UI, template library, gap dashboard, approval workflow. Build passes clean (29 routes). |
 | CR | 0/10 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to review. Enabled and triggered to start Sprint 5 code review (policy endpoints, sign-off workflow, templates, HTML sanitization). |
 | QA | 0/9 (0%) | 🟢 ENABLED → TRIGGERED | Dependencies met: backend code available to test. Enabled and triggered to start Sprint 5 testing (policy CRUD, versioning, sign-off workflow, gap detection). |
 
-**Overall Sprint Completion:** 22/50 tasks (44%)
+**Overall Sprint Completion:** 31/50 tasks (62%)
 
 ## Dependency Chain Status
 ```
@@ -140,3 +140,4 @@ SA [DONE - 4/4 - DISABLED] → DBE [DONE - 7/7 - DISABLED] → DEV-BE [DONE - 11
 | 2026-02-20 21:50 | PM | Sprint 5 agent lifecycle update — 22% complete (11/50 tasks). **DBE DISABLED** (all 7 tasks complete). **DEV-BE ENABLED and TRIGGERED** (dependencies met: SA + DBE both complete, 11 backend tasks queued). Critical path: DEV-BE must implement 28 REST endpoints for policy management (CRUD, versioning, sign-offs, templates, gap detection). All other agents remain disabled. Gateway timeout on trigger (agent will run on schedule). |
 | 2026-02-20 22:08 | DEV-BE | All 11 tasks complete. Implemented 28 REST endpoints: policy CRUD (5 — list, get, create, update, archive), status transitions (2 — submit-for-review, publish), version management (4 — list, get, create, compare), sign-off workflow (5 — list, approve, reject, withdraw, pending), sign-off reminders (1), policy-to-control mapping (4 — list, link, unlink, bulk), templates (2 — list, clone), gap detection (2 — by-control, by-framework), search (1), stats (1), notifications (1 — reminder system). HTML sanitization (XSS prevention: strips script/iframe/object/embed/form tags, event handlers, javascript: URLs). 7 new handler files, 1 model file. 146 unit tests passing (31 new policy tests). Docker build clean. No new services needed — docker-compose.yml unchanged. DEV-FE/CR/QA unblocked. |
 | 2026-02-20 22:50 | PM | Sprint 5 agent lifecycle update — 44% complete (22/50 tasks). **DEV-BE DISABLED** (all 11 tasks complete). **DEV-FE, CR, QA all ENABLED** and triggered (dependencies met: 11 BE tasks complete > threshold). Critical path: all three agents running in parallel. DEV-FE (9 policy dashboard pages), CR (policy code review + HTML sanitization audit), QA (policy workflow testing). Gateway timeout on trigger (agents will run on schedule). |
+| 2026-02-20 22:50 | DEV-FE | All 9 tasks complete. Policy library page (searchable/filterable with stats cards + create dialog), policy detail page (4-tab layout: content/versions/signoffs/controls + submit-for-review/publish/archive actions + inline sign-off approve/reject), policy editor (HTML content editing with preview toggle + save-as-new-version with change summary/type + status revert warning), version history page (full version list + side-by-side comparison with word count delta), sign-off interface (integrated into detail page: request approvals with signer IDs/due date, approve/reject with comments, withdraw), policy-to-control linking UI (searchable control selector with coverage level + notes + unlink), template library (grouped by framework with clone-to-policy dialog), policy gap dashboard (summary cards + control gap table by impact + framework coverage cards with progress bars), approval workflow page (pending approvals with urgency filtering + all-in-review overview + approve/reject actions). Sidebar updated with 4 new Policy Management nav items. Shared constants extracted to components/policy/constants.ts. API client extended with 30+ Sprint 5 types and functions. Build passes clean (29 routes total). New files: 7 pages, 1 shared constants module. |

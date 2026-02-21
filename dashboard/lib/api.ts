@@ -3,6 +3,7 @@
  * Sprint 2: Frameworks & Controls
  * Sprint 3: Evidence Management
  * Sprint 4: Continuous Monitoring Engine
+ * Sprint 5: Policy Management
  */
 
 import { authFetch } from './auth';
@@ -1234,4 +1235,467 @@ export function getMonitoringSummary() {
 
 export function getAlertQueue(params?: Record<string, string>) {
   return apiGet<AlertQueueData>('/api/v1/monitoring/alert-queue', params);
+}
+
+// ========== Sprint 5: Policy Management Types ==========
+
+export type PolicyStatus = 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+
+export type PolicyCategory =
+  | 'information_security'
+  | 'access_control'
+  | 'incident_response'
+  | 'data_privacy'
+  | 'network_security'
+  | 'encryption'
+  | 'vulnerability_management'
+  | 'change_management'
+  | 'business_continuity'
+  | 'secure_development'
+  | 'vendor_management'
+  | 'acceptable_use'
+  | 'physical_security'
+  | 'hr_security'
+  | 'asset_management';
+
+export type SignoffStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
+
+export type PolicyChangeType = 'initial' | 'major' | 'minor' | 'patch';
+
+export type PolicyContentFormat = 'html' | 'markdown' | 'plain_text';
+
+export type PolicyReviewStatus = 'overdue' | 'due_soon' | 'on_track' | 'no_schedule';
+
+export interface PolicyOwner {
+  id: string;
+  name: string;
+  email?: string;
+}
+
+export interface PolicyCurrentVersion {
+  id: string;
+  version_number: number;
+  content?: string;
+  content_format?: PolicyContentFormat;
+  content_summary?: string;
+  change_summary?: string;
+  change_type?: PolicyChangeType;
+  word_count?: number;
+  character_count?: number;
+  created_by?: PolicyOwner;
+  created_at?: string;
+}
+
+export interface PolicyLinkedControl {
+  id: string;
+  identifier: string;
+  title: string;
+  category?: string;
+  coverage?: string;
+}
+
+export interface PolicySignoffSummary {
+  total: number;
+  approved: number;
+  pending: number;
+  rejected: number;
+}
+
+export interface Policy {
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category: PolicyCategory;
+  status: PolicyStatus;
+  owner?: PolicyOwner | null;
+  secondary_owner?: PolicyOwner | null;
+  current_version?: PolicyCurrentVersion | null;
+  review_frequency_days?: number | null;
+  next_review_at?: string | null;
+  last_reviewed_at?: string | null;
+  review_status?: PolicyReviewStatus;
+  approved_at?: string | null;
+  approved_version?: number | null;
+  published_at?: string | null;
+  is_template?: boolean;
+  template_framework?: { id: string; identifier: string; name: string } | null;
+  cloned_from_policy_id?: string | null;
+  linked_controls?: PolicyLinkedControl[];
+  linked_controls_count?: number;
+  pending_signoffs_count?: number;
+  signoff_summary?: PolicySignoffSummary;
+  tags?: string[];
+  metadata?: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PolicyVersion {
+  id: string;
+  policy_id?: string;
+  version_number: number;
+  is_current: boolean;
+  content?: string;
+  content_format?: PolicyContentFormat;
+  content_summary?: string;
+  change_summary?: string;
+  change_type?: PolicyChangeType;
+  word_count?: number;
+  character_count?: number;
+  created_by?: PolicyOwner;
+  signoff_summary?: PolicySignoffSummary;
+  signoffs?: PolicySignoff[];
+  created_at: string;
+}
+
+export interface PolicySignoff {
+  id: string;
+  policy_id?: string;
+  policy_version?: { id: string; version_number: number };
+  signer: PolicyOwner & { role?: string };
+  signer_role?: string;
+  requested_by?: PolicyOwner;
+  requested_at?: string;
+  due_date?: string | null;
+  status: SignoffStatus;
+  decided_at?: string | null;
+  comments?: string | null;
+  reminder_count?: number;
+  reminder_sent_at?: string | null;
+}
+
+export interface PendingSignoff {
+  id: string;
+  policy: {
+    id: string;
+    identifier: string;
+    title: string;
+    category: PolicyCategory;
+  };
+  policy_version: {
+    id: string;
+    version_number: number;
+    content_summary?: string;
+    word_count?: number;
+  };
+  requested_by: PolicyOwner;
+  requested_at: string;
+  due_date?: string | null;
+  urgency?: 'overdue' | 'due_soon' | 'on_time';
+  reminder_count?: number;
+}
+
+export interface PolicyControlLink {
+  id: string;
+  policy_control_id?: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category?: string;
+  status?: string;
+  coverage?: string;
+  notes?: string | null;
+  linked_by?: PolicyOwner;
+  linked_at?: string;
+  frameworks?: string[];
+}
+
+export interface PolicyTemplate {
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category: PolicyCategory;
+  framework?: { id: string; identifier: string; name: string } | null;
+  current_version?: {
+    id: string;
+    version_number: number;
+    word_count?: number;
+    content_summary?: string;
+  };
+  review_frequency_days?: number | null;
+  tags?: string[];
+}
+
+export interface PolicyGapSummary {
+  total_active_controls: number;
+  controls_with_full_coverage: number;
+  controls_with_partial_coverage: number;
+  controls_without_coverage: number;
+  coverage_percentage: number;
+}
+
+export interface PolicyGapItem {
+  control: {
+    id: string;
+    identifier: string;
+    title: string;
+    category: string;
+    status: string;
+    owner?: PolicyOwner | null;
+  };
+  mapped_frameworks: string[];
+  mapped_requirements_count: number;
+  policy_coverage: 'none' | 'partial';
+  suggested_categories: string[];
+}
+
+export interface PolicyGapByFramework {
+  framework: {
+    id: string;
+    identifier: string;
+    name: string;
+    version: string;
+  };
+  total_requirements: number;
+  requirements_with_controls: number;
+  controls_with_policy_coverage: number;
+  controls_without_policy_coverage: number;
+  policy_coverage_percentage: number;
+  gap_count: number;
+}
+
+export interface PolicyStats {
+  total_policies: number;
+  by_status: Record<string, number>;
+  by_category: Record<string, number>;
+  review_status: {
+    overdue: number;
+    due_within_30_days: number;
+    on_track: number;
+    no_schedule: number;
+  };
+  signoff_summary: {
+    total_pending: number;
+    overdue_signoffs: number;
+  };
+  gap_summary: {
+    total_active_controls: number;
+    controls_with_policy_coverage: number;
+    coverage_percentage: number;
+  };
+  templates_available: number;
+  recent_activity: {
+    policy_identifier: string;
+    action: string;
+    actor: string;
+    timestamp: string;
+  }[];
+}
+
+export interface PolicyVersionCompare {
+  policy_id: string;
+  policy_identifier: string;
+  versions: PolicyVersion[];
+  word_count_delta: number;
+}
+
+export interface PolicySearchResult {
+  id: string;
+  identifier: string;
+  title: string;
+  description?: string;
+  category: PolicyCategory;
+  status: PolicyStatus;
+  match_context?: string;
+  match_source?: string;
+  current_version_number?: number;
+  owner?: PolicyOwner;
+}
+
+// ========== Sprint 5: Policy Management API Functions ==========
+
+// ---- Policies ----
+
+export function listPolicies(params?: Record<string, string>) {
+  return apiGet<Policy[]>('/api/v1/policies', params);
+}
+
+export function getPolicy(id: string) {
+  return apiGet<Policy>(`/api/v1/policies/${id}`);
+}
+
+export function createPolicy(body: {
+  identifier: string;
+  title: string;
+  description?: string;
+  category: string;
+  owner_id?: string;
+  secondary_owner_id?: string;
+  review_frequency_days?: number;
+  tags?: string[];
+  content: string;
+  content_format?: string;
+  content_summary?: string;
+}) {
+  return apiPost<Policy>('/api/v1/policies', body);
+}
+
+export function updatePolicy(id: string, body: Partial<{
+  title: string;
+  description: string;
+  category: string;
+  owner_id: string;
+  secondary_owner_id: string | null;
+  review_frequency_days: number;
+  next_review_at: string;
+  tags: string[];
+}>) {
+  return apiPut<Policy>(`/api/v1/policies/${id}`, body);
+}
+
+export function archivePolicy(id: string) {
+  return apiPost<{ id: string; identifier: string; status: string }>(`/api/v1/policies/${id}/archive`, {});
+}
+
+export function submitPolicyForReview(id: string, body: {
+  signer_ids: string[];
+  due_date?: string;
+  message?: string;
+}) {
+  return apiPost<Policy & { signoffs_created: number; signoffs: PolicySignoff[] }>(
+    `/api/v1/policies/${id}/submit-for-review`,
+    body
+  );
+}
+
+export function publishPolicy(id: string) {
+  return apiPost<Policy>(`/api/v1/policies/${id}/publish`, {});
+}
+
+// ---- Policy Versions ----
+
+export function listPolicyVersions(policyId: string, params?: Record<string, string>) {
+  return apiGet<PolicyVersion[]>(`/api/v1/policies/${policyId}/versions`, params);
+}
+
+export function getPolicyVersion(policyId: string, versionNumber: number) {
+  return apiGet<PolicyVersion>(`/api/v1/policies/${policyId}/versions/${versionNumber}`);
+}
+
+export function createPolicyVersion(policyId: string, body: {
+  content: string;
+  content_format?: string;
+  content_summary?: string;
+  change_summary: string;
+  change_type?: string;
+}) {
+  return apiPost<PolicyVersion>(`/api/v1/policies/${policyId}/versions`, body);
+}
+
+export function comparePolicyVersions(policyId: string, v1: number, v2: number) {
+  return apiGet<PolicyVersionCompare>(
+    `/api/v1/policies/${policyId}/versions/compare`,
+    { v1: String(v1), v2: String(v2) }
+  );
+}
+
+// ---- Policy Signoffs ----
+
+export function listPolicySignoffs(policyId: string, params?: Record<string, string>) {
+  return apiGet<PolicySignoff[]>(`/api/v1/policies/${policyId}/signoffs`, params);
+}
+
+export function approvePolicySignoff(policyId: string, signoffId: string, body?: { comments?: string }) {
+  return apiPost<PolicySignoff & { policy_status: string; all_signoffs_complete: boolean }>(
+    `/api/v1/policies/${policyId}/signoffs/${signoffId}/approve`,
+    body || {}
+  );
+}
+
+export function rejectPolicySignoff(policyId: string, signoffId: string, body: { comments: string }) {
+  return apiPost<PolicySignoff & { policy_status: string }>(
+    `/api/v1/policies/${policyId}/signoffs/${signoffId}/reject`,
+    body
+  );
+}
+
+export function withdrawPolicySignoff(policyId: string, signoffId: string) {
+  return apiPost<PolicySignoff>(
+    `/api/v1/policies/${policyId}/signoffs/${signoffId}/withdraw`,
+    {}
+  );
+}
+
+export function getPendingSignoffs(params?: Record<string, string>) {
+  return apiGet<PendingSignoff[]>('/api/v1/signoffs/pending', params);
+}
+
+export function remindPolicySignoffs(policyId: string, body?: {
+  signoff_ids?: string[];
+  message?: string;
+}) {
+  return apiPost<{ reminders_sent: number; signers: { id: string; name: string; reminder_count: number }[] }>(
+    `/api/v1/policies/${policyId}/signoffs/remind`,
+    body || {}
+  );
+}
+
+// ---- Policy Controls ----
+
+export function listPolicyControls(policyId: string) {
+  return apiGet<PolicyControlLink[]>(`/api/v1/policies/${policyId}/controls`);
+}
+
+export function linkPolicyControl(policyId: string, body: {
+  control_id: string;
+  coverage?: string;
+  notes?: string;
+}) {
+  return apiPost<PolicyControlLink>(`/api/v1/policies/${policyId}/controls`, body);
+}
+
+export function unlinkPolicyControl(policyId: string, controlId: string) {
+  return apiDelete<{ message: string }>(`/api/v1/policies/${policyId}/controls/${controlId}`);
+}
+
+export function bulkLinkPolicyControls(policyId: string, links: {
+  control_id: string;
+  coverage?: string;
+  notes?: string;
+}[]) {
+  return apiPost<{ created: number; skipped: number; errors: string[] }>(
+    `/api/v1/policies/${policyId}/controls/bulk`,
+    { links }
+  );
+}
+
+// ---- Policy Templates ----
+
+export function listPolicyTemplates(params?: Record<string, string>) {
+  return apiGet<PolicyTemplate[]>('/api/v1/policy-templates', params);
+}
+
+export function clonePolicyTemplate(templateId: string, body: {
+  identifier: string;
+  title?: string;
+  description?: string;
+  owner_id?: string;
+  review_frequency_days?: number;
+  tags?: string[];
+}) {
+  return apiPost<Policy>(`/api/v1/policy-templates/${templateId}/clone`, body);
+}
+
+// ---- Policy Gap Detection ----
+
+export function getPolicyGap(params?: Record<string, string>) {
+  return apiGet<{ summary: PolicyGapSummary; gaps: PolicyGapItem[] }>('/api/v1/policy-gap', params);
+}
+
+export function getPolicyGapByFramework() {
+  return apiGet<PolicyGapByFramework[]>('/api/v1/policy-gap/by-framework');
+}
+
+// ---- Policy Search ----
+
+export function searchPolicies(params: Record<string, string>) {
+  return apiGet<PolicySearchResult[]>('/api/v1/policies/search', params);
+}
+
+// ---- Policy Stats ----
+
+export function getPolicyStats() {
+  return apiGet<PolicyStats>('/api/v1/policies/stats');
 }
