@@ -353,6 +353,41 @@ func main() {
 				policyGap.GET("", middleware.RequireRoles(models.PolicyGapRoles...), handlers.GetPolicyGap)
 				policyGap.GET("/by-framework", middleware.RequireRoles(models.PolicyGapRoles...), handlers.GetPolicyGapByFramework)
 			}
+
+			// === Sprint 6: Risk Register ===
+
+			// Risks (CRUD + status transitions)
+			risks := protected.Group("/risks")
+			{
+				risks.GET("", handlers.ListRisks)
+				risks.POST("", middleware.RequireRoles(models.RiskCreateRoles...), handlers.CreateRisk)
+				risks.GET("/heat-map", handlers.GetRiskHeatMap)
+				risks.GET("/gaps", middleware.RequireRoles(models.RiskGapRoles...), handlers.GetRiskGaps)
+				risks.GET("/search", handlers.SearchRisks)
+				risks.GET("/stats", handlers.GetRiskStats)
+
+				risks.GET("/:id", handlers.GetRisk)
+				risks.PUT("/:id", handlers.UpdateRisk) // owner check in handler
+				risks.POST("/:id/archive", middleware.RequireRoles(models.RiskArchiveRoles...), handlers.ArchiveRisk)
+				risks.PUT("/:id/status", handlers.ChangeRiskStatus) // owner + role check in handler
+				risks.POST("/:id/recalculate", middleware.RequireRoles(models.RiskRecalcRoles...), handlers.RecalculateRiskScores)
+
+				// Risk Assessments
+				risks.GET("/:id/assessments", handlers.ListRiskAssessments)
+				risks.POST("/:id/assessments", handlers.CreateRiskAssessment) // owner + role check in handler
+
+				// Risk Treatments
+				risks.GET("/:id/treatments", handlers.ListRiskTreatments)
+				risks.POST("/:id/treatments", handlers.CreateRiskTreatment) // owner + role check in handler
+				risks.PUT("/:id/treatments/:treatment_id", handlers.UpdateRiskTreatment) // owner check in handler
+				risks.POST("/:id/treatments/:treatment_id/complete", handlers.CompleteTreatment) // owner check in handler
+
+				// Risk-to-Control Linkage
+				risks.GET("/:id/controls", handlers.ListRiskControls)
+				risks.POST("/:id/controls", handlers.LinkRiskControl) // owner + role check in handler
+				risks.PUT("/:id/controls/:control_id", handlers.UpdateRiskControl) // owner + role check in handler
+				risks.DELETE("/:id/controls/:control_id", handlers.UnlinkRiskControl) // owner + role check in handler
+			}
 		}
 	}
 
