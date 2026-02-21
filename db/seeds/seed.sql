@@ -1927,3 +1927,11 @@ ON CONFLICT DO NOTHING;
 -- This section adds summary policy seed data for the demo org.
 -- Full template + demo data is in migrations 033_sprint5_seed_templates.sql
 -- and 034_sprint5_seed_demo.sql (idempotent, can be run standalone).
+
+-- ============================================================================
+-- SPRINT 6: RISK REGISTER
+-- ============================================================================
+-- Risk template library (230 risks) and demo risk data (5 active risks,
+-- 10 assessments, 5 treatments, 7 control mappings) are created via
+-- migrations 042_sprint6_seed_templates.sql and 043_sprint6_seed_demo.sql
+-- (idempotent, can be run standalone).
