@@ -6,10 +6,10 @@
 ## Sprint 5 Tasks
 
 ### System Architect
-- [ ] Design Sprint 5 schema (policies, policy_versions, policy_signoffs)
-- [ ] Write Sprint 5 API spec (policy CRUD, versioning, sign-offs, templates, mapping)
-- [ ] Write docs/sprints/sprint-5/SCHEMA.md
-- [ ] Write docs/sprints/sprint-5/API_SPEC.md
+- [x] Design Sprint 5 schema (policies, policy_versions, policy_signoffs)
+- [x] Write Sprint 5 API spec (policy CRUD, versioning, sign-offs, templates, mapping)
+- [x] Write docs/sprints/sprint-5/SCHEMA.md
+- [x] Write docs/sprints/sprint-5/API_SPEC.md
 
 ### Database Engineer
 - [ ] Write migration: policy-related enums (policy_category, policy_status, signoff_status)
@@ -71,25 +71,25 @@
 
 | Agent | Progress | Status | Notes |
 |-------|----------|--------|-------|
-| SA | 0/4 (0%) | 🔄 ENABLED | Sprint 5 design starting. Agent enabled and triggered immediately. |
+| SA | 4/4 (100%) | ✅ DONE | Sprint 5 schema + API spec complete. 4 tables, 4 enums, 28 endpoints, seed data. DBE unblocked. |
 | DBE | 0/7 (0%) | 💤 DISABLED | Waiting for SA to complete schema design. |
 | DEV-BE | 0/11 (0%) | 💤 DISABLED | Waiting for DBE to complete migrations. |
 | DEV-FE | 0/9 (0%) | 💤 DISABLED | Waiting for backend (need ≥5 BE tasks complete). |
 | CR | 0/10 (0%) | 💤 DISABLED | Waiting for implementation code to review. |
 | QA | 0/9 (0%) | 💤 DISABLED | Waiting for backend code to test. |
 
-**Overall Sprint Completion:** 0/50 tasks (0%)
+**Overall Sprint Completion:** 4/50 tasks (8%)
 
 ## Dependency Chain Status
 ```
-SA [ACTIVE - 0/4] → DBE [WAITING] → DEV-BE [WAITING] → CR [WAITING]
-                                                      ↘ DEV-FE [WAITING] → QA [WAITING]
+SA [DONE - 4/4] → DBE [UNBLOCKED - 0/7] → DEV-BE [WAITING] → CR [WAITING]
+                                                             ↘ DEV-FE [WAITING] → QA [WAITING]
 ```
 
-**Critical Path:** SA (system architect) must complete schema + API spec design before DBE can begin.
+**Critical Path:** DBE (database engineer) must complete migrations before DEV-BE can begin.
 
 ## Blockers
-**NONE:** SA is now active and will start Sprint 5 design.
+**NONE:** SA complete. DBE is next on the critical path.
 
 ## Agent Activity Log
 | Timestamp | Agent | Action |
@@ -134,3 +134,4 @@ SA [ACTIVE - 0/4] → DBE [WAITING] → DEV-BE [WAITING] → CR [WAITING]
 | 2026-02-20 19:05 | CR | All 10 tasks complete. Comprehensive code review: MonitoringWorker (367 lines), alert handlers (691 lines), alert delivery (176 lines), alert rules (520 lines), 8 migrations, 9 dashboard pages (~8,000 lines total). Security audit: multi-tenancy isolation verified (20+ org_id checks), RBAC enforcement confirmed, SQL injection prevention verified (all parameterized queries), no hardcoded secrets, audit logging present, JWT validation correct. Result: 0 critical/high issues, 3 medium findings (Issues #7-9: SSRF in webhook/Slack URLs, user-controlled webhook headers, missing Slack HTTP timeout), 3 low-priority recommendations (custom template code, rate limiting, worker metrics). Frontend: TypeScript strict, no XSS vectors (zero dangerouslySetInnerHTML), proper loading/error states. Migrations: proper indexes, foreign keys, multi-tenancy support. Unit tests: 118/118 passing. CODE_REVIEW.md published. Result: APPROVED FOR DEPLOYMENT (after fixing Issues #7-9). Sprint 4 at 83% completion. |
 | 2026-02-20 19:15 | QA | All 9 tasks complete. Comprehensive testing: 172/172 unit tests passing (go test + go vet clean), 12 core API endpoints verified (tests, test-runs, alerts, alert-rules, monitoring), all 6 services healthy (API, worker, postgres, redis, minio, dashboard), worker operational (30s polling, no crash loops), multi-tenancy isolation confirmed (org_id enforcement verified), security review (SQL injection prevention, RBAC enforcement, no hardcoded secrets). Found 3 medium bugs: Bug #1 (posture SQL column error), Bug #2 (seed data UUID format errors), Bug #3 (manual deployment steps required). QA_REPORT.md published. Result: APPROVED FOR DEPLOYMENT (after addressing Issues #7-9). **Sprint 4 COMPLETE (100%).** |
 | 2026-02-20 19:50 | PM | **Sprint 4 COMPLETE (100%).** Sprint transition: advanced to Sprint 5 (Policy Management). ALL agents disabled. SA enabled and triggered immediately to start Sprint 5 design (policies, versioning, sign-offs, templates, mapping to controls). |
+| 2026-02-20 19:53 | SA | Sprint 5 design complete: SCHEMA.md (4 tables: policies, policy_versions, policy_signoffs, policy_controls + 4 new enums + 15 audit_action extensions + evidence_links FK completion + 8 migration files + seed data for 15 templates across 5 frameworks + demo policies with versions, signoffs, and control mappings) and API_SPEC.md (28 endpoints covering policy CRUD, status transitions, version management with content comparison, sign-off workflow with approve/reject/withdraw, policy-to-control mapping with bulk ops, template library with clone, gap detection by control and by framework, content search, reminder system, and dashboard statistics). DBE unblocked. |
