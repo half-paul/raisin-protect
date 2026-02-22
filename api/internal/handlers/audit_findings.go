@@ -303,6 +303,10 @@ func CreateAuditFinding(c *gin.Context) {
 		return
 	}
 
+	if req.Tags == nil {
+		req.Tags = []string{}
+	}
+
 	if utf8.RuneCountInString(req.Title) > 500 {
 		c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "Title must not exceed 500 characters"))
 		return

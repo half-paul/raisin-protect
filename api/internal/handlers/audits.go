@@ -360,6 +360,14 @@ func CreateAudit(c *gin.Context) {
 		return
 	}
 
+	// Initialize nil slices to empty arrays to avoid NOT NULL constraint violations
+	if req.AuditorIDs == nil {
+		req.AuditorIDs = []string{}
+	}
+	if req.Tags == nil {
+		req.Tags = []string{}
+	}
+
 	if utf8.RuneCountInString(req.Title) > 255 {
 		c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "Title must not exceed 255 characters"))
 		return
