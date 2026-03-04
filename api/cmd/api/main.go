@@ -445,10 +445,56 @@ func main() {
 				audits.POST("/:id/comments", middleware.RequireRoles(models.AuditCommentCreateRoles...), handlers.CreateAuditComment)
 				audits.PUT("/:id/comments/:cid", handlers.UpdateAuditComment) // author check in handler
 				audits.DELETE("/:id/comments/:cid", handlers.DeleteAuditComment) // author + admin check in handler
-			}
-		}
-	}
+				}
 
+				// === Sprint 8: User Access Reviews ===
+
+				ar := protected.Group("/access-reviews")
+				{
+				// Identity Providers
+				idp := ar.Group("/identity-providers")
+				{
+				        idp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListIdentityProviders)
+				        idp.POST("", middleware.RequireRoles(models.IdPManageRoles...), handlers.CreateIdentityProvider)
+				        idp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProvider)
+				        idp.PUT("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.UpdateIdentityProvider)
+				        idp.DELETE("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.DeleteIdentityProvider)
+				        idp.POST("/:id/sync", middleware.RequireRoles(models.IdPManageRoles...), handlers.SyncIdentityProvider)
+				        idp.GET("/:id/sync-stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProviderSyncStats)
+				}
+
+				// Access Resources
+				res := ar.Group("/resources")
+				{
+				        res.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessResources)
+				        res.POST("", middleware.RequireRoles(models.ResourceManageRoles...), handlers.CreateAccessResource)
+				        res.GET("/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResourceStats)
+				        res.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResource)
+				        res.PUT("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.UpdateAccessResource)
+				        res.DELETE("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DeleteAccessResource)
+				        res.GET("/:id/users", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListResourceUsers)
+				}
+
+				// Campaigns
+				camp := ar.Group("/campaigns")
+				{
+				        camp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaigns)
+				        camp.POST("", middleware.RequireRoles(models.CampaignManageRoles...), handlers.CreateCampaign)
+				        camp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaign)
+				        camp.POST("/:id/launch", middleware.RequireRoles(models.CampaignManageRoles...), handlers.LaunchCampaign)
+				}
+
+				// Individual Reviews
+				rev := ar.Group("/reviews")
+				{
+				        rev.PUT("/:id", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReview)
+				}
+
+				// Personal Queue
+				ar.GET("/my-reviews", handlers.ListMyReviews)
+				}
+				}
+				}
 	// Start monitoring worker (background)
 	if database != nil {
 		workerCtx, workerCancel := context.WithCancel(context.Background())
