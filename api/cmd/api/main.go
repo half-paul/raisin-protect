@@ -475,20 +475,46 @@ func main() {
 				        res.GET("/:id/users", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListResourceUsers)
 				}
 
+				// Access Entries
+				entries := ar.Group("/entries")
+				{
+				        entries.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessEntries)
+				        entries.GET("/anomalies", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntryAnomalies)
+				        entries.POST("/detect-anomalies", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DetectAnomalies)
+				        entries.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntry)
+				}
+
 				// Campaigns
 				camp := ar.Group("/campaigns")
 				{
 				        camp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaigns)
 				        camp.POST("", middleware.RequireRoles(models.CampaignManageRoles...), handlers.CreateCampaign)
 				        camp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaign)
+				        camp.PUT("/:id", middleware.RequireRoles(models.CampaignManageRoles...), handlers.UpdateCampaign)
 				        camp.POST("/:id/launch", middleware.RequireRoles(models.CampaignManageRoles...), handlers.LaunchCampaign)
+				        camp.POST("/:id/complete", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CompleteCampaign)
+				        camp.POST("/:id/cancel", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CancelCampaign)
+				        camp.GET("/:id/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaignStats)
+				        camp.GET("/:id/certification-report", middleware.RequireRoles("compliance_manager", "ciso", "auditor"), handlers.GetCertificationReport)
+
+				        // Reviews within campaigns
+				        camp.GET("/:id/reviews", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaignReviews)
+				        camp.GET("/:id/reviews/:rid", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetReviewDetail)
+				        camp.POST("/:id/reviews/:rid/decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReviewNested)
+				        camp.POST("/:id/reviews/bulk-decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.BulkDecideReviews)
+				        camp.POST("/:id/reviews/:rid/delegate", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DelegateReview)
+				        camp.POST("/:id/reviews/:rid/escalate", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.EscalateReview)
+				        camp.POST("/:id/reviews/:rid/revocation", middleware.RequireRoles("it_admin", "ciso"), handlers.MarkRevocation)
 				}
 
-				// Individual Reviews
+				// Individual Reviews (legacy path)
 				rev := ar.Group("/reviews")
 				{
 				        rev.PUT("/:id", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReview)
 				}
+
+				// Dashboard
+				ar.GET("/dashboard", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessReviewDashboard)
 
 				// Personal Queue
 				ar.GET("/my-reviews", handlers.ListMyReviews)
