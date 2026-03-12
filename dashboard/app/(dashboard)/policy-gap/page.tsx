@@ -21,6 +21,7 @@ import {
   PolicyGapSummary, PolicyGapItem, PolicyGapByFramework, OrgFramework,
   getPolicyGap, getPolicyGapByFramework, listOrgFrameworks,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const CATEGORY_LABELS: Record<string, string> = {
   information_security: 'Information Security', access_control: 'Access Control',
@@ -87,6 +88,7 @@ export default function PolicyGapDashboardPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <AlertTriangle className="h-6 w-6" /> Policy Gap Analysis
         </h1>
+        <WikiHelpLink path="policies/gap-analysis/" />
         <p className="text-sm text-muted-foreground">Identify controls without adequate policy coverage</p>
       </div>
 

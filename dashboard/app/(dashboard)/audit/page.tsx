@@ -26,6 +26,7 @@ import {
   Audit, AuditDashboard,
   listAudits, getAuditDashboard, createAudit,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   AUDIT_STATUS_LABELS, AUDIT_STATUS_COLORS,
   AUDIT_TYPE_LABELS,
@@ -126,6 +127,7 @@ export default function AuditHubPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Audit Hub</h1>
+          <WikiHelpLink path="audit-hub/engagements/" />
           <p className="text-sm text-muted-foreground">Manage audit engagements, evidence requests, and findings</p>
         </div>
         <div className="flex items-center gap-2">

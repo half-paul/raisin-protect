@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { TestRun, listTestRuns, createTestRun, cancelTestRun } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const RUN_STATUS_STYLES: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
   pending: { variant: 'outline', label: 'Pending' },
@@ -113,6 +114,7 @@ export default function TestRunsPage() {
             <Activity className="h-8 w-8" />
             Test Execution History
           </h1>
+          <WikiHelpLink path="monitoring/test-runs/" />
           <p className="text-muted-foreground mt-1">
             View and manage test sweeps across your controls
           </p>

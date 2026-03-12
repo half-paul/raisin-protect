@@ -9,6 +9,7 @@ import {
   HelpCircle, RefreshCw,
 } from 'lucide-react';
 import { PostureData, getMonitoringPosture } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import { cn } from '@/lib/utils';
 
 function ScoreRing({ score, size = 120 }: { score: number; size?: number }) {
@@ -80,6 +81,7 @@ export default function PosturePage() {
             <Shield className="h-8 w-8" />
             Compliance Posture
           </h1>
+          <WikiHelpLink path="posture/" />
           <p className="text-muted-foreground mt-1">
             Real-time compliance scores per activated framework
           </p>

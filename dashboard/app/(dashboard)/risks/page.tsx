@@ -23,6 +23,7 @@ import {
   Risk, RiskStats, HeatMapData, RiskSeverity, LikelihoodLevel, ImpactLevel,
   listRisks, getRiskStats, getRiskHeatMap, archiveRisk,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   RISK_STATUS_LABELS, RISK_STATUS_COLORS,
   RISK_CATEGORY_LABELS,
@@ -110,6 +111,7 @@ export default function RiskRegisterPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Risk Register</h1>
+          <WikiHelpLink path="risk-management/risk-register/" />
           <p className="text-sm text-muted-foreground">Organizational risk inventory with scoring, treatments, and controls</p>
         </div>
         <div className="flex items-center gap-2">

@@ -30,8 +30,7 @@ func ListIdentityProviders(c *gin.Context) {
 	var total int
 	err := database.QueryRow("SELECT COUNT(*) FROM identity_providers WHERE org_id = $1", orgID).Scan(&total)
 	if err != nil {
-		fmt.Printf("COUNT ERROR: %v\n", err)
-		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", fmt.Sprintf("Failed to count identity providers: %v", err)))
+		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", "Failed to count identity providers"))
 		return
 	}
 
@@ -39,8 +38,7 @@ func ListIdentityProviders(c *gin.Context) {
 
 	rows, err := database.Query(query, orgID, perPage, offset)
 	if err != nil {
-		fmt.Printf("QUERY ERROR: %v\n", err)
-		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", fmt.Sprintf("Failed to query identity providers: %v", err)))
+		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", "Failed to query identity providers"))
 		return
 	}
 	defer rows.Close()
@@ -238,14 +236,18 @@ func SyncIdentityProvider(c *gin.Context) {
 	id := c.Param("id")
 
 	// Update status to syncing
-	_, err := database.Exec(`
-		UPDATE identity_providers 
+	res, err := database.Exec(`
+		UPDATE identity_providers
 		SET status = $1, last_sync_at = NOW(), updated_at = NOW()
 		WHERE id = $2 AND org_id = $3
 	`, models.IdPStatusSyncing, id, orgID)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", "Failed to start sync"))
+		return
+	}
+	if rows, _ := res.RowsAffected(); rows == 0 {
+		c.JSON(http.StatusNotFound, errorResponse("NOT_FOUND", "Identity provider not found"))
 		return
 	}
 

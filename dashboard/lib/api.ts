@@ -6,6 +6,7 @@
  * Sprint 5: Policy Management
  * Sprint 6: Risk Management
  * Sprint 7: Audit Hub
+ * Sprint 9: Integration Engine
  */
 
 import { authFetch } from './auth';
@@ -2716,4 +2717,273 @@ export function getAuditStats(auditId: string) {
 
 export function getAuditReadiness(auditId: string) {
   return apiGet<AuditReadiness>(`/api/v1/audits/${auditId}/readiness`);
+}
+
+// ========== Sprint 9: Integration Engine ==========
+
+export interface IntegrationDefinition {
+  id: string;
+  name: string;
+  slug: string;
+  provider: string;
+  category: string;
+  description: string | null;
+  short_description: string | null;
+  icon_url: string | null;
+  documentation_url: string | null;
+  website_url: string | null;
+  auth_type: string;
+  config_schema: Record<string, unknown>;
+  capabilities: string[];
+  is_active: boolean;
+  is_beta: boolean;
+  version: string;
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationConnection {
+  id: string;
+  org_id: string;
+  definition_id: string;
+  name: string;
+  description: string | null;
+  instance_label: string | null;
+  status: string;
+  health: string;
+  config: Record<string, unknown>;
+  sync_enabled: boolean;
+  sync_interval_mins: number;
+  sync_cron: string | null;
+  next_sync_at: string | null;
+  last_sync_at: string | null;
+  last_sync_status: string | null;
+  last_sync_error: string | null;
+  last_health_check_at: string | null;
+  last_health_status: string | null;
+  consecutive_failures: number;
+  total_runs: number;
+  successful_runs: number;
+  failed_runs: number;
+  created_by: string | null;
+  tags: string[];
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+  definition_name: string;
+  definition_slug: string;
+  definition_category: string;
+  definition_icon_url: string;
+}
+
+export interface IntegrationRun {
+  id: string;
+  org_id: string;
+  connection_id: string;
+  trigger: string;
+  triggered_by: string | null;
+  status: string;
+  queued_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+  duration_ms: number | null;
+  stats: Record<string, unknown>;
+  error_message: string | null;
+  error_details: Record<string, unknown> | null;
+  retry_count: number;
+  max_retries: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationLog {
+  id: string;
+  run_id: string;
+  connection_id: string;
+  level: string;
+  message: string;
+  details: Record<string, unknown> | null;
+  source: string | null;
+  item_ref: string | null;
+  created_at: string;
+}
+
+export interface IntegrationWebhook {
+  id: string;
+  connection_id: string;
+  name: string;
+  description: string | null;
+  signature_header: string;
+  signature_algo: string;
+  status: string;
+  event_types: string[];
+  total_received: number;
+  total_processed: number;
+  total_errors: number;
+  last_received_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationDashboardData {
+  connections: { total: number; connected: number; disconnected: number; error: number; disabled: number };
+  health: { healthy: number; degraded: number; unhealthy: number };
+  recent_failures: number;
+  active_syncs: number;
+  stale_connections: number;
+}
+
+export interface IntegrationHealthData {
+  status: string;
+  health: string;
+  last_health_check_at: string | null;
+  last_health_status: string | null;
+  consecutive_failures: number;
+  total_runs: number;
+  successful_runs: number;
+  failed_runs: number;
+  uptime_pct: number;
+  recent_runs: Array<{
+    id: string;
+    status: string;
+    trigger: string;
+    started_at: string | null;
+    completed_at: string | null;
+    duration_ms: number | null;
+    stats: Record<string, unknown>;
+    error_message: string | null;
+  }>;
+}
+
+// ---- Integration Catalog ----
+
+export function listIntegrations(params?: Record<string, string>) {
+  return apiGet<IntegrationDefinition[]>('/api/v1/integrations', params);
+}
+
+export function getIntegration(id: string) {
+  return apiGet<IntegrationDefinition>(`/api/v1/integrations/${id}`);
+}
+
+// ---- Integration Connections ----
+
+export function listIntegrationConnections(params?: Record<string, string>) {
+  return apiGet<IntegrationConnection[]>('/api/v1/integration-connections', params);
+}
+
+export function getIntegrationConnection(id: string) {
+  return apiGet<IntegrationConnection>(`/api/v1/integration-connections/${id}`);
+}
+
+export function createIntegrationConnection(body: {
+  definition_id: string;
+  name: string;
+  description?: string;
+  instance_label?: string;
+  config?: Record<string, unknown>;
+  sync_enabled?: boolean;
+  sync_interval_mins?: number;
+  tags?: string[];
+}) {
+  return apiPost<{ id: string }>('/api/v1/integration-connections', body);
+}
+
+export function updateIntegrationConnection(id: string, body: Partial<{
+  name: string;
+  description: string;
+  instance_label: string;
+  config: Record<string, unknown>;
+  sync_enabled: boolean;
+  sync_interval_mins: number;
+  sync_cron: string;
+  tags: string[];
+}>) {
+  return apiPut<{ status: string }>(`/api/v1/integration-connections/${id}`, body);
+}
+
+export function deleteIntegrationConnection(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/integration-connections/${id}`);
+}
+
+export function testIntegrationConnection(id: string) {
+  return apiPost<{ status: string; message: string; tested_at: string }>(`/api/v1/integration-connections/${id}/test`, {});
+}
+
+export function enableIntegrationConnection(id: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${id}/enable`, {});
+}
+
+export function disableIntegrationConnection(id: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${id}/disable`, {});
+}
+
+// ---- Sync / Runs ----
+
+export function triggerIntegrationSync(id: string) {
+  return apiPost<{ run_id: string; status: string }>(`/api/v1/integration-connections/${id}/sync`, {});
+}
+
+export function listIntegrationRuns(connectionId: string, params?: Record<string, string>) {
+  return apiGet<IntegrationRun[]>(`/api/v1/integration-connections/${connectionId}/runs`, params);
+}
+
+export function getIntegrationRun(connectionId: string, runId: string) {
+  return apiGet<IntegrationRun>(`/api/v1/integration-connections/${connectionId}/runs/${runId}`);
+}
+
+export function cancelIntegrationRun(connectionId: string, runId: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${connectionId}/runs/${runId}/cancel`, {});
+}
+
+export function getIntegrationRunLogs(connectionId: string, runId: string, params?: Record<string, string>) {
+  return apiGet<IntegrationLog[]>(`/api/v1/integration-connections/${connectionId}/runs/${runId}/logs`, params);
+}
+
+// ---- Health ----
+
+export function getIntegrationConnectionHealth(id: string) {
+  return apiGet<IntegrationHealthData>(`/api/v1/integration-connections/${id}/health`);
+}
+
+export function triggerIntegrationHealthCheck(id: string) {
+  return apiPost<{ health: string; checked_at: string; message: string }>(`/api/v1/integration-connections/${id}/health-check`, {});
+}
+
+// ---- Webhooks ----
+
+export function listIntegrationWebhooks(connectionId: string) {
+  return apiGet<IntegrationWebhook[]>(`/api/v1/integration-connections/${connectionId}/webhooks`);
+}
+
+export function createIntegrationWebhook(connectionId: string, body: {
+  name: string;
+  description?: string;
+  signature_header?: string;
+  signature_algo?: string;
+  event_types?: string[];
+}) {
+  return apiPost<{ id: string; webhook_secret: string; webhook_url: string }>(`/api/v1/integration-connections/${connectionId}/webhooks`, body);
+}
+
+export function deleteIntegrationWebhook(connectionId: string, webhookId: string) {
+  return apiDelete<{ status: string }>(`/api/v1/integration-connections/${connectionId}/webhooks/${webhookId}`);
+}
+
+export function rotateIntegrationWebhookSecret(connectionId: string, webhookId: string) {
+  return apiPost<{ webhook_secret: string }>(`/api/v1/integration-connections/${connectionId}/webhooks/${webhookId}/rotate-secret`, {});
+}
+
+// ---- Dashboard ----
+
+export function getIntegrationDashboard() {
+  return apiGet<IntegrationDashboardData>('/api/v1/integrations/dashboard');
+}
+
+export function getIntegrationSyncActivity() {
+  return apiGet<{ hours: number; buckets: Array<{ timestamp: string; total: number; completed: number; failed: number; partial: number }> }>('/api/v1/integrations/dashboard/sync-activity');
+}
+
+export function getIntegrationPreview(connectionId: string) {
+  return apiGet<{ connection_name: string; provider: string; last_sync_at: string | null; latest_stats: Record<string, unknown>; recent_logs: { info: number; warn: number; error: number } }>(`/api/v1/integration-connections/${connectionId}/preview`);
 }

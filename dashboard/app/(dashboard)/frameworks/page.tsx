@@ -39,6 +39,7 @@ import {
   deactivateOrgFramework,
   getFramework,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const CATEGORY_LABELS: Record<string, string> = {
   security_privacy: 'Security & Privacy',
@@ -189,6 +190,7 @@ export default function FrameworksPage() {
             <FileCheck className="h-8 w-8" />
             Compliance Frameworks
           </h1>
+          <WikiHelpLink path="compliance/frameworks/" />
           <p className="text-muted-foreground mt-1">
             Manage your organization&apos;s compliance framework activations
           </p>

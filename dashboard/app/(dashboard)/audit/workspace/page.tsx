@@ -18,6 +18,7 @@ import {
   Audit, AuditDashboard,
   listAudits, getAuditDashboard,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   AUDIT_STATUS_LABELS, AUDIT_STATUS_COLORS, AUDIT_TYPE_LABELS,
   FINDING_SEVERITY_COLORS,
@@ -59,6 +60,7 @@ export default function AuditorWorkspacePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Auditor Workspace</h1>
+        <WikiHelpLink path="audit-hub/auditor-workspace/" />
         <p className="text-sm text-muted-foreground">
           {isAuditor ? 'Your assigned audit engagements' : 'Audit engagements overview'}
         </p>

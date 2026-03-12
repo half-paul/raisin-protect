@@ -163,7 +163,7 @@ func GetCampaign(c *gin.Context) {
 		&cmp.ID, &cmp.OrgID, &cmp.Name, &cmp.Description, &cmp.Status, &cmp.Cadence, &scopeJSON,
 		&cmp.ReviewerStrategy, &cmp.DefaultReviewerID, &cmp.StartedAt, &cmp.Deadline,
 		&cmp.CompletedAt, &cmp.CancelledAt, &escJSON, &cmp.TotalReviews, &cmp.CompletedReviews,
-		&cmp.ApprovedCount, &cmp.ReviewerStrategy, &cmp.FlaggedCount, &cmp.CreatedBy,
+		&cmp.ApprovedCount, &cmp.RevokedCount, &cmp.FlaggedCount, &cmp.CreatedBy,
 		pq.Array(&cmp.Tags), &cmp.Notes, &cmp.CreatedAt, &cmp.UpdatedAt,
 	)
 
@@ -311,6 +311,21 @@ func DecideReview(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, errorResponse("NOT_FOUND", "Review not found"))
+		return
+	}
+
+	if currentDecision != models.DecisionPending {
+		c.JSON(http.StatusConflict, errorResponse("ALREADY_DECIDED", "Review has already been decided"))
+		return
+	}
+
+	// 1b. Check campaign is still active
+	var campStatus models.CampaignStatus
+	err = database.QueryRow(`
+		SELECT status FROM access_review_campaigns WHERE id = $1 AND org_id = $2
+	`, campaignID, orgID).Scan(&campStatus)
+	if err != nil || (campStatus != models.CampaignStatusActive && campStatus != models.CampaignStatusInReview) {
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("INVALID_STATE", "Campaign is not active"))
 		return
 	}
 
@@ -622,8 +637,8 @@ func CompleteCampaign(c *gin.Context) {
 	var totalReviews, completedReviews, approvedCount, revokedCount, flaggedCount int
 	database.QueryRow(`
 		SELECT total_reviews, completed_reviews, approved_count, revoked_count, flagged_count
-		FROM access_review_campaigns WHERE id = $1
-	`, id).Scan(&totalReviews, &completedReviews, &approvedCount, &revokedCount, &flaggedCount)
+		FROM access_review_campaigns WHERE id = $1 AND org_id = $2
+	`, id, orgID).Scan(&totalReviews, &completedReviews, &approvedCount, &revokedCount, &flaggedCount)
 
 	middleware.LogAudit(c, "campaign.completed", "access_review_campaign", &id, map[string]interface{}{
 		"expired_reviews": expiredCount,
@@ -1169,8 +1184,8 @@ func DecideReviewNested(c *gin.Context) {
 	// Get campaign progress
 	var totalR, completedR int
 	database.QueryRow(`
-		SELECT total_reviews, completed_reviews FROM access_review_campaigns WHERE id = $1
-	`, campaignID).Scan(&totalR, &completedR)
+		SELECT total_reviews, completed_reviews FROM access_review_campaigns WHERE id = $1 AND org_id = $2
+	`, campaignID, orgID).Scan(&totalR, &completedR)
 
 	pct := float64(0)
 	if totalR > 0 {
@@ -1315,8 +1330,8 @@ func BulkDecideReviews(c *gin.Context) {
 	// Get campaign progress
 	var totalR, completedR int
 	database.QueryRow(`
-		SELECT total_reviews, completed_reviews FROM access_review_campaigns WHERE id = $1
-	`, campaignID).Scan(&totalR, &completedR)
+		SELECT total_reviews, completed_reviews FROM access_review_campaigns WHERE id = $1 AND org_id = $2
+	`, campaignID, orgID).Scan(&totalR, &completedR)
 
 	pct := float64(0)
 	if totalR > 0 {
@@ -1393,11 +1408,21 @@ func DelegateReview(c *gin.Context) {
 	}
 
 	// Create a new pending review for the delegate
-	database.Exec(`
+	_, err = database.Exec(`
 		INSERT INTO access_reviews (org_id, campaign_id, entry_id, reviewer_id, assigned_at, access_snapshot)
 		SELECT org_id, campaign_id, entry_id, $1, NOW(), access_snapshot
-		FROM access_reviews WHERE id = $2
-	`, req.DelegateToID, reviewID)
+		FROM access_reviews WHERE id = $2 AND org_id = $3
+	`, req.DelegateToID, reviewID, orgID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", "Failed to create delegated review"))
+		return
+	}
+
+	// Increment total_reviews to account for the new review
+	database.Exec(`
+		UPDATE access_review_campaigns SET total_reviews = total_reviews + 1, updated_at = NOW()
+		WHERE id = $1 AND org_id = $2
+	`, campaignID, orgID)
 
 	middleware.LogAudit(c, "access_review.delegated", "access_review", &reviewID, map[string]interface{}{
 		"delegated_to": req.DelegateToID,
@@ -1709,8 +1734,8 @@ func GetCertificationReport(c *gin.Context) {
 	// Get expired count
 	var expiredCount int
 	database.QueryRow(`
-		SELECT COUNT(*) FROM access_reviews WHERE campaign_id = $1 AND decision = 'expired'
-	`, campaignID).Scan(&expiredCount)
+		SELECT COUNT(*) FROM access_reviews WHERE campaign_id = $1 AND org_id = $2 AND decision = 'expired'
+	`, campaignID, orgID).Scan(&expiredCount)
 
 	// Get all decisions
 	type DecisionItem struct {
@@ -1766,8 +1791,8 @@ func GetCertificationReport(c *gin.Context) {
 		       COUNT(*) FILTER (WHERE revocation_executed = TRUE),
 		       COUNT(*) FILTER (WHERE revocation_executed = FALSE)
 		FROM access_reviews
-		WHERE campaign_id = $1 AND decision = 'revoked'
-	`, campaignID).Scan(&totalRev, &executedRev, &pendingRev)
+		WHERE campaign_id = $1 AND org_id = $2 AND decision = 'revoked'
+	`, campaignID, orgID).Scan(&totalRev, &executedRev, &pendingRev)
 
 	c.JSON(http.StatusOK, successResponse(c, gin.H{
 		"report": gin.H{

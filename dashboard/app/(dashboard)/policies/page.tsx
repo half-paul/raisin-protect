@@ -33,6 +33,7 @@ import {
   REVIEW_STATUS_LABELS,
   REVIEW_STATUS_COLORS,
 } from '@/components/policy/constants';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 export default function PolicyLibraryPage() {
   const { hasRole } = useAuth();
@@ -142,6 +143,7 @@ export default function PolicyLibraryPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Policy Library</h1>
+          <WikiHelpLink path="policies/overview/" />
           <p className="text-sm text-muted-foreground">Manage organizational policies and governance documents</p>
         </div>
         {canCreate && (

@@ -36,6 +36,7 @@ import {
   EVIDENCE_TYPE_LABELS, EVIDENCE_STATUS_LABELS, EVIDENCE_STATUS_COLORS,
   COLLECTION_METHOD_LABELS, formatFileSize,
 } from '@/components/evidence/freshness-badge';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const ALLOWED_MIME_TYPES: Record<string, string> = {
   'application/pdf': '.pdf',
@@ -258,6 +259,7 @@ export default function EvidenceLibraryPage() {
             <ClipboardCheck className="h-8 w-8" />
             Evidence Library
           </h1>
+          <WikiHelpLink path="compliance/evidence/" />
           <p className="text-muted-foreground mt-1">
             Upload, manage, and track compliance evidence artifacts
           </p>

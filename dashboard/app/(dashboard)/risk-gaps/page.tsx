@@ -17,6 +17,7 @@ import {
   ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { RiskGapData, getRiskGaps } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   SEVERITY_LABELS, SEVERITY_COLORS,
   RISK_CATEGORY_LABELS, RISK_STATUS_LABELS,
@@ -75,6 +76,7 @@ export default function RiskGapDashboardPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold">Risk Gap Dashboard</h1>
+          <WikiHelpLink path="risk-management/gap-analysis/" />
           <p className="text-sm text-muted-foreground">Risks missing treatments, controls, or with overdue assessments</p>
         </div>
       </div>

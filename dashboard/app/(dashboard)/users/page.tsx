@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const ALL_ROLES: GrcRole[] = [
   'ciso',
@@ -153,6 +154,7 @@ export default function UsersPage() {
             <Users className="h-8 w-8" />
             User Management
           </h1>
+          <WikiHelpLink path="administration/users/" />
           <p className="text-muted-foreground mt-1">
             Manage users and their GRC roles in your organization
           </p>

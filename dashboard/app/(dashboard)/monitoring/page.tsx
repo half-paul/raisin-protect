@@ -21,6 +21,7 @@ import {
   getMonitoringSummary, getMonitoringHeatmap, getMonitoringPosture,
 } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const HEALTH_COLORS: Record<string, string> = {
   healthy: 'bg-green-500',
@@ -149,6 +150,7 @@ export default function MonitoringDashboardPage() {
             <Activity className="h-8 w-8" />
             Monitoring Dashboard
           </h1>
+          <WikiHelpLink path="monitoring/dashboard/" />
           <p className="text-muted-foreground mt-1">
             Real-time compliance posture and control health
           </p>

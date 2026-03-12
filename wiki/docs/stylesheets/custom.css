@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Raisin Protect Wiki — Custom Theme
+   Matches the dashboard's neutral grayscale (zinc) color scheme with
+   a fixed left sidebar, matching the portal's layout and feel.
+   ========================================================================== */
+
+/* ---------- CSS Custom Properties (Light Mode) ---------- */
+:root {
+  /* Primary: near-black like the dashboard's --primary: 0 0% 9% */
+  --md-primary-fg-color: hsl(0, 0%, 9%);
+  --md-primary-fg-color--light: hsl(0, 0%, 30%);
+  --md-primary-fg-color--dark: hsl(0, 0%, 5%);
+  --md-primary-bg-color: hsl(0, 0%, 98%);
+  --md-primary-bg-color--light: hsl(0, 0%, 100%);
+
+  /* Accent */
+  --md-accent-fg-color: hsl(0, 0%, 9%);
+  --md-accent-fg-color--transparent: hsla(0, 0%, 9%, 0.1);
+  --md-accent-bg-color: hsl(0, 0%, 96.1%);
+
+  /* Surfaces — match dashboard card/background */
+  --md-default-bg-color: hsl(0, 0%, 100%);
+  --md-default-fg-color: hsl(0, 0%, 3.9%);
+  --md-default-fg-color--light: hsl(0, 0%, 45.1%);
+  --md-default-fg-color--lighter: hsl(0, 0%, 65%);
+  --md-default-fg-color--lightest: hsl(0, 0%, 89.8%);
+
+  /* Code */
+  --md-code-bg-color: hsl(0, 0%, 96.1%);
+  --md-code-fg-color: hsl(0, 0%, 9%);
+
+  /* Footer */
+  --md-footer-bg-color: hsl(0, 0%, 9%);
+  --md-footer-fg-color: hsl(0, 0%, 98%);
+
+  /* Admonition accent */
+  --md-admonition-bg-color: hsl(0, 0%, 96.1%);
+}
+
+/* ---------- CSS Custom Properties (Dark Mode) ---------- */
+[data-md-color-scheme="slate"] {
+  /* Match dashboard dark: --background: 0 0% 3.9% */
+  --md-primary-fg-color: hsl(0, 0%, 98%);
+  --md-primary-fg-color--light: hsl(0, 0%, 70%);
+  --md-primary-fg-color--dark: hsl(0, 0%, 100%);
+  --md-primary-bg-color: hsl(0, 0%, 9%);
+  --md-primary-bg-color--light: hsl(0, 0%, 3.9%);
+
+  --md-accent-fg-color: hsl(0, 0%, 98%);
+  --md-accent-fg-color--transparent: hsla(0, 0%, 98%, 0.1);
+  --md-accent-bg-color: hsl(0, 0%, 14.9%);
+
+  --md-default-bg-color: hsl(0, 0%, 3.9%);
+  --md-default-fg-color: hsl(0, 0%, 98%);
+  --md-default-fg-color--light: hsl(0, 0%, 63.9%);
+  --md-default-fg-color--lighter: hsl(0, 0%, 45%);
+  --md-default-fg-color--lightest: hsl(0, 0%, 14.9%);
+
+  --md-code-bg-color: hsl(0, 0%, 14.9%);
+  --md-code-fg-color: hsl(0, 0%, 98%);
+
+  --md-footer-bg-color: hsl(0, 0%, 3.9%);
+  --md-footer-fg-color: hsl(0, 0%, 63.9%);
+
+  --md-admonition-bg-color: hsl(0, 0%, 14.9%);
+}
+
+/* ---------- Header / Top Bar ---------- */
+.md-header {
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  box-shadow: none;
+}
+
+.md-header__topic {
+  font-weight: 700;
+}
+
+.md-header[data-md-state="shadow"] {
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.05), 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
+}
+
+/* Header search & icons match foreground */
+.md-header .md-icon,
+.md-header .md-search__icon {
+  color: var(--md-default-fg-color);
+}
+
+/* ---------- Left Sidebar Navigation ---------- */
+.md-sidebar--primary {
+  border-right: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Section labels: uppercase + smaller, matching dashboard sidebar sections */
+.md-nav__title {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-default-fg-color--light);
+  padding: 0.6rem 0.6rem 0.2rem;
+}
+
+/* Nav items: match dashboard sidebar link style */
+.md-nav__link {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  margin: 0.05rem 0.3rem;
+  padding: 0.35rem 0.6rem;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.md-nav__link:hover {
+  background-color: var(--md-accent-bg-color);
+}
+
+/* Active nav item: match dashboard's bg-primary/10 text-primary */
+.md-nav__link--active,
+.md-nav__item--active > .md-nav__link {
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+}
+
+[data-md-color-scheme="default"] .md-nav__link--active,
+[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link {
+  background-color: hsla(0, 0%, 9%, 0.08);
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active,
+[data-md-color-scheme="slate"] .md-nav__item--active > .md-nav__link {
+  background-color: hsla(0, 0%, 98%, 0.08);
+}
+
+/* ---------- Content Area ---------- */
+.md-content {
+  max-width: 52rem;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  padding-bottom: 0.4rem;
+}
+
+/* Table styling closer to dashboard's shadcn tables */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--md-code-bg-color);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: none;
+}
+
+.md-typeset table:not([class]) td {
+  font-size: 0.875rem;
+}
+
+/* Code blocks */
+.md-typeset code {
+  border-radius: 0.25rem;
+  font-size: 0.8125em;
+}
+
+.md-typeset pre > code {
+  border-radius: 0.5rem;
+}
+
+/* Admonitions: more subtle, matching card style */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 0.5rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  box-shadow: none;
+}
+
+/* ---------- Search ---------- */
+.md-search__input {
+  border-radius: 0.375rem;
+}
+
+/* ---------- Footer ---------- */
+.md-footer {
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* ---------- Branding mark in sidebar header ---------- */
+.md-logo {
+  color: var(--md-default-fg-color);
+}
+
+/* ---------- Scrollbar (subtle, matching dashboard) ---------- */
+.md-sidebar__scrollwrap::-webkit-scrollbar {
+  width: 4px;
+}
+
+.md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+  background: var(--md-default-fg-color--lightest);
+  border-radius: 2px;
+}
+
+/* ---------- Smooth transitions for scheme toggle ---------- */
+body,
+.md-header,
+.md-sidebar,
+.md-content,
+.md-footer {
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}

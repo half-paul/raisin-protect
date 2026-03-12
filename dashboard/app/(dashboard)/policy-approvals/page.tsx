@@ -28,6 +28,7 @@ import {
   listPolicies,
   Policy,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const CATEGORY_LABELS: Record<string, string> = {
   information_security: 'Information Security', access_control: 'Access Control',
@@ -121,6 +122,7 @@ export default function PolicyApprovalsPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <ClipboardCheck className="h-6 w-6" /> Policy Approvals
         </h1>
+        <WikiHelpLink path="policies/approval-workflow/" />
         <p className="text-sm text-muted-foreground">Review and sign-off on policy documents</p>
       </div>
 

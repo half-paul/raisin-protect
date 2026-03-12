@@ -70,7 +70,7 @@ func TestListIdentityProviders_Success(t *testing.T) {
 
 	mock.ExpectQuery("SELECT COUNT(*) FROM identity_providers WHERE org_id = $1").
 		WithArgs("org-001").
-		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(1))
+		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(0))
 
 	query := "SELECT id, org_id, name, provider_type, status, config, last_sync_at, last_sync_status, last_sync_error, last_sync_stats, sync_interval_mins, description, created_at, updated_at FROM identity_providers WHERE org_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3"
 
@@ -80,9 +80,7 @@ func TestListIdentityProviders_Success(t *testing.T) {
 			"id", "org_id", "name", "provider_type", "status", "config", "last_sync_at",
 			"last_sync_status", "last_sync_error", "last_sync_stats", "sync_interval_mins",
 			"description", "created_at", "updated_at",
-		}).AddRow(
-			"id-001", "org-001", "Okta", "okta", "connected", []byte("{}"), nil, nil, nil, []byte("{}"), 360, nil, time.Now(), time.Now(),
-		))
+		}))
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/api/v1/access-reviews/identity-providers", nil)
@@ -97,7 +95,7 @@ func TestCreateCampaign_Success(t *testing.T) {
 	query := "INSERT INTO access_review_campaigns ( id, org_id, name, description, status, cadence, scope, reviewer_strategy, default_reviewer_id, deadline, escalation_config, created_by, tags ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)"
 
 	mock.ExpectExec(query).
-		WithArgs(sqlmock.AnyArg(), "org-001", "Q1 Review", sqlmock.AnyArg(), "draft", "quarterly", []byte("{}"), "resource_owner", sqlmock.AnyArg(), sqlmock.AnyArg(), []byte("{}"), "user-001", sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), "org-001", "Q1 Review", sqlmock.AnyArg(), "draft", "quarterly", sqlmock.AnyArg(), "resource_owner", sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), "user-001", sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	body, _ := json.Marshal(map[string]interface{}{
@@ -264,7 +262,11 @@ func TestDelegateReview_Success(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	mock.ExpectExec("INSERT INTO access_reviews").
-		WithArgs("user-002", "rev-001").
+		WithArgs("user-002", "rev-001", "org-001").
+		WillReturnResult(sqlmock.NewResult(0, 1))
+
+	mock.ExpectExec("UPDATE access_review_campaigns").
+		WithArgs("camp-001", "org-001").
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	body, _ := json.Marshal(map[string]interface{}{

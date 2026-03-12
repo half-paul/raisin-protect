@@ -96,7 +96,7 @@ func ListAccessEntries(c *gin.Context) {
 		       e.anomalies, e.last_sync_at, e.is_service_account, e.notes, e.created_at, e.updated_at,
 		       r.name as resource_name, r.criticality as resource_criticality
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id
 		%s
 		ORDER BY e.created_at DESC
 		LIMIT $%d OFFSET $%d
@@ -157,7 +157,7 @@ func GetAccessEntry(c *gin.Context) {
 		       r.name, r.criticality,
 		       ip.name
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id
 		LEFT JOIN identity_providers ip ON e.identity_provider_id = ip.id
 		WHERE e.id = $1 AND e.org_id = $2
 	`, id, orgID).Scan(
@@ -279,7 +279,7 @@ func GetAccessEntryAnomalies(c *gin.Context) {
 		SELECT COUNT(*),
 		       COUNT(*) FILTER (WHERE jsonb_array_length(e.anomalies) > 0)
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id
 		%s
 	`, whereClause), args...).Scan(&totalEntries, &entriesWithAnomalies)
 
@@ -292,7 +292,7 @@ func GetAccessEntryAnomalies(c *gin.Context) {
 	anomRows, err := database.Query(fmt.Sprintf(`
 		SELECT a.value->>'type' as anomaly_type, COUNT(*) as cnt
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id,
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id,
 		jsonb_array_elements(e.anomalies) a
 		%s
 		GROUP BY a.value->>'type'
@@ -339,7 +339,7 @@ func GetAccessEntryAnomalies(c *gin.Context) {
 	critRows, err := database.Query(fmt.Sprintf(`
 		SELECT r.criticality, COUNT(DISTINCT e.id)
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id
 		%s AND jsonb_array_length(e.anomalies) > 0
 		GROUP BY r.criticality
 	`, whereClause), args...)
@@ -359,7 +359,7 @@ func GetAccessEntryAnomalies(c *gin.Context) {
 	deptRows, err := database.Query(fmt.Sprintf(`
 		SELECT COALESCE(e.user_department, 'Unknown'), COUNT(DISTINCT e.id)
 		FROM access_entries e
-		JOIN access_resources r ON e.resource_id = r.id
+		JOIN access_resources r ON e.resource_id = r.id AND r.org_id = e.org_id
 		%s AND jsonb_array_length(e.anomalies) > 0
 		GROUP BY e.user_department
 	`, whereClause), args...)
@@ -450,8 +450,11 @@ func DetectAnomalies(c *gin.Context) {
 		)
 	`, argN, whereClause, argN)
 
-	staleResult, _ := database.Exec(staleQuery, staleArgs...)
-	staleCount, _ := staleResult.RowsAffected()
+	staleResult, staleErr := database.Exec(staleQuery, staleArgs...)
+	var staleCount int64
+	if staleErr == nil && staleResult != nil {
+		staleCount, _ = staleResult.RowsAffected()
+	}
 
 	// Detect role drift
 	driftQuery := fmt.Sprintf(`
@@ -472,8 +475,11 @@ func DetectAnomalies(c *gin.Context) {
 		)
 	`, whereClause)
 
-	driftResult, _ := database.Exec(driftQuery, args...)
-	driftCount, _ := driftResult.RowsAffected()
+	driftResult, driftErr := database.Exec(driftQuery, args...)
+	var driftCount int64
+	if driftErr == nil && driftResult != nil {
+		driftCount, _ = driftResult.RowsAffected()
+	}
 
 	// Detect no MFA on critical resources
 	mfaQuery := fmt.Sprintf(`
@@ -495,8 +501,11 @@ func DetectAnomalies(c *gin.Context) {
 		)
 	`, whereClause)
 
-	mfaResult, _ := database.Exec(mfaQuery, args...)
-	mfaCount, _ := mfaResult.RowsAffected()
+	mfaResult, mfaErr := database.Exec(mfaQuery, args...)
+	var mfaCount int64
+	if mfaErr == nil && mfaResult != nil {
+		mfaCount, _ = mfaResult.RowsAffected()
+	}
 
 	totalNew := int(staleCount + driftCount + mfaCount)
 

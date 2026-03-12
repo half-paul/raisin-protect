@@ -445,72 +445,71 @@ func main() {
 				audits.POST("/:id/comments", middleware.RequireRoles(models.AuditCommentCreateRoles...), handlers.CreateAuditComment)
 				audits.PUT("/:id/comments/:cid", handlers.UpdateAuditComment) // author check in handler
 				audits.DELETE("/:id/comments/:cid", handlers.DeleteAuditComment) // author + admin check in handler
-				}
+			}
 
-				// === Sprint 8: User Access Reviews ===
-
-				ar := protected.Group("/access-reviews")
-				{
+			// === Sprint 8: User Access Reviews ===
+			ar := protected.Group("/access-reviews")
+			{
 				// Identity Providers
 				idp := ar.Group("/identity-providers")
 				{
-				        idp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListIdentityProviders)
-				        idp.POST("", middleware.RequireRoles(models.IdPManageRoles...), handlers.CreateIdentityProvider)
-				        idp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProvider)
-				        idp.PUT("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.UpdateIdentityProvider)
-				        idp.DELETE("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.DeleteIdentityProvider)
-				        idp.POST("/:id/sync", middleware.RequireRoles(models.IdPManageRoles...), handlers.SyncIdentityProvider)
-				        idp.GET("/:id/sync-stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProviderSyncStats)
+					idp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListIdentityProviders)
+					idp.POST("", middleware.RequireRoles(models.IdPManageRoles...), handlers.CreateIdentityProvider)
+					idp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProvider)
+					idp.PUT("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.UpdateIdentityProvider)
+					idp.DELETE("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.DeleteIdentityProvider)
+					idp.POST("/:id/sync", middleware.RequireRoles(models.IdPManageRoles...), handlers.SyncIdentityProvider)
+					idp.GET("/:id/sync-stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProviderSyncStats)
 				}
 
 				// Access Resources
 				res := ar.Group("/resources")
 				{
-				        res.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessResources)
-				        res.POST("", middleware.RequireRoles(models.ResourceManageRoles...), handlers.CreateAccessResource)
-				        res.GET("/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResourceStats)
-				        res.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResource)
-				        res.PUT("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.UpdateAccessResource)
-				        res.DELETE("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DeleteAccessResource)
-				        res.GET("/:id/users", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListResourceUsers)
+					res.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessResources)
+					res.POST("", middleware.RequireRoles(models.ResourceManageRoles...), handlers.CreateAccessResource)
+					res.GET("/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResourceStats)
+					res.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResource)
+					res.PUT("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.UpdateAccessResource)
+					res.DELETE("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DeleteAccessResource)
+					res.GET("/:id/users", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListResourceUsers)
 				}
 
 				// Access Entries
 				entries := ar.Group("/entries")
 				{
-				        entries.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessEntries)
-				        entries.GET("/anomalies", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntryAnomalies)
-				        entries.POST("/detect-anomalies", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DetectAnomalies)
-				        entries.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntry)
+					entries.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessEntries)
+					entries.GET("/anomalies", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntryAnomalies)
+					entries.POST("/detect-anomalies", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DetectAnomalies)
+					entries.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntry)
 				}
 
 				// Campaigns
 				camp := ar.Group("/campaigns")
 				{
-				        camp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaigns)
-				        camp.POST("", middleware.RequireRoles(models.CampaignManageRoles...), handlers.CreateCampaign)
-				        camp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaign)
-				        camp.PUT("/:id", middleware.RequireRoles(models.CampaignManageRoles...), handlers.UpdateCampaign)
-				        camp.POST("/:id/launch", middleware.RequireRoles(models.CampaignManageRoles...), handlers.LaunchCampaign)
-				        camp.POST("/:id/complete", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CompleteCampaign)
-				        camp.POST("/:id/cancel", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CancelCampaign)
-				        camp.GET("/:id/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaignStats)
-				        camp.GET("/:id/certification-report", middleware.RequireRoles("compliance_manager", "ciso", "auditor"), handlers.GetCertificationReport)
+					camp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaigns)
+					camp.POST("", middleware.RequireRoles(models.CampaignManageRoles...), handlers.CreateCampaign)
+					camp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaign)
+					camp.PUT("/:id", middleware.RequireRoles(models.CampaignManageRoles...), handlers.UpdateCampaign)
+					camp.POST("/:id/launch", middleware.RequireRoles(models.CampaignManageRoles...), handlers.LaunchCampaign)
+					camp.POST("/:id/complete", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CompleteCampaign)
+					camp.POST("/:id/cancel", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CancelCampaign)
+					camp.GET("/:id/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaignStats)
+					camp.GET("/:id/certification-report", middleware.RequireRoles("compliance_manager", "ciso", "auditor"), handlers.GetCertificationReport)
 
-				        // Reviews within campaigns
-				        camp.GET("/:id/reviews", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaignReviews)
-				        camp.GET("/:id/reviews/:rid", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetReviewDetail)
-				        camp.POST("/:id/reviews/:rid/decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReviewNested)
-				        camp.POST("/:id/reviews/bulk-decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.BulkDecideReviews)
-				        camp.POST("/:id/reviews/:rid/delegate", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DelegateReview)
-				        camp.POST("/:id/reviews/:rid/escalate", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.EscalateReview)
-				        camp.POST("/:id/reviews/:rid/revocation", middleware.RequireRoles("it_admin", "ciso"), handlers.MarkRevocation)
+					// Reviews within campaigns
+					camp.GET("/:id/reviews", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaignReviews)
+					camp.GET("/:id/reviews/:rid", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetReviewDetail)
+					camp.POST("/:id/reviews/:rid/decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReviewNested)
+					camp.POST("/:id/reviews/bulk-decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.BulkDecideReviews)
+					camp.POST("/:id/reviews/:rid/delegate", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DelegateReview)
+					camp.POST("/:id/reviews/:rid/escalate", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.EscalateReview)
+					camp.POST("/:id/reviews/:rid/revocation", middleware.RequireRoles("it_admin", "ciso"), handlers.MarkRevocation)
 				}
 
 				// Individual Reviews (legacy path)
 				rev := ar.Group("/reviews")
 				{
-				        rev.PUT("/:id", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReview)
+					rev.PUT("/:id", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReview)
 				}
 
 				// Dashboard
@@ -518,9 +517,50 @@ func main() {
 
 				// Personal Queue
 				ar.GET("/my-reviews", handlers.ListMyReviews)
-				}
-				}
-				}
+			}
+
+			// === Sprint 9: Integration Engine ===
+
+			// Integration catalog (system-level, read-only)
+			integrations := protected.Group("/integrations")
+			integrations.Use(middleware.RequireRoles(models.IntegrationViewRoles...))
+			{
+				integrations.GET("", handlers.ListIntegrations)
+				integrations.GET("/dashboard", handlers.IntegrationDashboard)
+				integrations.GET("/dashboard/sync-activity", handlers.IntegrationSyncActivity)
+				integrations.GET("/:id", handlers.GetIntegration)
+			}
+
+			// Integration connections (per-org)
+			connections := protected.Group("/integration-connections")
+			{
+				connections.GET("", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.ListConnections)
+				connections.GET("/:id", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetConnection)
+				connections.POST("", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CreateConnection)
+				connections.PUT("/:id", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.UpdateConnection)
+				connections.DELETE("/:id", middleware.RequireRoles(models.IntegrationDeleteRoles...), handlers.DeleteConnection)
+				connections.POST("/:id/test", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TestConnection)
+				connections.POST("/:id/enable", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.EnableConnection)
+				connections.POST("/:id/disable", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.DisableConnection)
+				connections.POST("/:id/sync", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TriggerSync)
+				connections.GET("/:id/runs", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.ListRuns)
+				connections.GET("/:id/runs/:rid", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetRun)
+				connections.POST("/:id/runs/:rid/cancel", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CancelRun)
+				connections.GET("/:id/runs/:rid/logs", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetRunLogs)
+				connections.GET("/:id/health", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetConnectionHealth)
+				connections.POST("/:id/health-check", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TriggerHealthCheck)
+				connections.GET("/:id/webhooks", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.ListWebhooks)
+				connections.POST("/:id/webhooks", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CreateWebhook)
+				connections.DELETE("/:id/webhooks/:wid", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.DeleteWebhook)
+				connections.POST("/:id/webhooks/:wid/rotate-secret", middleware.RequireRoles(models.IntegrationDeleteRoles...), handlers.RotateWebhookSecret)
+				connections.GET("/:id/preview", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.IntegrationPreview)
+			}
+		}
+
+		// Public webhook receiver (no JWT auth, HMAC verification)
+		v1.POST("/webhooks/receive/:id", handlers.ReceiveWebhook)
+	}
+
 	// Start monitoring worker (background)
 	if database != nil {
 		workerCtx, workerCancel := context.WithCancel(context.Background())

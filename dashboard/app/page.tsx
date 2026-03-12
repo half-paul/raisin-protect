@@ -17,6 +17,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { ControlStats, OrgFramework, getControlStats, listOrgFrameworks } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 interface StatCardProps {
   title: string;
@@ -77,6 +78,7 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight">
           Welcome back{user?.first_name ? `, ${user.first_name}` : ''}
         </h1>
+        <WikiHelpLink path="getting-started/dashboard/" />
         <p className="text-muted-foreground mt-1">
           {user?.role ? getRoleLabel(user.role) : 'GRC Dashboard'} — Here&apos;s your compliance overview.
         </p>

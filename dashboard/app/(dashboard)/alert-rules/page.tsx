@@ -29,6 +29,7 @@ import {
   testAlertDelivery,
 } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const SEVERITY_COLORS: Record<string, string> = {
   critical: 'bg-red-600 text-white',
@@ -213,6 +214,7 @@ export default function AlertRulesPage() {
             <Settings className="h-8 w-8" />
             Alert Rules
           </h1>
+          <WikiHelpLink path="monitoring/alert-rules/" />
           <p className="text-muted-foreground mt-1">
             Configure how alerts are generated from test failures
           </p>

@@ -61,6 +61,7 @@ import {
   deprecateControl,
   bulkControlStatus,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Draft',
@@ -243,6 +244,7 @@ export default function ControlsPage() {
             <Shield className="h-8 w-8" />
             Control Library
           </h1>
+          <WikiHelpLink path="compliance/controls/" />
           <p className="text-muted-foreground mt-1">
             Browse, search, and manage your organization&apos;s controls
           </p>

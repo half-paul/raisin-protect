@@ -34,6 +34,8 @@ import {
   BookOpen,
   Target,
   CheckSquare,
+  HelpCircle,
+  ExternalLink,
 } from 'lucide-react';
 
 interface NavItem {
@@ -41,6 +43,7 @@ interface NavItem {
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   roles?: GrcRole[]; // if undefined, visible to all roles
+  external?: boolean; // if true, renders as <a target="_blank"> instead of <Link>
 }
 
 interface NavSection {
@@ -273,6 +276,17 @@ const navigation: NavSection[] = [
       },
     ],
   },
+  {
+    title: 'Resources',
+    items: [
+      {
+        label: 'Documentation',
+        href: process.env.NEXT_PUBLIC_WIKI_URL || 'http://localhost:3020',
+        icon: HelpCircle,
+        external: true,
+      },
+    ],
+  },
 ];
 
 interface SidebarProps {
@@ -333,6 +347,22 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               </p>
               {section.items.map((item) => {
                 const isActive = pathname === item.href;
+                if (item.external) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={onClose}
+                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                      <ExternalLink className="h-3 w-3 ml-auto" />
+                    </a>
+                  );
+                }
                 return (
                   <Link
                     key={item.href}

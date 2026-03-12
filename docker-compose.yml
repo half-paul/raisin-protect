@@ -171,6 +171,18 @@ services:
         limits:
           memory: 256M
 
+  wiki:
+    build: ./wiki
+    container_name: rp-wiki
+    ports:
+      - "3020:3020"
+    networks:
+      - rp-net
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
 volumes:
   rp_postgres_data:
   rp_redis_data:

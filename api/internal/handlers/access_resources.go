@@ -410,12 +410,16 @@ func GetAccessResourceStats(c *gin.Context) {
 		return
 	}
 
-	rows, _ := database.Query(`
-		SELECT criticality, COUNT(*) 
-		FROM access_resources 
-		WHERE org_id = $1 
+	rows, err2 := database.Query(`
+		SELECT criticality, COUNT(*)
+		FROM access_resources
+		WHERE org_id = $1
 		GROUP BY criticality
 	`, orgID)
+	if err2 != nil {
+		c.JSON(http.StatusInternalServerError, errorResponse("DB_ERROR", "Failed to query resource breakdown"))
+		return
+	}
 	defer rows.Close()
 
 	stats.ResourcesByCritical = make(map[string]int)

@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Building2, Save, Key, Shield } from 'lucide-react';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 interface Organization {
   id: string;
@@ -121,6 +122,7 @@ export default function SettingsPage() {
           <Building2 className="h-8 w-8" />
           Organization Settings
         </h1>
+        <WikiHelpLink path="administration/organization/" />
         <p className="text-muted-foreground mt-1">Manage your organization and account settings</p>
       </div>
 

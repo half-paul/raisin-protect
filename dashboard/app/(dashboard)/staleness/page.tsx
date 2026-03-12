@@ -24,6 +24,7 @@ import {
 import {
   EVIDENCE_TYPE_LABELS, formatFileSize,
 } from '@/components/evidence/freshness-badge';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 export default function StalenessPage() {
   const router = useRouter();
@@ -79,6 +80,7 @@ export default function StalenessPage() {
           <AlertTriangle className="h-8 w-8 text-amber-600 dark:text-amber-400" />
           Staleness Alerts
         </h1>
+        <WikiHelpLink path="compliance/evidence/#tracking-freshness--staleness" />
         <p className="text-muted-foreground mt-1">
           Evidence artifacts that are expired or expiring soon
         </p>

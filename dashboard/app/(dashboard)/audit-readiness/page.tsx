@@ -20,6 +20,7 @@ import {
   Audit, AuditReadiness, AuditStats,
   listAudits, getAuditReadiness, getAuditStats,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   AUDIT_STATUS_LABELS, AUDIT_STATUS_COLORS,
   AUDIT_TYPE_LABELS,
@@ -77,6 +78,7 @@ export default function AuditReadinessPage() {
         </Link>
         <div className="flex-1">
           <h1 className="text-2xl font-bold">Audit Readiness Dashboard</h1>
+          <WikiHelpLink path="audit-hub/readiness/" />
           <p className="text-sm text-muted-foreground">Track evidence request completion and identify gaps</p>
         </div>
         <div className="w-[300px]">
