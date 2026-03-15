@@ -2987,3 +2987,248 @@ export function getIntegrationSyncActivity() {
 export function getIntegrationPreview(connectionId: string) {
   return apiGet<{ connection_name: string; provider: string; last_sync_at: string | null; latest_stats: Record<string, unknown>; recent_logs: { info: number; warn: number; error: number } }>(`/api/v1/integration-connections/${connectionId}/preview`);
 }
+
+// ============================================================
+// CDE Scoping (PCI DSS Req 1, 11.4)
+// ============================================================
+
+export type CdeAssetScope = 'in_scope' | 'out_of_scope' | 'connected_to';
+export type CdeAssetType =
+  | 'server'
+  | 'database'
+  | 'network_device'
+  | 'application'
+  | 'endpoint'
+  | 'cloud_service'
+  | 'storage'
+  | 'other';
+
+export interface CdeAsset {
+  id: string;
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description?: string;
+  ip_address?: string;
+  hostname?: string;
+  owner?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type IsolationMethod =
+  | 'firewall'
+  | 'vlan'
+  | 'dmz'
+  | 'air_gap'
+  | 'cloud_vpc'
+  | 'microsegmentation'
+  | 'other';
+
+export interface NetworkSegment {
+  id: string;
+  name: string;
+  description?: string;
+  isolation_method: IsolationMethod;
+  cidr?: string;
+  vlan_id?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type DataFlowProtocol = 'https' | 'http' | 'tls' | 'ssh' | 'sftp' | 'smb' | 'ftp' | 'other';
+export type EncryptionStatus = 'encrypted' | 'unencrypted' | 'partial';
+
+export interface DataFlow {
+  id: string;
+  name: string;
+  source: string;
+  destination: string;
+  protocol: DataFlowProtocol;
+  encryption_status: EncryptionStatus;
+  port?: string;
+  data_classification?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SegmentationTestResult = 'pass' | 'fail' | 'pending';
+
+export interface SegmentationTest {
+  id: string;
+  name: string;
+  description?: string;
+  result: SegmentationTestResult;
+  segment_id?: string;
+  tester?: string;
+  tested_at?: string;
+  next_test_date?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CdeScopeSummary {
+  in_scope_count: number;
+  out_of_scope_count: number;
+  connected_to_count: number;
+  total_assets: number;
+  total_segments: number;
+  total_data_flows: number;
+  tests_pass: number;
+  tests_fail: number;
+  tests_pending: number;
+}
+
+// ---- CDE Assets ----
+
+export function listCdeAssets(params?: Record<string, string>) {
+  return apiGet<CdeAsset[]>('/api/v1/cde/assets', params);
+}
+
+export function getCdeAsset(id: string) {
+  return apiGet<CdeAsset>(`/api/v1/cde/assets/${id}`);
+}
+
+export function createCdeAsset(body: {
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description?: string;
+  ip_address?: string;
+  hostname?: string;
+  owner?: string;
+  notes?: string;
+}) {
+  return apiPost<CdeAsset>('/api/v1/cde/assets', body);
+}
+
+export function updateCdeAsset(id: string, body: Partial<{
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description: string;
+  ip_address: string;
+  hostname: string;
+  owner: string;
+  notes: string;
+}>) {
+  return apiPut<CdeAsset>(`/api/v1/cde/assets/${id}`, body);
+}
+
+export function deleteCdeAsset(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/assets/${id}`);
+}
+
+// ---- Network Segments ----
+
+export function listNetworkSegments(params?: Record<string, string>) {
+  return apiGet<NetworkSegment[]>('/api/v1/cde/segments', params);
+}
+
+export function createNetworkSegment(body: {
+  name: string;
+  isolation_method: IsolationMethod;
+  description?: string;
+  cidr?: string;
+  vlan_id?: string;
+  notes?: string;
+}) {
+  return apiPost<NetworkSegment>('/api/v1/cde/segments', body);
+}
+
+export function updateNetworkSegment(id: string, body: Partial<{
+  name: string;
+  isolation_method: IsolationMethod;
+  description: string;
+  cidr: string;
+  vlan_id: string;
+  notes: string;
+}>) {
+  return apiPut<NetworkSegment>(`/api/v1/cde/segments/${id}`, body);
+}
+
+export function deleteNetworkSegment(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/segments/${id}`);
+}
+
+// ---- Data Flows ----
+
+export function listDataFlows(params?: Record<string, string>) {
+  return apiGet<DataFlow[]>('/api/v1/cde/data-flows', params);
+}
+
+export function createDataFlow(body: {
+  name: string;
+  source: string;
+  destination: string;
+  protocol: DataFlowProtocol;
+  encryption_status: EncryptionStatus;
+  port?: string;
+  data_classification?: string;
+  notes?: string;
+}) {
+  return apiPost<DataFlow>('/api/v1/cde/data-flows', body);
+}
+
+export function updateDataFlow(id: string, body: Partial<{
+  name: string;
+  source: string;
+  destination: string;
+  protocol: DataFlowProtocol;
+  encryption_status: EncryptionStatus;
+  port: string;
+  data_classification: string;
+  notes: string;
+}>) {
+  return apiPut<DataFlow>(`/api/v1/cde/data-flows/${id}`, body);
+}
+
+export function deleteDataFlow(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/data-flows/${id}`);
+}
+
+// ---- Segmentation Tests ----
+
+export function listSegmentationTests(params?: Record<string, string>) {
+  return apiGet<SegmentationTest[]>('/api/v1/cde/segmentation-tests', params);
+}
+
+export function createSegmentationTest(body: {
+  name: string;
+  description?: string;
+  result: SegmentationTestResult;
+  segment_id?: string;
+  tester?: string;
+  tested_at?: string;
+  next_test_date?: string;
+  notes?: string;
+}) {
+  return apiPost<SegmentationTest>('/api/v1/cde/segmentation-tests', body);
+}
+
+export function updateSegmentationTest(id: string, body: Partial<{
+  name: string;
+  description: string;
+  result: SegmentationTestResult;
+  segment_id: string;
+  tester: string;
+  tested_at: string;
+  next_test_date: string;
+  notes: string;
+}>) {
+  return apiPut<SegmentationTest>(`/api/v1/cde/segmentation-tests/${id}`, body);
+}
+
+export function deleteSegmentationTest(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/segmentation-tests/${id}`);
+}
+
+// ---- Scope Summary ----
+
+export function getCdeScopeSummary() {
+  return apiGet<CdeScopeSummary>('/api/v1/cde/scope-summary');
+}

@@ -36,6 +36,10 @@ import {
   CheckSquare,
   HelpCircle,
   ExternalLink,
+  Database,
+  Network,
+  ArrowRightLeft,
+  TestTube2,
 } from 'lucide-react';
 
 interface NavItem {
@@ -228,6 +232,35 @@ const navigation: NavSection[] = [
         href: '/audit/workspace',
         icon: CheckSquare,
         roles: ['auditor'],
+      },
+    ],
+  },
+  {
+    title: 'CDE Scoping',
+    items: [
+      {
+        label: 'Asset Inventory',
+        href: '/cde/assets',
+        icon: Database,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'it_admin', 'auditor'],
+      },
+      {
+        label: 'Network Segments',
+        href: '/cde/segments',
+        icon: Network,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'it_admin', 'auditor'],
+      },
+      {
+        label: 'Data Flows',
+        href: '/cde/data-flows',
+        icon: ArrowRightLeft,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'it_admin', 'auditor'],
+      },
+      {
+        label: 'Segmentation Tests',
+        href: '/cde/segmentation-tests',
+        icon: TestTube2,
+        roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
       },
     ],
   },
