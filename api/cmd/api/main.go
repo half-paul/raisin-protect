@@ -557,6 +557,49 @@ func main() {
 			}
 		}
 
+		// CDE Scoping Module (PCI DSS Req 1, 11.4) — Sprint 11
+		cde := protected.Group("/cde")
+		{
+			// Assets
+			cdeAssets := cde.Group("/assets")
+			{
+				cdeAssets.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDEAssets)
+				cdeAssets.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDEAsset)
+				cdeAssets.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEAsset)
+				cdeAssets.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDEAsset)
+				cdeAssets.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDEAsset)
+			}
+			// Network Segments
+			cdeSegs := cde.Group("/segments")
+			{
+				cdeSegs.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDESegments)
+				cdeSegs.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDESegment)
+				cdeSegs.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDESegment)
+				cdeSegs.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDESegment)
+				cdeSegs.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDESegment)
+			}
+			// Data Flows
+			cdeFlows := cde.Group("/data-flows")
+			{
+				cdeFlows.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDEDataFlows)
+				cdeFlows.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDEDataFlow)
+				cdeFlows.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEDataFlow)
+				cdeFlows.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDEDataFlow)
+				cdeFlows.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDEDataFlow)
+			}
+			// Segmentation Tests
+			cdeSegTests := cde.Group("/segmentation-tests")
+			{
+				cdeSegTests.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDESegmentationTests)
+				cdeSegTests.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDESegmentationTest)
+				cdeSegTests.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDESegmentationTest)
+				cdeSegTests.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDESegmentationTest)
+				cdeSegTests.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDESegmentationTest)
+			}
+			// Scope Summary
+			cde.GET("/scope-summary", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEScopeSummary)
+		}
+
 		// Public webhook receiver (no JWT auth, HMAC verification)
 		v1.POST("/webhooks/receive/:id", handlers.ReceiveWebhook)
 	}
