@@ -600,6 +600,46 @@ func main() {
 			cde.GET("/scope-summary", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEScopeSummary)
 		}
 
+		// Service Provider / Vendor Management (PCI DSS Req 12.8, 12.9) — Sprint 12
+		sp := protected.Group("/service-providers")
+		{
+			sp.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListServiceProviders)
+			sp.POST("", middleware.RequireRoles(models.SPManageRoles...), handlers.CreateServiceProvider)
+			sp.GET("/compliance-summary", middleware.RequireRoles(models.SPViewRoles...), handlers.GetSPComplianceSummary)
+			sp.GET("/:id", middleware.RequireRoles(models.SPViewRoles...), handlers.GetServiceProvider)
+			sp.PUT("/:id", middleware.RequireRoles(models.SPManageRoles...), handlers.UpdateServiceProvider)
+			sp.DELETE("/:id", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteServiceProvider)
+
+			// Compliance Documents
+			spDocs := sp.Group("/:id/documents")
+			{
+				spDocs.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListSPComplianceDocs)
+				spDocs.POST("", middleware.RequireRoles(models.SPManageRoles...), handlers.CreateSPComplianceDoc)
+				spDocs.GET("/:docId", middleware.RequireRoles(models.SPViewRoles...), handlers.GetSPComplianceDoc)
+				spDocs.DELETE("/:docId", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteSPComplianceDoc)
+			}
+
+			// Responsibility Matrix
+			spResp := sp.Group("/:id/responsibilities")
+			{
+				spResp.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListSPResponsibilities)
+				spResp.PUT("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.UpsertSPResponsibility)
+				spResp.DELETE("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteSPResponsibility)
+			}
+		}
+
+		// ASV Scan Management (PCI DSS Req 11.3.2) — Sprint 12
+		asv := protected.Group("/asv-scans")
+		{
+			asv.GET("", middleware.RequireRoles(models.ASVViewRoles...), handlers.ListASVScans)
+			asv.POST("", middleware.RequireRoles(models.ASVManageRoles...), handlers.CreateASVScan)
+			asv.GET("/quarterly-status", middleware.RequireRoles(models.ASVViewRoles...), handlers.GetASVQuarterlyStatus)
+			asv.POST("/import", middleware.RequireRoles(models.ASVManageRoles...), handlers.ImportASVScan)
+			asv.GET("/:id", middleware.RequireRoles(models.ASVViewRoles...), handlers.GetASVScan)
+			asv.PUT("/:id", middleware.RequireRoles(models.ASVManageRoles...), handlers.UpdateASVScan)
+			asv.DELETE("/:id", middleware.RequireRoles(models.ASVManageRoles...), handlers.DeleteASVScan)
+		}
+
 		// Public webhook receiver (no JWT auth, HMAC verification)
 		v1.POST("/webhooks/receive/:id", handlers.ReceiveWebhook)
 	}
