@@ -61,20 +61,24 @@ func IsAuditTerminal(status string) bool {
 
 // --- Audit type constants ---
 const (
-	AuditTypeSOC2Type1           = "soc2_type1"
-	AuditTypeSOC2Type2           = "soc2_type2"
-	AuditTypeISO27001Cert        = "iso27001_certification"
+	AuditTypeSOC2Type1            = "soc2_type1"
+	AuditTypeSOC2Type2            = "soc2_type2"
+	AuditTypeISO27001Cert         = "iso27001_certification"
 	AuditTypeISO27001Surveillance = "iso27001_surveillance"
-	AuditTypePCIDSSROC           = "pci_dss_roc"
-	AuditTypePCIDSSSAQ           = "pci_dss_saq"
-	AuditTypeGDPRDPIA            = "gdpr_dpia"
-	AuditTypeInternal            = "internal"
-	AuditTypeCustom              = "custom"
+	AuditTypePCIDSSROC            = "pci_dss_roc"
+	AuditTypePCIDSSSAQ            = "pci_dss_saq"
+	AuditTypePCIDSSSAQA           = "pci_dss_saq_a" // SAQ A — fully-outsourced card-not-present merchants
+	AuditTypePCIDSSSAQD           = "pci_dss_saq_d" // SAQ D — all other merchants and all service providers
+	AuditTypePCIDSSAOC            = "pci_dss_aoc"   // Attestation of Compliance
+	AuditTypeGDPRDPIA             = "gdpr_dpia"
+	AuditTypeInternal             = "internal"
+	AuditTypeCustom               = "custom"
 )
 
 var ValidAuditTypes = []string{
 	AuditTypeSOC2Type1, AuditTypeSOC2Type2, AuditTypeISO27001Cert,
 	AuditTypeISO27001Surveillance, AuditTypePCIDSSROC, AuditTypePCIDSSSAQ,
+	AuditTypePCIDSSSAQA, AuditTypePCIDSSSAQD, AuditTypePCIDSSAOC,
 	AuditTypeGDPRDPIA, AuditTypeInternal, AuditTypeCustom,
 }
 

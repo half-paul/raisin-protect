@@ -17,6 +17,8 @@ type Control struct {
 	EvidenceRequirements    *string   `json:"evidence_requirements"`
 	TestCriteria            *string   `json:"test_criteria"`
 	IsCustom                bool      `json:"is_custom"`
+	IsCompensating          bool      `json:"is_compensating"`
+	CompensatingWorksheet   *string   `json:"compensating_worksheet"` // raw JSONB
 	SourceTemplateID        *string   `json:"source_template_id"`
 	Metadata                string    `json:"metadata"` // raw JSON
 	MappingsCount           int       `json:"mappings_count,omitempty"`
@@ -104,6 +106,8 @@ type UpdateControlRequest struct {
 	Category               *string                 `json:"category"`
 	EvidenceRequirements   *string                 `json:"evidence_requirements"`
 	TestCriteria           *string                 `json:"test_criteria"`
+	IsCompensating         *bool                   `json:"is_compensating"`
+	CompensatingWorksheet  map[string]interface{}  `json:"compensating_worksheet"`
 	Metadata               map[string]interface{}  `json:"metadata"`
 }
 
