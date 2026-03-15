@@ -40,6 +40,7 @@ import {
   Network,
   ArrowRightLeft,
   TestTube2,
+  ScrollText,
 } from 'lucide-react';
 
 interface NavItem {
@@ -261,6 +262,17 @@ const navigation: NavSection[] = [
         href: '/cde/segmentation-tests',
         icon: TestTube2,
         roles: ['ciso', 'compliance_manager', 'security_engineer', 'auditor'],
+      },
+    ],
+  },
+  {
+    title: 'AOC / ROC',
+    items: [
+      {
+        label: 'Documents',
+        href: '/documents',
+        icon: ScrollText,
+        roles: ['ciso', 'compliance_manager', 'auditor'],
       },
     ],
   },

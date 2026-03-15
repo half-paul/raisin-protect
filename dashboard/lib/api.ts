@@ -3445,3 +3445,255 @@ export function deleteSPResponsibility(providerId: string, reqCode: string) {
     `/api/v1/service-providers/${providerId}/responsibility-matrix/${reqCode}`,
   );
 }
+
+// ============================================================
+// AOC / ROC Compliance Documents (PCI DSS Req 12.4)
+// ============================================================
+
+export type ComplianceDocumentType =
+  | 'aoc_saq_a'
+  | 'aoc_saq_a_ep'
+  | 'aoc_saq_b'
+  | 'aoc_saq_b_ip'
+  | 'aoc_saq_c_vt'
+  | 'aoc_saq_c'
+  | 'aoc_saq_d'
+  | 'aoc_saq_d_sp'
+  | 'roc';
+
+export type ComplianceDocumentStatus =
+  | 'draft'
+  | 'generating'
+  | 'review'
+  | 'approved'
+  | 'final'
+  | 'signed'
+  | 'superseded'
+  | 'cancelled';
+
+export type DocumentSectionComplianceStatus =
+  | 'compliant'
+  | 'non_compliant'
+  | 'partially_compliant'
+  | 'not_applicable'
+  | 'compensating_control'
+  | 'customized_approach';
+
+export type AttestationRole =
+  | 'merchant_signatory'
+  | 'qsa_signatory'
+  | 'isac_signatory'
+  | 'sp_signatory';
+
+export type SignatureMethod = 'manual' | 'digital_signature' | 'docusign_ref';
+
+export interface DocumentTemplate {
+  id: string;
+  org_id: string | null;
+  template_type: string;
+  name: string;
+  description: string | null;
+  pci_dss_version: string;
+  version: string;
+  is_active: boolean;
+  sections: string; // raw JSON string — parse as TemplateSection[]
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TemplateSection {
+  key: string;
+  title: string;
+  required: boolean;
+  order: number;
+  fields: TemplateSectionField[];
+}
+
+export interface TemplateSectionField {
+  name: string;
+  label: string;
+  type: 'text' | 'textarea' | 'email' | 'url' | 'date' | 'number' | 'checkbox' | 'select' | 'multiselect';
+  required: boolean;
+  description?: string;
+  default?: string;
+  options?: string[];
+}
+
+export interface ComplianceDocument {
+  id: string;
+  org_id: string;
+  template_id: string | null;
+  document_type: ComplianceDocumentType;
+  title: string;
+  assessment_period_start: string;
+  assessment_period_end: string;
+  pci_dss_version: string;
+  merchant_name: string | null;
+  merchant_dba: string | null;
+  merchant_url: string | null;
+  business_type: string | null;
+  qsa_name: string | null;
+  qsa_company: string | null;
+  qsa_signature_date: string | null;
+  doc_status: ComplianceDocumentStatus;
+  generated_by: string | null;
+  pdf_path: string | null;
+  file_size_bytes: number | null;
+  generated_at: string | null;
+  generation_error: string | null;
+  version: number;
+  parent_id: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentSection {
+  id: string;
+  document_id: string;
+  org_id: string;
+  section_key: string;
+  title: string;
+  content: string | null;
+  compliance_status: DocumentSectionComplianceStatus | null;
+  evidence_ids: string[];
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentAttestation {
+  id: string;
+  document_id: string;
+  org_id: string;
+  attestation_role: AttestationRole;
+  full_name: string;
+  title: string;
+  company_name: string | null;
+  company_address: string | null;
+  company_url: string | null;
+  email: string | null;
+  phone: string | null;
+  qsa_company: string | null;
+  qsa_number: string | null;
+  signed_at: string | null;
+  signature_method: SignatureMethod | null;
+  signature_ref: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentRequirementSnapshot {
+  id: string;
+  document_id: string;
+  requirement_id: string | null;
+  requirement_code: string;
+  requirement_title: string;
+  in_scope: boolean;
+  control_count: number;
+  passing_controls: number;
+  evidence_count: number;
+  status: DocumentSectionComplianceStatus;
+  notes: string | null;
+  snapshotted_at: string;
+}
+
+// ---- Compliance Document CRUD ----
+
+export function listComplianceDocuments(params?: Record<string, string>) {
+  return apiGet<ComplianceDocument[]>('/api/v1/documents', params);
+}
+
+export function getComplianceDocument(id: string) {
+  return apiGet<ComplianceDocument>(`/api/v1/documents/${id}`);
+}
+
+export function createComplianceDocument(body: {
+  template_id?: string;
+  document_type: ComplianceDocumentType;
+  title: string;
+  assessment_period_start: string;
+  assessment_period_end: string;
+  pci_dss_version?: string;
+  merchant_name?: string;
+  merchant_dba?: string;
+  merchant_url?: string;
+  business_type?: string;
+  qsa_name?: string;
+  qsa_company?: string;
+  qsa_signature_date?: string;
+}) {
+  return apiPost<ComplianceDocument>('/api/v1/documents', body);
+}
+
+export function updateComplianceDocument(id: string, body: Partial<{
+  title: string;
+  merchant_name: string;
+  merchant_dba: string;
+  merchant_url: string;
+  business_type: string;
+  qsa_name: string;
+  qsa_company: string;
+  qsa_signature_date: string;
+}>) {
+  return apiPut<ComplianceDocument>(`/api/v1/documents/${id}`, body);
+}
+
+export function generateDocument(id: string) {
+  return apiPost<ComplianceDocument>(`/api/v1/documents/${id}/generate`, {});
+}
+
+export function finalizeDocument(id: string) {
+  return apiPost<ComplianceDocument>(`/api/v1/documents/${id}/finalize`, {});
+}
+
+// ---- Document Sections ----
+
+export function getDocumentSection(docId: string, sectionKey: string) {
+  return apiGet<DocumentSection>(`/api/v1/documents/${docId}/sections/${sectionKey}`);
+}
+
+export function upsertDocumentSection(docId: string, sectionKey: string, body: {
+  title: string;
+  content?: string;
+  compliance_status?: DocumentSectionComplianceStatus;
+  evidence_ids?: string[];
+  sort_order?: number;
+}) {
+  return apiPut<DocumentSection>(`/api/v1/documents/${docId}/sections/${sectionKey}`, body);
+}
+
+// ---- Document Attestations ----
+
+export function getDocumentAttestations(docId: string) {
+  return apiGet<DocumentAttestation[]>(`/api/v1/documents/${docId}/attestations`);
+}
+
+export function upsertDocumentAttestation(docId: string, role: AttestationRole, body: {
+  full_name: string;
+  title: string;
+  company_name?: string;
+  company_address?: string;
+  company_url?: string;
+  email?: string;
+  phone?: string;
+  qsa_company?: string;
+  qsa_number?: string;
+  signed_at?: string;
+  signature_method?: SignatureMethod;
+  signature_ref?: string;
+}) {
+  return apiPut<DocumentAttestation>(`/api/v1/documents/${docId}/attestations/${role}`, body);
+}
+
+// ---- Document Requirements Snapshot ----
+
+export function getDocumentRequirements(docId: string) {
+  return apiGet<DocumentRequirementSnapshot[]>(`/api/v1/documents/${docId}/requirements`);
+}
+
+// ---- Document Templates ----
+
+export function listDocumentTemplates(params?: Record<string, string>) {
+  return apiGet<DocumentTemplate[]>('/api/v1/document-templates', params);
+}
