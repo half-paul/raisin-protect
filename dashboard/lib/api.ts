@@ -3232,3 +3232,216 @@ export function deleteSegmentationTest(id: string) {
 export function getCdeScopeSummary() {
   return apiGet<CdeScopeSummary>('/api/v1/cde/scope-summary');
 }
+
+// ============================================================
+// Service Providers / Vendor Management (PCI DSS Req 12.8)
+// ============================================================
+
+export type SPType =
+  | 'payment_processor'
+  | 'payment_gateway'
+  | 'acquirer'
+  | 'tokenization'
+  | 'hosting'
+  | 'managed_security'
+  | 'software'
+  | 'network'
+  | 'cloud_storage'
+  | 'third_party_agent'
+  | 'other';
+
+export type SPComplianceStatus =
+  | 'compliant'
+  | 'compliance_in_progress'
+  | 'compliance_not_validated'
+  | 'non_compliant'
+  | 'not_applicable'
+  | 'unknown';
+
+export type SPRiskLevel = 'critical' | 'high' | 'medium' | 'low';
+
+export type SPDocType =
+  | 'aoc'
+  | 'soc2_type1'
+  | 'soc2_type2'
+  | 'iso27001'
+  | 'csa_star'
+  | 'pentest'
+  | 'questionnaire'
+  | 'other';
+
+export type SPResponsibleParty = 'merchant' | 'provider' | 'shared';
+
+export interface ServiceProvider {
+  id: string;
+  org_id: string;
+  name: string;
+  type: SPType;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  services_provided: string | null;
+  pci_compliance_status: SPComplianceStatus;
+  last_aoc_date: string | null;
+  next_review_date: string | null;
+  risk_level: SPRiskLevel;
+  risk_notes: string | null;
+  contract_start_date: string | null;
+  contract_end_date: string | null;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPComplianceDocument {
+  id: string;
+  provider_id: string;
+  org_id: string;
+  document_type: SPDocType;
+  title: string | null;
+  document_version: string | null;
+  upload_path: string | null;
+  valid_from: string | null;
+  valid_until: string | null;
+  reviewed_by: string | null;
+  review_notes: string | null;
+  is_current: boolean;
+  uploaded_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPResponsibilityMatrix {
+  id: string;
+  provider_id: string;
+  org_id: string;
+  requirement_id: string | null;
+  requirement_code: string;
+  responsible_party: SPResponsibleParty;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPComplianceSummary {
+  total: number;
+  active: number;
+  compliant: number;
+  non_compliant: number;
+  unknown: number;
+  expiring_soon: {
+    within_30_days: number;
+    within_60_days: number;
+    within_90_days: number;
+  };
+  by_risk_level: Record<SPRiskLevel, number>;
+  by_type: Record<SPType, number>;
+  needs_attention: Array<{
+    id: string;
+    name: string;
+    reason: string;
+    next_review_date: string | null;
+  }>;
+}
+
+// ---- Service Provider CRUD ----
+
+export function listServiceProviders(params?: Record<string, string>) {
+  return apiGet<ServiceProvider[]>('/api/v1/service-providers', params);
+}
+
+export function getServiceProvider(id: string) {
+  return apiGet<ServiceProvider>(`/api/v1/service-providers/${id}`);
+}
+
+export function createServiceProvider(body: {
+  name: string;
+  type: SPType;
+  contact_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  services_provided?: string;
+  pci_compliance_status?: SPComplianceStatus;
+  last_aoc_date?: string;
+  next_review_date?: string;
+  risk_level?: SPRiskLevel;
+  risk_notes?: string;
+  contract_start_date?: string;
+  contract_end_date?: string;
+}) {
+  return apiPost<ServiceProvider>('/api/v1/service-providers', body);
+}
+
+export function updateServiceProvider(id: string, body: Partial<{
+  name: string;
+  type: SPType;
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  services_provided: string;
+  pci_compliance_status: SPComplianceStatus;
+  last_aoc_date: string;
+  next_review_date: string;
+  risk_level: SPRiskLevel;
+  risk_notes: string;
+  contract_start_date: string;
+  contract_end_date: string;
+  is_active: boolean;
+}>) {
+  return apiPut<ServiceProvider>(`/api/v1/service-providers/${id}`, body);
+}
+
+export function deleteServiceProvider(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/service-providers/${id}`);
+}
+
+export function getSPComplianceSummary() {
+  return apiGet<SPComplianceSummary>('/api/v1/service-providers/compliance-summary');
+}
+
+// ---- SP Compliance Documents ----
+
+export function listSPComplianceDocs(providerId: string) {
+  return apiGet<SPComplianceDocument[]>(`/api/v1/service-providers/${providerId}/compliance-docs`);
+}
+
+export function createSPComplianceDoc(providerId: string, body: {
+  document_type: SPDocType;
+  title?: string;
+  document_version?: string;
+  upload_path?: string;
+  valid_from?: string;
+  valid_until?: string;
+  review_notes?: string;
+}) {
+  return apiPost<SPComplianceDocument>(`/api/v1/service-providers/${providerId}/compliance-docs`, body);
+}
+
+export function deleteSPComplianceDoc(providerId: string, docId: string) {
+  return apiDelete<{ status: string }>(`/api/v1/service-providers/${providerId}/compliance-docs/${docId}`);
+}
+
+// ---- SP Responsibility Matrix ----
+
+export function getSPResponsibilityMatrix(providerId: string) {
+  return apiGet<SPResponsibilityMatrix[]>(`/api/v1/service-providers/${providerId}/responsibility-matrix`);
+}
+
+export function upsertSPResponsibility(providerId: string, reqCode: string, body: {
+  requirement_id?: string;
+  responsible_party: SPResponsibleParty;
+  notes?: string;
+}) {
+  return apiPut<SPResponsibilityMatrix>(
+    `/api/v1/service-providers/${providerId}/responsibility-matrix/${reqCode}`,
+    body,
+  );
+}
+
+export function deleteSPResponsibility(providerId: string, reqCode: string) {
+  return apiDelete<{ status: string }>(
+    `/api/v1/service-providers/${providerId}/responsibility-matrix/${reqCode}`,
+  );
+}
