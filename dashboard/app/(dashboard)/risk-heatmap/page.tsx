@@ -15,6 +15,7 @@ import {
   HeatMapData, RiskSeverity, LikelihoodLevel, ImpactLevel,
   getRiskHeatMap,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   LIKELIHOOD_LABELS, LIKELIHOOD_ORDER,
   IMPACT_LABELS, IMPACT_ORDER,
@@ -62,6 +63,7 @@ export default function RiskHeatMapPage() {
         </Link>
         <div className="flex-1">
           <h1 className="text-2xl font-bold">Risk Heat Map</h1>
+          <WikiHelpLink path="risk-management/heat-map/" />
           <p className="text-sm text-muted-foreground">5×5 likelihood vs impact grid visualization</p>
         </div>
       </div>

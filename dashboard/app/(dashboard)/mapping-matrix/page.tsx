@@ -34,6 +34,7 @@ import {
   MappingMatrixControl,
   getMappingMatrix,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const STRENGTH_COLORS: Record<string, string> = {
   primary: 'bg-green-500 dark:bg-green-600',
@@ -102,6 +103,7 @@ export default function MappingMatrixPage() {
           <Grid3X3 className="h-8 w-8" />
           Control Mapping Matrix
         </h1>
+        <WikiHelpLink path="compliance/mapping-matrix/" />
         <p className="text-muted-foreground mt-1">
           Cross-framework view — which controls satisfy which requirements across all your frameworks
         </p>

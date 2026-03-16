@@ -19,6 +19,7 @@ import {
   PolicyTemplate, OrgFramework,
   listPolicyTemplates, clonePolicyTemplate, listOrgFrameworks,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const CATEGORY_LABELS: Record<string, string> = {
   information_security: 'Information Security', access_control: 'Access Control',
@@ -126,6 +127,7 @@ export default function PolicyTemplateLibraryPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <BookOpen className="h-6 w-6" /> Policy Template Library
         </h1>
+        <WikiHelpLink path="policies/templates/" />
         <p className="text-sm text-muted-foreground">Browse and clone pre-built policy templates for your organization</p>
       </div>
 

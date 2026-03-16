@@ -28,6 +28,7 @@ import {
   getControlStats,
   listOrgFrameworks,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 function coverageColor(pct: number) {
   if (pct >= 80) return 'text-green-600 dark:text-green-400';
@@ -88,6 +89,7 @@ export default function CoverageDashboard() {
           <BarChart3 className="h-8 w-8" />
           Compliance Coverage
         </h1>
+        <WikiHelpLink path="compliance/coverage/" />
         <p className="text-muted-foreground mt-1">
           Overall compliance posture across all activated frameworks
         </p>

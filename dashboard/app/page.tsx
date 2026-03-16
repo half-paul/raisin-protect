@@ -15,8 +15,10 @@ import {
   Truck,
   Monitor,
   TrendingUp,
+  Database,
 } from 'lucide-react';
-import { ControlStats, OrgFramework, getControlStats, listOrgFrameworks } from '@/lib/api';
+import { ControlStats, OrgFramework, CdeScopeSummary, getControlStats, listOrgFrameworks, getCdeScopeSummary } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 interface StatCardProps {
   title: string;
@@ -48,16 +50,19 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [stats, setStats] = useState<ControlStats | null>(null);
   const [orgFrameworks, setOrgFrameworks] = useState<OrgFramework[]>([]);
+  const [cdeSummary, setCdeSummary] = useState<CdeScopeSummary | null>(null);
 
   useEffect(() => {
     async function fetchDashData() {
       try {
-        const [statsRes, ofRes] = await Promise.all([
+        const [statsRes, ofRes, cdeRes] = await Promise.all([
           getControlStats(),
           listOrgFrameworks({ status: 'active' }),
+          getCdeScopeSummary().catch(() => null),
         ]);
         setStats(statsRes.data);
         setOrgFrameworks(ofRes.data || []);
+        if (cdeRes) setCdeSummary(cdeRes.data);
       } catch {
         // Dashboard loads with static defaults if API unavailable
       }
@@ -77,6 +82,7 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight">
           Welcome back{user?.first_name ? `, ${user.first_name}` : ''}
         </h1>
+        <WikiHelpLink path="getting-started/dashboard/" />
         <p className="text-muted-foreground mt-1">
           {user?.role ? getRoleLabel(user.role) : 'GRC Dashboard'} — Here&apos;s your compliance overview.
         </p>
@@ -109,6 +115,55 @@ export default function DashboardPage() {
           icon={AlertTriangle}
         />
       </div>
+
+      {/* CDE Scope Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Database className="h-5 w-5" />
+            CDE Scope Summary
+          </CardTitle>
+          <CardDescription>
+            Cardholder Data Environment asset classification —{' '}
+            <Link href="/cde/assets" className="text-primary hover:underline">view all assets</Link>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {cdeSummary ? (
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600">{cdeSummary.in_scope_count}</div>
+                <p className="text-xs text-muted-foreground">In Scope</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600">{cdeSummary.connected_to_count}</div>
+                <p className="text-xs text-muted-foreground">Connected To</p>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{cdeSummary.out_of_scope_count}</div>
+                <p className="text-xs text-muted-foreground">Out of Scope</p>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">No CDE assets defined yet.</p>
+              <Link href="/cde/assets" className="text-sm text-primary hover:underline">
+                Add CDE assets →
+              </Link>
+            </div>
+          )}
+          {cdeSummary && (
+            <div className="mt-4 pt-4 border-t grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+              <span>{cdeSummary.total_segments} network segment{cdeSummary.total_segments !== 1 ? 's' : ''}</span>
+              <span>{cdeSummary.total_data_flows} data flow{cdeSummary.total_data_flows !== 1 ? 's' : ''}</span>
+              <span className={cdeSummary.tests_fail > 0 ? 'text-red-600 font-medium' : ''}>
+                {cdeSummary.tests_fail} seg. test{cdeSummary.tests_fail !== 1 ? 's' : ''} failing
+              </span>
+              <span>{cdeSummary.tests_pass} seg. test{cdeSummary.tests_pass !== 1 ? 's' : ''} passing</span>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Role-specific sections */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

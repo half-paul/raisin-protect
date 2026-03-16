@@ -192,6 +192,10 @@ func main() {
 				ctrl.GET("/:id/mappings", handlers.ListControlMappings)
 				ctrl.POST("/:id/mappings", middleware.RequireRoles(models.ControlMappingRoles...), handlers.CreateControlMappings)
 				ctrl.DELETE("/:id/mappings/:mid", middleware.RequireRoles(models.ControlMappingRoles...), handlers.DeleteControlMapping)
+
+			// Compensating Controls Worksheet (PCI DSS Appendix B)
+			ctrl.GET("/:id/compensating-worksheet", middleware.RequireRoles(models.ControlReadRoles...), handlers.GetCompensatingWorksheet)
+			ctrl.PUT("/:id/compensating-worksheet", middleware.RequireRoles(models.ControlCreateRoles...), handlers.UpdateCompensatingWorksheet)
 			}
 
 			// Mapping matrix
@@ -234,11 +238,15 @@ func main() {
 			// Evidence on existing resources
 			ctrl.GET("/:id/evidence", handlers.ListControlEvidence)
 
-			// Requirements evidence
+			// Requirements evidence + direct scope management
 			req := protected.Group("/requirements")
 			{
 				req.GET("/:id/evidence", handlers.ListRequirementEvidence)
+				req.PUT("/:id/scope", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.SetScopeByRequirement)
 			}
+
+			// Requirement scopes listing (org-wide, used by PCI regression tests)
+			protected.GET("/requirement-scopes", handlers.ListAllScopes)
 
 			// === Sprint 4: Continuous Monitoring Engine ===
 
@@ -446,7 +454,218 @@ func main() {
 				audits.PUT("/:id/comments/:cid", handlers.UpdateAuditComment) // author check in handler
 				audits.DELETE("/:id/comments/:cid", handlers.DeleteAuditComment) // author + admin check in handler
 			}
+
+			// === Sprint 8: User Access Reviews ===
+			ar := protected.Group("/access-reviews")
+			{
+				// Identity Providers
+				idp := ar.Group("/identity-providers")
+				{
+					idp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListIdentityProviders)
+					idp.POST("", middleware.RequireRoles(models.IdPManageRoles...), handlers.CreateIdentityProvider)
+					idp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProvider)
+					idp.PUT("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.UpdateIdentityProvider)
+					idp.DELETE("/:id", middleware.RequireRoles(models.IdPManageRoles...), handlers.DeleteIdentityProvider)
+					idp.POST("/:id/sync", middleware.RequireRoles(models.IdPManageRoles...), handlers.SyncIdentityProvider)
+					idp.GET("/:id/sync-stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetIdentityProviderSyncStats)
+				}
+
+				// Access Resources
+				res := ar.Group("/resources")
+				{
+					res.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessResources)
+					res.POST("", middleware.RequireRoles(models.ResourceManageRoles...), handlers.CreateAccessResource)
+					res.GET("/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResourceStats)
+					res.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessResource)
+					res.PUT("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.UpdateAccessResource)
+					res.DELETE("/:id", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DeleteAccessResource)
+					res.GET("/:id/users", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListResourceUsers)
+				}
+
+				// Access Entries
+				entries := ar.Group("/entries")
+				{
+					entries.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListAccessEntries)
+					entries.GET("/anomalies", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntryAnomalies)
+					entries.POST("/detect-anomalies", middleware.RequireRoles(models.ResourceManageRoles...), handlers.DetectAnomalies)
+					entries.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessEntry)
+				}
+
+				// Campaigns
+				camp := ar.Group("/campaigns")
+				{
+					camp.GET("", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaigns)
+					camp.POST("", middleware.RequireRoles(models.CampaignManageRoles...), handlers.CreateCampaign)
+					camp.GET("/:id", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaign)
+					camp.PUT("/:id", middleware.RequireRoles(models.CampaignManageRoles...), handlers.UpdateCampaign)
+					camp.POST("/:id/launch", middleware.RequireRoles(models.CampaignManageRoles...), handlers.LaunchCampaign)
+					camp.POST("/:id/complete", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CompleteCampaign)
+					camp.POST("/:id/cancel", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.CancelCampaign)
+					camp.GET("/:id/stats", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetCampaignStats)
+					camp.GET("/:id/certification-report", middleware.RequireRoles("compliance_manager", "ciso", "auditor"), handlers.GetCertificationReport)
+
+					// Reviews within campaigns
+					camp.GET("/:id/reviews", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.ListCampaignReviews)
+					camp.GET("/:id/reviews/:rid", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetReviewDetail)
+					camp.POST("/:id/reviews/:rid/decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReviewNested)
+					camp.POST("/:id/reviews/bulk-decide", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.BulkDecideReviews)
+					camp.POST("/:id/reviews/:rid/delegate", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DelegateReview)
+					camp.POST("/:id/reviews/:rid/escalate", middleware.RequireRoles(models.AccessReviewAdminRoles...), handlers.EscalateReview)
+					camp.POST("/:id/reviews/:rid/revocation", middleware.RequireRoles("it_admin", "ciso"), handlers.MarkRevocation)
+				}
+
+				// Individual Reviews (legacy path)
+				rev := ar.Group("/reviews")
+				{
+					rev.PUT("/:id", middleware.RequireRoles(models.AccessReviewReviewerRoles...), handlers.DecideReview)
+				}
+
+				// Dashboard
+				ar.GET("/dashboard", middleware.RequireRoles(models.AccessReviewViewRoles...), handlers.GetAccessReviewDashboard)
+
+				// Personal Queue
+				ar.GET("/my-reviews", handlers.ListMyReviews)
+			}
+
+			// === Sprint 9: Integration Engine ===
+
+			// Integration catalog (system-level, read-only)
+			integrations := protected.Group("/integrations")
+			integrations.Use(middleware.RequireRoles(models.IntegrationViewRoles...))
+			{
+				integrations.GET("", handlers.ListIntegrations)
+				integrations.GET("/dashboard", handlers.IntegrationDashboard)
+				integrations.GET("/dashboard/sync-activity", handlers.IntegrationSyncActivity)
+				integrations.GET("/:id", handlers.GetIntegration)
+			}
+
+			// Integration connections (per-org)
+			connections := protected.Group("/integration-connections")
+			{
+				connections.GET("", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.ListConnections)
+				connections.GET("/:id", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetConnection)
+				connections.POST("", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CreateConnection)
+				connections.PUT("/:id", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.UpdateConnection)
+				connections.DELETE("/:id", middleware.RequireRoles(models.IntegrationDeleteRoles...), handlers.DeleteConnection)
+				connections.POST("/:id/test", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TestConnection)
+				connections.POST("/:id/enable", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.EnableConnection)
+				connections.POST("/:id/disable", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.DisableConnection)
+				connections.POST("/:id/sync", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TriggerSync)
+				connections.GET("/:id/runs", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.ListRuns)
+				connections.GET("/:id/runs/:rid", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetRun)
+				connections.POST("/:id/runs/:rid/cancel", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CancelRun)
+				connections.GET("/:id/runs/:rid/logs", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetRunLogs)
+				connections.GET("/:id/health", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.GetConnectionHealth)
+				connections.POST("/:id/health-check", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.TriggerHealthCheck)
+				connections.GET("/:id/webhooks", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.ListWebhooks)
+				connections.POST("/:id/webhooks", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.CreateWebhook)
+				connections.DELETE("/:id/webhooks/:wid", middleware.RequireRoles(models.IntegrationManageRoles...), handlers.DeleteWebhook)
+				connections.POST("/:id/webhooks/:wid/rotate-secret", middleware.RequireRoles(models.IntegrationDeleteRoles...), handlers.RotateWebhookSecret)
+				connections.GET("/:id/preview", middleware.RequireRoles(models.IntegrationViewRoles...), handlers.IntegrationPreview)
+			}
 		}
+
+		// CDE Scoping Module (PCI DSS Req 1, 11.4) — Sprint 11
+		cde := protected.Group("/cde")
+		{
+			// Assets
+			cdeAssets := cde.Group("/assets")
+			{
+				cdeAssets.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDEAssets)
+				cdeAssets.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDEAsset)
+				cdeAssets.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEAsset)
+				cdeAssets.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDEAsset)
+				cdeAssets.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDEAsset)
+			}
+			// Network Segments
+			cdeSegs := cde.Group("/segments")
+			{
+				cdeSegs.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDESegments)
+				cdeSegs.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDESegment)
+				cdeSegs.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDESegment)
+				cdeSegs.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDESegment)
+				cdeSegs.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDESegment)
+			}
+			// Data Flows
+			cdeFlows := cde.Group("/data-flows")
+			{
+				cdeFlows.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDEDataFlows)
+				cdeFlows.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDEDataFlow)
+				cdeFlows.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEDataFlow)
+				cdeFlows.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDEDataFlow)
+				cdeFlows.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDEDataFlow)
+			}
+			// Segmentation Tests
+			cdeSegTests := cde.Group("/segmentation-tests")
+			{
+				cdeSegTests.GET("", middleware.RequireRoles(models.AdminRoles...), handlers.ListCDESegmentationTests)
+				cdeSegTests.POST("", middleware.RequireRoles(models.AdminRoles...), handlers.CreateCDESegmentationTest)
+				cdeSegTests.GET("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDESegmentationTest)
+				cdeSegTests.PUT("/:id", middleware.RequireRoles(models.AdminRoles...), handlers.UpdateCDESegmentationTest)
+				cdeSegTests.DELETE("/:id", middleware.RequireAdmin(), handlers.DeleteCDESegmentationTest)
+			}
+			// Scope Summary
+			cde.GET("/scope-summary", middleware.RequireRoles(models.AdminRoles...), handlers.GetCDEScopeSummary)
+		}
+
+		// Service Provider / Vendor Management (PCI DSS Req 12.8, 12.9) — Sprint 12
+		sp := protected.Group("/service-providers")
+		{
+			sp.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListServiceProviders)
+			sp.POST("", middleware.RequireRoles(models.SPManageRoles...), handlers.CreateServiceProvider)
+			sp.GET("/compliance-summary", middleware.RequireRoles(models.SPViewRoles...), handlers.GetSPComplianceSummary)
+			sp.GET("/:id", middleware.RequireRoles(models.SPViewRoles...), handlers.GetServiceProvider)
+			sp.PUT("/:id", middleware.RequireRoles(models.SPManageRoles...), handlers.UpdateServiceProvider)
+			sp.DELETE("/:id", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteServiceProvider)
+
+			// Compliance Documents
+			spDocs := sp.Group("/:id/documents")
+			{
+				spDocs.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListSPComplianceDocs)
+				spDocs.POST("", middleware.RequireRoles(models.SPManageRoles...), handlers.CreateSPComplianceDoc)
+				spDocs.GET("/:docId", middleware.RequireRoles(models.SPViewRoles...), handlers.GetSPComplianceDoc)
+				spDocs.DELETE("/:docId", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteSPComplianceDoc)
+			}
+
+			// Responsibility Matrix
+			spResp := sp.Group("/:id/responsibilities")
+			{
+				spResp.GET("", middleware.RequireRoles(models.SPViewRoles...), handlers.ListSPResponsibilities)
+				spResp.PUT("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.UpsertSPResponsibility)
+				spResp.DELETE("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteSPResponsibility)
+			}
+		}
+
+		// AOC/ROC Compliance Documents (PCI DSS Req 12.4) — Sprint 12
+		docs := protected.Group("/documents")
+		{
+			docs.GET("", middleware.RequireRoles(models.DocumentViewRoles...), handlers.ListComplianceDocuments)
+			docs.POST("", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.CreateComplianceDocument)
+			docs.GET("/:id", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetComplianceDocument)
+			docs.PUT("/:id", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpdateComplianceDocument)
+			docs.POST("/:id/generate", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.GenerateDocument)
+			docs.POST("/:id/finalize", middleware.RequireRoles(models.DocumentFinalizeRoles...), handlers.FinalizeDocument)
+			docs.GET("/:id/sections/:key", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentSection)
+			docs.PUT("/:id/sections/:key", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpsertDocumentSection)
+			docs.GET("/:id/attestations", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentAttestations)
+			docs.PUT("/:id/attestations/:role", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpsertDocumentAttestation)
+			docs.GET("/:id/requirements", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentRequirements)
+		}
+
+		// ASV Scan Management (PCI DSS Req 11.3.2) — Sprint 12
+		asv := protected.Group("/asv-scans")
+		{
+			asv.GET("", middleware.RequireRoles(models.ASVViewRoles...), handlers.ListASVScans)
+			asv.POST("", middleware.RequireRoles(models.ASVManageRoles...), handlers.CreateASVScan)
+			asv.GET("/quarterly-status", middleware.RequireRoles(models.ASVViewRoles...), handlers.GetASVQuarterlyStatus)
+			asv.POST("/import", middleware.RequireRoles(models.ASVManageRoles...), handlers.ImportASVScan)
+			asv.GET("/:id", middleware.RequireRoles(models.ASVViewRoles...), handlers.GetASVScan)
+			asv.PUT("/:id", middleware.RequireRoles(models.ASVManageRoles...), handlers.UpdateASVScan)
+			asv.DELETE("/:id", middleware.RequireRoles(models.ASVManageRoles...), handlers.DeleteASVScan)
+		}
+
+		// Public webhook receiver (no JWT auth, HMAC verification)
+		v1.POST("/webhooks/receive/:id", handlers.ReceiveWebhook)
 	}
 
 	// Start monitoring worker (background)

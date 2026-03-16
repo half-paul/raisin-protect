@@ -20,6 +20,7 @@ import {
 import {
   AuditRequestTemplate, listAuditRequestTemplates, createRequestsFromTemplate, listAudits, Audit,
 } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   AUDIT_TYPE_LABELS, TEMPLATE_FRAMEWORK_LABELS,
   REQUEST_PRIORITY_COLORS,
@@ -120,6 +121,7 @@ export default function PBCTemplatesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">PBC Template Library</h1>
+          <WikiHelpLink path="audit-hub/templates/" />
           <p className="text-sm text-muted-foreground">Prepared-By-Client request templates for audit engagements</p>
         </div>
         {canCreate && selected.size > 0 && (

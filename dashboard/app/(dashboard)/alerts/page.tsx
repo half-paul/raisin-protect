@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Alert, AlertQueueData, getAlertQueue } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 
 const SEVERITY_COLORS: Record<string, string> = {
   critical: 'bg-red-600 text-white',
@@ -95,6 +96,7 @@ export default function AlertQueuePage() {
           <Bell className="h-8 w-8" />
           Alert Queue
         </h1>
+        <WikiHelpLink path="monitoring/alerts/" />
         <p className="text-muted-foreground mt-1">
           Active alerts sorted by urgency — manage, assign, and resolve
         </p>

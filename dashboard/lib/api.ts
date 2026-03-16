@@ -6,6 +6,7 @@
  * Sprint 5: Policy Management
  * Sprint 6: Risk Management
  * Sprint 7: Audit Hub
+ * Sprint 9: Integration Engine
  */
 
 import { authFetch } from './auth';
@@ -2716,4 +2717,978 @@ export function getAuditStats(auditId: string) {
 
 export function getAuditReadiness(auditId: string) {
   return apiGet<AuditReadiness>(`/api/v1/audits/${auditId}/readiness`);
+}
+
+// ========== Sprint 9: Integration Engine ==========
+
+export interface IntegrationDefinition {
+  id: string;
+  name: string;
+  slug: string;
+  provider: string;
+  category: string;
+  description: string | null;
+  short_description: string | null;
+  icon_url: string | null;
+  documentation_url: string | null;
+  website_url: string | null;
+  auth_type: string;
+  config_schema: Record<string, unknown>;
+  capabilities: string[];
+  is_active: boolean;
+  is_beta: boolean;
+  version: string;
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationConnection {
+  id: string;
+  org_id: string;
+  definition_id: string;
+  name: string;
+  description: string | null;
+  instance_label: string | null;
+  status: string;
+  health: string;
+  config: Record<string, unknown>;
+  sync_enabled: boolean;
+  sync_interval_mins: number;
+  sync_cron: string | null;
+  next_sync_at: string | null;
+  last_sync_at: string | null;
+  last_sync_status: string | null;
+  last_sync_error: string | null;
+  last_health_check_at: string | null;
+  last_health_status: string | null;
+  consecutive_failures: number;
+  total_runs: number;
+  successful_runs: number;
+  failed_runs: number;
+  created_by: string | null;
+  tags: string[];
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+  definition_name: string;
+  definition_slug: string;
+  definition_category: string;
+  definition_icon_url: string;
+}
+
+export interface IntegrationRun {
+  id: string;
+  org_id: string;
+  connection_id: string;
+  trigger: string;
+  triggered_by: string | null;
+  status: string;
+  queued_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+  duration_ms: number | null;
+  stats: Record<string, unknown>;
+  error_message: string | null;
+  error_details: Record<string, unknown> | null;
+  retry_count: number;
+  max_retries: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationLog {
+  id: string;
+  run_id: string;
+  connection_id: string;
+  level: string;
+  message: string;
+  details: Record<string, unknown> | null;
+  source: string | null;
+  item_ref: string | null;
+  created_at: string;
+}
+
+export interface IntegrationWebhook {
+  id: string;
+  connection_id: string;
+  name: string;
+  description: string | null;
+  signature_header: string;
+  signature_algo: string;
+  status: string;
+  event_types: string[];
+  total_received: number;
+  total_processed: number;
+  total_errors: number;
+  last_received_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IntegrationDashboardData {
+  connections: { total: number; connected: number; disconnected: number; error: number; disabled: number };
+  health: { healthy: number; degraded: number; unhealthy: number };
+  recent_failures: number;
+  active_syncs: number;
+  stale_connections: number;
+}
+
+export interface IntegrationHealthData {
+  status: string;
+  health: string;
+  last_health_check_at: string | null;
+  last_health_status: string | null;
+  consecutive_failures: number;
+  total_runs: number;
+  successful_runs: number;
+  failed_runs: number;
+  uptime_pct: number;
+  recent_runs: Array<{
+    id: string;
+    status: string;
+    trigger: string;
+    started_at: string | null;
+    completed_at: string | null;
+    duration_ms: number | null;
+    stats: Record<string, unknown>;
+    error_message: string | null;
+  }>;
+}
+
+// ---- Integration Catalog ----
+
+export function listIntegrations(params?: Record<string, string>) {
+  return apiGet<IntegrationDefinition[]>('/api/v1/integrations', params);
+}
+
+export function getIntegration(id: string) {
+  return apiGet<IntegrationDefinition>(`/api/v1/integrations/${id}`);
+}
+
+// ---- Integration Connections ----
+
+export function listIntegrationConnections(params?: Record<string, string>) {
+  return apiGet<IntegrationConnection[]>('/api/v1/integration-connections', params);
+}
+
+export function getIntegrationConnection(id: string) {
+  return apiGet<IntegrationConnection>(`/api/v1/integration-connections/${id}`);
+}
+
+export function createIntegrationConnection(body: {
+  definition_id: string;
+  name: string;
+  description?: string;
+  instance_label?: string;
+  config?: Record<string, unknown>;
+  sync_enabled?: boolean;
+  sync_interval_mins?: number;
+  tags?: string[];
+}) {
+  return apiPost<{ id: string }>('/api/v1/integration-connections', body);
+}
+
+export function updateIntegrationConnection(id: string, body: Partial<{
+  name: string;
+  description: string;
+  instance_label: string;
+  config: Record<string, unknown>;
+  sync_enabled: boolean;
+  sync_interval_mins: number;
+  sync_cron: string;
+  tags: string[];
+}>) {
+  return apiPut<{ status: string }>(`/api/v1/integration-connections/${id}`, body);
+}
+
+export function deleteIntegrationConnection(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/integration-connections/${id}`);
+}
+
+export function testIntegrationConnection(id: string) {
+  return apiPost<{ status: string; message: string; tested_at: string }>(`/api/v1/integration-connections/${id}/test`, {});
+}
+
+export function enableIntegrationConnection(id: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${id}/enable`, {});
+}
+
+export function disableIntegrationConnection(id: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${id}/disable`, {});
+}
+
+// ---- Sync / Runs ----
+
+export function triggerIntegrationSync(id: string) {
+  return apiPost<{ run_id: string; status: string }>(`/api/v1/integration-connections/${id}/sync`, {});
+}
+
+export function listIntegrationRuns(connectionId: string, params?: Record<string, string>) {
+  return apiGet<IntegrationRun[]>(`/api/v1/integration-connections/${connectionId}/runs`, params);
+}
+
+export function getIntegrationRun(connectionId: string, runId: string) {
+  return apiGet<IntegrationRun>(`/api/v1/integration-connections/${connectionId}/runs/${runId}`);
+}
+
+export function cancelIntegrationRun(connectionId: string, runId: string) {
+  return apiPost<{ status: string }>(`/api/v1/integration-connections/${connectionId}/runs/${runId}/cancel`, {});
+}
+
+export function getIntegrationRunLogs(connectionId: string, runId: string, params?: Record<string, string>) {
+  return apiGet<IntegrationLog[]>(`/api/v1/integration-connections/${connectionId}/runs/${runId}/logs`, params);
+}
+
+// ---- Health ----
+
+export function getIntegrationConnectionHealth(id: string) {
+  return apiGet<IntegrationHealthData>(`/api/v1/integration-connections/${id}/health`);
+}
+
+export function triggerIntegrationHealthCheck(id: string) {
+  return apiPost<{ health: string; checked_at: string; message: string }>(`/api/v1/integration-connections/${id}/health-check`, {});
+}
+
+// ---- Webhooks ----
+
+export function listIntegrationWebhooks(connectionId: string) {
+  return apiGet<IntegrationWebhook[]>(`/api/v1/integration-connections/${connectionId}/webhooks`);
+}
+
+export function createIntegrationWebhook(connectionId: string, body: {
+  name: string;
+  description?: string;
+  signature_header?: string;
+  signature_algo?: string;
+  event_types?: string[];
+}) {
+  return apiPost<{ id: string; webhook_secret: string; webhook_url: string }>(`/api/v1/integration-connections/${connectionId}/webhooks`, body);
+}
+
+export function deleteIntegrationWebhook(connectionId: string, webhookId: string) {
+  return apiDelete<{ status: string }>(`/api/v1/integration-connections/${connectionId}/webhooks/${webhookId}`);
+}
+
+export function rotateIntegrationWebhookSecret(connectionId: string, webhookId: string) {
+  return apiPost<{ webhook_secret: string }>(`/api/v1/integration-connections/${connectionId}/webhooks/${webhookId}/rotate-secret`, {});
+}
+
+// ---- Dashboard ----
+
+export function getIntegrationDashboard() {
+  return apiGet<IntegrationDashboardData>('/api/v1/integrations/dashboard');
+}
+
+export function getIntegrationSyncActivity() {
+  return apiGet<{ hours: number; buckets: Array<{ timestamp: string; total: number; completed: number; failed: number; partial: number }> }>('/api/v1/integrations/dashboard/sync-activity');
+}
+
+export function getIntegrationPreview(connectionId: string) {
+  return apiGet<{ connection_name: string; provider: string; last_sync_at: string | null; latest_stats: Record<string, unknown>; recent_logs: { info: number; warn: number; error: number } }>(`/api/v1/integration-connections/${connectionId}/preview`);
+}
+
+// ============================================================
+// CDE Scoping (PCI DSS Req 1, 11.4)
+// ============================================================
+
+export type CdeAssetScope = 'in_scope' | 'out_of_scope' | 'connected_to';
+export type CdeAssetType =
+  | 'server'
+  | 'database'
+  | 'network_device'
+  | 'application'
+  | 'endpoint'
+  | 'cloud_service'
+  | 'storage'
+  | 'other';
+
+export interface CdeAsset {
+  id: string;
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description?: string;
+  ip_address?: string;
+  hostname?: string;
+  owner?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type IsolationMethod =
+  | 'firewall'
+  | 'vlan'
+  | 'dmz'
+  | 'air_gap'
+  | 'cloud_vpc'
+  | 'microsegmentation'
+  | 'other';
+
+export interface NetworkSegment {
+  id: string;
+  name: string;
+  description?: string;
+  isolation_method: IsolationMethod;
+  cidr?: string;
+  vlan_id?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type DataFlowProtocol = 'https' | 'http' | 'tls' | 'ssh' | 'sftp' | 'smb' | 'ftp' | 'other';
+export type EncryptionStatus = 'encrypted' | 'unencrypted' | 'partial';
+
+export interface DataFlow {
+  id: string;
+  org_id: string;
+  source_asset_id: string;
+  dest_asset_id: string;
+  protocol?: DataFlowProtocol;
+  port?: number;
+  data_type?: string;
+  encryption_method?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SegmentationTestResult = 'pass' | 'fail' | 'pending';
+
+export interface SegmentationTest {
+  id: string;
+  name: string;
+  description?: string;
+  result: SegmentationTestResult;
+  segment_id?: string;
+  tester?: string;
+  tested_at?: string;
+  next_test_date?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CdeScopeSummary {
+  in_scope_count: number;
+  out_of_scope_count: number;
+  connected_to_count: number;
+  total_assets: number;
+  total_segments: number;
+  total_data_flows: number;
+  tests_pass: number;
+  tests_fail: number;
+  tests_pending: number;
+}
+
+// ---- CDE Assets ----
+
+export function listCdeAssets(params?: Record<string, string>) {
+  return apiGet<CdeAsset[]>('/api/v1/cde/assets', params);
+}
+
+export function getCdeAsset(id: string) {
+  return apiGet<CdeAsset>(`/api/v1/cde/assets/${id}`);
+}
+
+export function createCdeAsset(body: {
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description?: string;
+  ip_address?: string;
+  hostname?: string;
+  owner?: string;
+  notes?: string;
+}) {
+  return apiPost<CdeAsset>('/api/v1/cde/assets', body);
+}
+
+export function updateCdeAsset(id: string, body: Partial<{
+  name: string;
+  asset_type: CdeAssetType;
+  scope_status: CdeAssetScope;
+  description: string;
+  ip_address: string;
+  hostname: string;
+  owner: string;
+  notes: string;
+}>) {
+  return apiPut<CdeAsset>(`/api/v1/cde/assets/${id}`, body);
+}
+
+export function deleteCdeAsset(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/assets/${id}`);
+}
+
+// ---- Network Segments ----
+
+export function listNetworkSegments(params?: Record<string, string>) {
+  return apiGet<NetworkSegment[]>('/api/v1/cde/segments', params);
+}
+
+export function createNetworkSegment(body: {
+  name: string;
+  isolation_method: IsolationMethod;
+  description?: string;
+  cidr?: string;
+  vlan_id?: string;
+  notes?: string;
+}) {
+  return apiPost<NetworkSegment>('/api/v1/cde/segments', body);
+}
+
+export function updateNetworkSegment(id: string, body: Partial<{
+  name: string;
+  isolation_method: IsolationMethod;
+  description: string;
+  cidr: string;
+  vlan_id: string;
+  notes: string;
+}>) {
+  return apiPut<NetworkSegment>(`/api/v1/cde/segments/${id}`, body);
+}
+
+export function deleteNetworkSegment(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/segments/${id}`);
+}
+
+// ---- Data Flows ----
+
+export function listDataFlows(params?: Record<string, string>) {
+  return apiGet<DataFlow[]>('/api/v1/cde/data-flows', params);
+}
+
+export function createDataFlow(body: {
+  source_asset_id: string;
+  dest_asset_id: string;
+  protocol?: DataFlowProtocol;
+  port?: number;
+  data_type?: string;
+  encryption_method?: string;
+}) {
+  return apiPost<DataFlow>('/api/v1/cde/data-flows', body);
+}
+
+export function updateDataFlow(id: string, body: Partial<{
+  source_asset_id: string;
+  dest_asset_id: string;
+  protocol: DataFlowProtocol;
+  port: number;
+  data_type: string;
+  encryption_method: string;
+}>) {
+  return apiPut<DataFlow>(`/api/v1/cde/data-flows/${id}`, body);
+}
+
+export function deleteDataFlow(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/data-flows/${id}`);
+}
+
+// ---- Segmentation Tests ----
+
+export function listSegmentationTests(params?: Record<string, string>) {
+  return apiGet<SegmentationTest[]>('/api/v1/cde/segmentation-tests', params);
+}
+
+export function createSegmentationTest(body: {
+  name: string;
+  description?: string;
+  result: SegmentationTestResult;
+  segment_id?: string;
+  tester?: string;
+  tested_at?: string;
+  next_test_date?: string;
+  notes?: string;
+}) {
+  return apiPost<SegmentationTest>('/api/v1/cde/segmentation-tests', body);
+}
+
+export function updateSegmentationTest(id: string, body: Partial<{
+  name: string;
+  description: string;
+  result: SegmentationTestResult;
+  segment_id: string;
+  tester: string;
+  tested_at: string;
+  next_test_date: string;
+  notes: string;
+}>) {
+  return apiPut<SegmentationTest>(`/api/v1/cde/segmentation-tests/${id}`, body);
+}
+
+export function deleteSegmentationTest(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/cde/segmentation-tests/${id}`);
+}
+
+// ---- Scope Summary ----
+
+export function getCdeScopeSummary() {
+  return apiGet<CdeScopeSummary>('/api/v1/cde/scope-summary');
+}
+
+// ============================================================
+// Service Providers / Vendor Management (PCI DSS Req 12.8)
+// ============================================================
+
+export type SPType =
+  | 'payment_processor'
+  | 'payment_gateway'
+  | 'acquirer'
+  | 'tokenization'
+  | 'hosting'
+  | 'managed_security'
+  | 'software'
+  | 'network'
+  | 'cloud_storage'
+  | 'third_party_agent'
+  | 'other';
+
+export type SPComplianceStatus =
+  | 'compliant'
+  | 'compliance_in_progress'
+  | 'compliance_not_validated'
+  | 'non_compliant'
+  | 'not_applicable'
+  | 'unknown';
+
+export type SPRiskLevel = 'critical' | 'high' | 'medium' | 'low';
+
+export type SPDocType =
+  | 'aoc'
+  | 'soc2_type1'
+  | 'soc2_type2'
+  | 'iso27001'
+  | 'csa_star'
+  | 'pentest'
+  | 'questionnaire'
+  | 'other';
+
+export type SPResponsibleParty = 'merchant' | 'provider' | 'shared';
+
+export interface ServiceProvider {
+  id: string;
+  org_id: string;
+  name: string;
+  type: SPType;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  services_provided: string | null;
+  pci_compliance_status: SPComplianceStatus;
+  last_aoc_date: string | null;
+  next_review_date: string | null;
+  risk_level: SPRiskLevel;
+  risk_notes: string | null;
+  contract_start_date: string | null;
+  contract_end_date: string | null;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPComplianceDocument {
+  id: string;
+  provider_id: string;
+  org_id: string;
+  document_type: SPDocType;
+  title: string | null;
+  document_version: string | null;
+  upload_path: string | null;
+  valid_from: string | null;
+  valid_until: string | null;
+  reviewed_by: string | null;
+  review_notes: string | null;
+  is_current: boolean;
+  uploaded_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPResponsibilityMatrix {
+  id: string;
+  provider_id: string;
+  org_id: string;
+  requirement_id: string | null;
+  requirement_code: string;
+  responsible_party: SPResponsibleParty;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SPComplianceSummary {
+  total: number;
+  active: number;
+  compliant: number;
+  non_compliant: number;
+  unknown: number;
+  expiring_soon: {
+    within_30_days: number;
+    within_60_days: number;
+    within_90_days: number;
+  };
+  by_risk_level: Record<SPRiskLevel, number>;
+  by_type: Record<SPType, number>;
+  needs_attention: Array<{
+    id: string;
+    name: string;
+    reason: string;
+    next_review_date: string | null;
+  }>;
+}
+
+// ---- Service Provider CRUD ----
+
+export function listServiceProviders(params?: Record<string, string>) {
+  return apiGet<ServiceProvider[]>('/api/v1/service-providers', params);
+}
+
+export function getServiceProvider(id: string) {
+  return apiGet<ServiceProvider>(`/api/v1/service-providers/${id}`);
+}
+
+export function createServiceProvider(body: {
+  name: string;
+  type: SPType;
+  contact_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  services_provided?: string;
+  pci_compliance_status?: SPComplianceStatus;
+  last_aoc_date?: string;
+  next_review_date?: string;
+  risk_level?: SPRiskLevel;
+  risk_notes?: string;
+  contract_start_date?: string;
+  contract_end_date?: string;
+}) {
+  return apiPost<ServiceProvider>('/api/v1/service-providers', body);
+}
+
+export function updateServiceProvider(id: string, body: Partial<{
+  name: string;
+  type: SPType;
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  services_provided: string;
+  pci_compliance_status: SPComplianceStatus;
+  last_aoc_date: string;
+  next_review_date: string;
+  risk_level: SPRiskLevel;
+  risk_notes: string;
+  contract_start_date: string;
+  contract_end_date: string;
+  is_active: boolean;
+}>) {
+  return apiPut<ServiceProvider>(`/api/v1/service-providers/${id}`, body);
+}
+
+export function deleteServiceProvider(id: string) {
+  return apiDelete<{ status: string }>(`/api/v1/service-providers/${id}`);
+}
+
+export function getSPComplianceSummary() {
+  return apiGet<SPComplianceSummary>('/api/v1/service-providers/compliance-summary');
+}
+
+// ---- SP Compliance Documents ----
+
+export function listSPComplianceDocs(providerId: string) {
+  return apiGet<SPComplianceDocument[]>(`/api/v1/service-providers/${providerId}/compliance-docs`);
+}
+
+export function createSPComplianceDoc(providerId: string, body: {
+  document_type: SPDocType;
+  title?: string;
+  document_version?: string;
+  upload_path?: string;
+  valid_from?: string;
+  valid_until?: string;
+  review_notes?: string;
+}) {
+  return apiPost<SPComplianceDocument>(`/api/v1/service-providers/${providerId}/compliance-docs`, body);
+}
+
+export function deleteSPComplianceDoc(providerId: string, docId: string) {
+  return apiDelete<{ status: string }>(`/api/v1/service-providers/${providerId}/compliance-docs/${docId}`);
+}
+
+// ---- SP Responsibility Matrix ----
+
+export function getSPResponsibilityMatrix(providerId: string) {
+  return apiGet<SPResponsibilityMatrix[]>(`/api/v1/service-providers/${providerId}/responsibility-matrix`);
+}
+
+export function upsertSPResponsibility(providerId: string, reqCode: string, body: {
+  requirement_id?: string;
+  responsible_party: SPResponsibleParty;
+  notes?: string;
+}) {
+  return apiPut<SPResponsibilityMatrix>(
+    `/api/v1/service-providers/${providerId}/responsibility-matrix/${reqCode}`,
+    body,
+  );
+}
+
+export function deleteSPResponsibility(providerId: string, reqCode: string) {
+  return apiDelete<{ status: string }>(
+    `/api/v1/service-providers/${providerId}/responsibility-matrix/${reqCode}`,
+  );
+}
+
+// ============================================================
+// AOC / ROC Compliance Documents (PCI DSS Req 12.4)
+// ============================================================
+
+export type ComplianceDocumentType =
+  | 'aoc_saq_a'
+  | 'aoc_saq_a_ep'
+  | 'aoc_saq_b'
+  | 'aoc_saq_b_ip'
+  | 'aoc_saq_c_vt'
+  | 'aoc_saq_c'
+  | 'aoc_saq_d'
+  | 'aoc_saq_d_sp'
+  | 'roc';
+
+export type ComplianceDocumentStatus =
+  | 'draft'
+  | 'generating'
+  | 'review'
+  | 'approved'
+  | 'final'
+  | 'signed'
+  | 'superseded'
+  | 'cancelled';
+
+export type DocumentSectionComplianceStatus =
+  | 'compliant'
+  | 'non_compliant'
+  | 'partially_compliant'
+  | 'not_applicable'
+  | 'compensating_control'
+  | 'customized_approach';
+
+export type AttestationRole =
+  | 'merchant_signatory'
+  | 'qsa_signatory'
+  | 'isac_signatory'
+  | 'sp_signatory';
+
+export type SignatureMethod = 'manual' | 'digital_signature' | 'docusign_ref';
+
+export interface DocumentTemplate {
+  id: string;
+  org_id: string | null;
+  template_type: string;
+  name: string;
+  description: string | null;
+  pci_dss_version: string;
+  version: string;
+  is_active: boolean;
+  sections: string; // raw JSON string — parse as TemplateSection[]
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TemplateSection {
+  key: string;
+  title: string;
+  required: boolean;
+  order: number;
+  fields: TemplateSectionField[];
+}
+
+export interface TemplateSectionField {
+  name: string;
+  label: string;
+  type: 'text' | 'textarea' | 'email' | 'url' | 'date' | 'number' | 'checkbox' | 'select' | 'multiselect';
+  required: boolean;
+  description?: string;
+  default?: string;
+  options?: string[];
+}
+
+export interface ComplianceDocument {
+  id: string;
+  org_id: string;
+  template_id: string | null;
+  document_type: ComplianceDocumentType;
+  title: string;
+  assessment_period_start: string;
+  assessment_period_end: string;
+  pci_dss_version: string;
+  merchant_name: string | null;
+  merchant_dba: string | null;
+  merchant_url: string | null;
+  business_type: string | null;
+  qsa_name: string | null;
+  qsa_company: string | null;
+  qsa_signature_date: string | null;
+  doc_status: ComplianceDocumentStatus;
+  generated_by: string | null;
+  pdf_path: string | null;
+  file_size_bytes: number | null;
+  generated_at: string | null;
+  generation_error: string | null;
+  version: number;
+  parent_id: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentSection {
+  id: string;
+  document_id: string;
+  org_id: string;
+  section_key: string;
+  title: string;
+  content: string | null;
+  compliance_status: DocumentSectionComplianceStatus | null;
+  evidence_ids: string[];
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentAttestation {
+  id: string;
+  document_id: string;
+  org_id: string;
+  attestation_role: AttestationRole;
+  full_name: string;
+  title: string;
+  company_name: string | null;
+  company_address: string | null;
+  company_url: string | null;
+  email: string | null;
+  phone: string | null;
+  qsa_company: string | null;
+  qsa_number: string | null;
+  signed_at: string | null;
+  signature_method: SignatureMethod | null;
+  signature_ref: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentRequirementSnapshot {
+  id: string;
+  document_id: string;
+  requirement_id: string | null;
+  requirement_code: string;
+  requirement_title: string;
+  in_scope: boolean;
+  control_count: number;
+  passing_controls: number;
+  evidence_count: number;
+  status: DocumentSectionComplianceStatus;
+  notes: string | null;
+  snapshotted_at: string;
+}
+
+// ---- Compliance Document CRUD ----
+
+export function listComplianceDocuments(params?: Record<string, string>) {
+  return apiGet<ComplianceDocument[]>('/api/v1/documents', params);
+}
+
+export function getComplianceDocument(id: string) {
+  return apiGet<ComplianceDocument>(`/api/v1/documents/${id}`);
+}
+
+export function createComplianceDocument(body: {
+  template_id?: string;
+  document_type: ComplianceDocumentType;
+  title: string;
+  assessment_period_start: string;
+  assessment_period_end: string;
+  pci_dss_version?: string;
+  merchant_name?: string;
+  merchant_dba?: string;
+  merchant_url?: string;
+  business_type?: string;
+  qsa_name?: string;
+  qsa_company?: string;
+  qsa_signature_date?: string;
+}) {
+  return apiPost<ComplianceDocument>('/api/v1/documents', body);
+}
+
+export function updateComplianceDocument(id: string, body: Partial<{
+  title: string;
+  merchant_name: string;
+  merchant_dba: string;
+  merchant_url: string;
+  business_type: string;
+  qsa_name: string;
+  qsa_company: string;
+  qsa_signature_date: string;
+}>) {
+  return apiPut<ComplianceDocument>(`/api/v1/documents/${id}`, body);
+}
+
+export function generateDocument(id: string) {
+  return apiPost<ComplianceDocument>(`/api/v1/documents/${id}/generate`, {});
+}
+
+export function finalizeDocument(id: string) {
+  return apiPost<ComplianceDocument>(`/api/v1/documents/${id}/finalize`, {});
+}
+
+// ---- Document Sections ----
+
+export function getDocumentSection(docId: string, sectionKey: string) {
+  return apiGet<DocumentSection>(`/api/v1/documents/${docId}/sections/${sectionKey}`);
+}
+
+export function upsertDocumentSection(docId: string, sectionKey: string, body: {
+  title: string;
+  content?: string;
+  compliance_status?: DocumentSectionComplianceStatus;
+  evidence_ids?: string[];
+  sort_order?: number;
+}) {
+  return apiPut<DocumentSection>(`/api/v1/documents/${docId}/sections/${sectionKey}`, body);
+}
+
+// ---- Document Attestations ----
+
+export function getDocumentAttestations(docId: string) {
+  return apiGet<DocumentAttestation[]>(`/api/v1/documents/${docId}/attestations`);
+}
+
+export function upsertDocumentAttestation(docId: string, role: AttestationRole, body: {
+  full_name: string;
+  title: string;
+  company_name?: string;
+  company_address?: string;
+  company_url?: string;
+  email?: string;
+  phone?: string;
+  qsa_company?: string;
+  qsa_number?: string;
+  signed_at?: string;
+  signature_method?: SignatureMethod;
+  signature_ref?: string;
+}) {
+  return apiPut<DocumentAttestation>(`/api/v1/documents/${docId}/attestations/${role}`, body);
+}
+
+// ---- Document Requirements Snapshot ----
+
+export function getDocumentRequirements(docId: string) {
+  return apiGet<DocumentRequirementSnapshot[]>(`/api/v1/documents/${docId}/requirements`);
+}
+
+// ---- Document Templates ----
+
+export function listDocumentTemplates(params?: Record<string, string>) {
+  return apiGet<DocumentTemplate[]>('/api/v1/document-templates', params);
 }

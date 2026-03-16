@@ -81,6 +81,11 @@ func ListControls(c *gin.Context) {
 	} else if isCustomFilter == "false" {
 		where = append(where, "c.is_custom = FALSE")
 	}
+	if v := c.Query("is_compensating"); v == "true" {
+		where = append(where, "c.is_compensating = TRUE")
+	} else if v == "false" {
+		where = append(where, "c.is_compensating = FALSE")
+	}
 	if frameworkIDFilter != "" {
 		where = append(where, fmt.Sprintf(`c.id IN (
 			SELECT cm.control_id FROM control_mappings cm
@@ -117,6 +122,7 @@ func ListControls(c *gin.Context) {
 			   c.owner_id, COALESCE(u.first_name || ' ' || u.last_name, ''), COALESCE(u.email, ''),
 			   c.secondary_owner_id,
 			   COALESCE((SELECT COUNT(*) FROM control_mappings cm WHERE cm.control_id = c.id), 0) AS mappings_count,
+			   c.is_compensating, c.compensating_worksheet::text,
 			   c.created_at, c.updated_at
 		FROM controls c
 		LEFT JOIN users u ON u.id = c.owner_id
@@ -138,30 +144,38 @@ func ListControls(c *gin.Context) {
 	for rows.Next() {
 		var (
 			cID, cIdentifier, cTitle, cDescription, cCategory, cStatus string
-			cIsCustom                                                   bool
-			ownerID, secondaryOwnerID                                  *string
-			ownerName, ownerEmail                                      string
-			mappingsCount                                              int
-			createdAt, updatedAt                                       interface{}
+			cIsCustom, cIsCompensating                                  bool
+			ownerID, secondaryOwnerID                                   *string
+			ownerName, ownerEmail                                       string
+			mappingsCount                                               int
+			cCompensatingWorksheet                                      *string
+			createdAt, updatedAt                                        interface{}
 		)
 		if err := rows.Scan(&cID, &cIdentifier, &cTitle, &cDescription, &cCategory, &cStatus,
 			&cIsCustom, &ownerID, &ownerName, &ownerEmail, &secondaryOwnerID,
-			&mappingsCount, &createdAt, &updatedAt); err != nil {
+			&mappingsCount, &cIsCompensating, &cCompensatingWorksheet,
+			&createdAt, &updatedAt); err != nil {
 			log.Error().Err(err).Msg("Failed to scan control row")
 			continue
 		}
 
+		var cwParsed interface{}
+		if cCompensatingWorksheet != nil {
+			json.Unmarshal([]byte(*cCompensatingWorksheet), &cwParsed)
+		}
 		ctrl := gin.H{
-			"id":             cID,
-			"identifier":     cIdentifier,
-			"title":          cTitle,
-			"description":    cDescription,
-			"category":       cCategory,
-			"status":         cStatus,
-			"is_custom":      cIsCustom,
-			"mappings_count": mappingsCount,
-			"created_at":     createdAt,
-			"updated_at":     updatedAt,
+			"id":                           cID,
+			"identifier":                   cIdentifier,
+			"title":                        cTitle,
+			"description":                  cDescription,
+			"category":                     cCategory,
+			"status":                       cStatus,
+			"is_custom":                    cIsCustom,
+			"mappings_count":               mappingsCount,
+			"is_compensating":              cIsCompensating,
+			"compensating_control_worksheet": cwParsed,
+			"created_at":                   createdAt,
+			"updated_at":                   updatedAt,
 		}
 
 		if ownerID != nil {
@@ -346,6 +360,7 @@ func GetControl(c *gin.Context) {
 			   c.owner_id, COALESCE(u.first_name || ' ' || u.last_name, ''), COALESCE(u.email, ''),
 			   c.secondary_owner_id,
 			   c.evidence_requirements, c.test_criteria, c.metadata::text,
+			   c.is_compensating, c.compensating_worksheet::text,
 			   c.created_at, c.updated_at
 		FROM controls c
 		LEFT JOIN users u ON u.id = c.owner_id
@@ -355,6 +370,7 @@ func GetControl(c *gin.Context) {
 		&ctrl.Category, &ctrl.Status, &ctrl.IsCustom, &ctrl.SourceTemplateID,
 		&ctrl.OwnerID, &ownerName, &ownerEmail, &ctrl.SecondaryOwnerID,
 		&ctrl.EvidenceRequirements, &ctrl.TestCriteria, &ctrl.Metadata,
+		&ctrl.IsCompensating, &ctrl.CompensatingWorksheet,
 		&ctrl.CreatedAt, &ctrl.UpdatedAt)
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, errorResponse("NOT_FOUND", "Control not found"))
@@ -369,21 +385,28 @@ func GetControl(c *gin.Context) {
 	var metadata interface{}
 	json.Unmarshal([]byte(ctrl.Metadata), &metadata)
 
+	var cwParsed interface{}
+	if ctrl.CompensatingWorksheet != nil {
+		json.Unmarshal([]byte(*ctrl.CompensatingWorksheet), &cwParsed)
+	}
+
 	resp := gin.H{
-		"id":                      ctrl.ID,
-		"identifier":              ctrl.Identifier,
-		"title":                   ctrl.Title,
-		"description":             ctrl.Description,
-		"implementation_guidance": ctrl.ImplementationGuidance,
-		"category":                ctrl.Category,
-		"status":                  ctrl.Status,
-		"is_custom":               ctrl.IsCustom,
-		"source_template_id":      ctrl.SourceTemplateID,
-		"evidence_requirements":   ctrl.EvidenceRequirements,
-		"test_criteria":           ctrl.TestCriteria,
-		"metadata":                metadata,
-		"created_at":              ctrl.CreatedAt,
-		"updated_at":              ctrl.UpdatedAt,
+		"id":                             ctrl.ID,
+		"identifier":                     ctrl.Identifier,
+		"title":                          ctrl.Title,
+		"description":                    ctrl.Description,
+		"implementation_guidance":        ctrl.ImplementationGuidance,
+		"category":                       ctrl.Category,
+		"status":                         ctrl.Status,
+		"is_custom":                      ctrl.IsCustom,
+		"source_template_id":             ctrl.SourceTemplateID,
+		"evidence_requirements":          ctrl.EvidenceRequirements,
+		"test_criteria":                  ctrl.TestCriteria,
+		"metadata":                       metadata,
+		"is_compensating":                ctrl.IsCompensating,
+		"compensating_control_worksheet": cwParsed,
+		"created_at":                     ctrl.CreatedAt,
+		"updated_at":                     ctrl.UpdatedAt,
 	}
 
 	if ctrl.OwnerID != nil {

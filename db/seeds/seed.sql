@@ -105,11 +105,11 @@ ON CONFLICT (identifier) DO NOTHING;
 -- ============================================================================
 
 INSERT INTO framework_versions (id, framework_id, version, display_name, status, effective_date, total_requirements) VALUES
-    ('v0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', '2024', 'SOC 2 (2024 TSC)', 'active', '2024-01-01', 64),
-    ('v0000000-0000-0000-0000-000000000002', 'f0000000-0000-0000-0000-000000000002', '2022', 'ISO 27001:2022', 'active', '2022-10-25', 93),
-    ('v0000000-0000-0000-0000-000000000003', 'f0000000-0000-0000-0000-000000000003', '4.0.1', 'PCI DSS v4.0.1', 'active', '2024-06-11', 280),
-    ('v0000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', '2016', 'GDPR (2016/679)', 'active', '2018-05-25', 99),
-    ('v0000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', '2023', 'CCPA/CPRA (2023)', 'active', '2023-01-01', 42)
+    ('a1000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', '2024', 'SOC 2 (2024 TSC)', 'active', '2024-01-01', 64),
+    ('a1000000-0000-0000-0000-000000000002', 'f0000000-0000-0000-0000-000000000002', '2022', 'ISO 27001:2022', 'active', '2022-10-25', 93),
+    ('a1000000-0000-0000-0000-000000000003', 'f0000000-0000-0000-0000-000000000003', '4.0.1', 'PCI DSS v4.0.1', 'active', '2024-06-11', 280),
+    ('a1000000-0000-0000-0000-000000000004', 'f0000000-0000-0000-0000-000000000004', '2016', 'GDPR (2016/679)', 'active', '2018-05-25', 99),
+    ('a1000000-0000-0000-0000-000000000005', 'f0000000-0000-0000-0000-000000000005', '2023', 'CCPA/CPRA (2023)', 'active', '2023-01-01', 42)
 ON CONFLICT (framework_id, version) DO NOTHING;
 
 -- ============================================================================
@@ -119,118 +119,118 @@ ON CONFLICT (framework_id, version) DO NOTHING;
 
 -- SOC 2 — CC1: Control Environment
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC1', 'Control Environment', 1, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000010', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000001', 'CC1.1', 'The entity demonstrates a commitment to integrity and ethical values', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000011', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000001', 'CC1.2', 'The board of directors demonstrates independence from management and exercises oversight', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000012', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000001', 'CC1.3', 'Management establishes structures, reporting lines, and authorities', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000013', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000001', 'CC1.4', 'The entity demonstrates a commitment to attract, develop, and retain competent individuals', 4, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000014', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000001', 'CC1.5', 'The entity holds individuals accountable for their internal control responsibilities', 5, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC1', 'Control Environment', 1, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000010', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000001', 'CC1.1', 'The entity demonstrates a commitment to integrity and ethical values', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000011', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000001', 'CC1.2', 'The board of directors demonstrates independence from management and exercises oversight', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000012', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000001', 'CC1.3', 'Management establishes structures, reporting lines, and authorities', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000013', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000001', 'CC1.4', 'The entity demonstrates a commitment to attract, develop, and retain competent individuals', 4, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000014', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000001', 'CC1.5', 'The entity holds individuals accountable for their internal control responsibilities', 5, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC2: Communication and Information
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC2', 'Communication and Information', 2, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000020', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000002', 'CC2.1', 'The entity obtains or generates relevant, quality information to support internal control', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000021', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000002', 'CC2.2', 'The entity internally communicates information to support the functioning of internal control', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000022', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000002', 'CC2.3', 'The entity communicates with external parties regarding matters affecting the functioning of internal control', 3, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC2', 'Communication and Information', 2, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000020', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000002', 'CC2.1', 'The entity obtains or generates relevant, quality information to support internal control', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000021', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000002', 'CC2.2', 'The entity internally communicates information to support the functioning of internal control', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000022', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000002', 'CC2.3', 'The entity communicates with external parties regarding matters affecting the functioning of internal control', 3, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC3: Risk Assessment
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC3', 'Risk Assessment', 3, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000030', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000003', 'CC3.1', 'The entity specifies objectives with sufficient clarity to enable identification of risks', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000031', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000003', 'CC3.2', 'The entity identifies risks to the achievement of its objectives and analyzes risks', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000032', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000003', 'CC3.3', 'The entity considers the potential for fraud in assessing risks', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000033', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000003', 'CC3.4', 'The entity identifies and assesses changes that could significantly impact internal controls', 4, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC3', 'Risk Assessment', 3, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000030', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000003', 'CC3.1', 'The entity specifies objectives with sufficient clarity to enable identification of risks', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000031', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000003', 'CC3.2', 'The entity identifies risks to the achievement of its objectives and analyzes risks', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000032', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000003', 'CC3.3', 'The entity considers the potential for fraud in assessing risks', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000033', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000003', 'CC3.4', 'The entity identifies and assesses changes that could significantly impact internal controls', 4, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC4: Monitoring Activities
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC4', 'Monitoring Activities', 4, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000040', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000004', 'CC4.1', 'The entity selects, develops, and performs ongoing evaluations to ascertain whether controls are present and functioning', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000041', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000004', 'CC4.2', 'The entity evaluates and communicates internal control deficiencies in a timely manner', 2, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC4', 'Monitoring Activities', 4, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000040', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000004', 'CC4.1', 'The entity selects, develops, and performs ongoing evaluations to ascertain whether controls are present and functioning', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000041', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000004', 'CC4.2', 'The entity evaluates and communicates internal control deficiencies in a timely manner', 2, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC5: Control Activities
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000005', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC5', 'Control Activities', 5, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000050', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000005', 'CC5.1', 'The entity selects and develops control activities that contribute to mitigation of risks', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000051', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000005', 'CC5.2', 'The entity deploys control activities through policies and procedures', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000052', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000005', 'CC5.3', 'The entity selects and develops general controls over technology', 3, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000005', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC5', 'Control Activities', 5, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000050', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000005', 'CC5.1', 'The entity selects and develops control activities that contribute to mitigation of risks', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000051', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000005', 'CC5.2', 'The entity deploys control activities through policies and procedures', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000052', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000005', 'CC5.3', 'The entity selects and develops general controls over technology', 3, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC6: Logical and Physical Access Controls
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000006', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC6', 'Logical and Physical Access Controls', 6, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000060', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.1', 'The entity implements logical access security over protected information assets', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000061', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.2', 'Prior to issuing system credentials, the entity registers and authorizes new users', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000062', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.3', 'The entity authorizes, modifies, or removes access based on authorization and changes', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000063', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.4', 'The entity restricts physical access to facilities and protected information assets', 4, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000064', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.5', 'The entity discontinues logical and physical protections over assets only by authorized personnel', 5, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000065', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.6', 'The entity implements logical access security measures to protect against threats from outside its boundaries', 6, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000066', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.7', 'The entity restricts the transmission, movement, and removal of information to authorized users', 7, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000067', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000006', 'CC6.8', 'The entity implements controls to prevent or detect and act upon unauthorized software', 8, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000006', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC6', 'Logical and Physical Access Controls', 6, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000060', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.1', 'The entity implements logical access security over protected information assets', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000061', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.2', 'Prior to issuing system credentials, the entity registers and authorizes new users', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000062', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.3', 'The entity authorizes, modifies, or removes access based on authorization and changes', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000063', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.4', 'The entity restricts physical access to facilities and protected information assets', 4, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000064', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.5', 'The entity discontinues logical and physical protections over assets only by authorized personnel', 5, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000065', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.6', 'The entity implements logical access security measures to protect against threats from outside its boundaries', 6, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000066', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.7', 'The entity restricts the transmission, movement, and removal of information to authorized users', 7, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000067', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000006', 'CC6.8', 'The entity implements controls to prevent or detect and act upon unauthorized software', 8, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC7: System Operations
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000007', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC7', 'System Operations', 7, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000070', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000007', 'CC7.1', 'To meet its objectives, the entity uses detection and monitoring procedures to identify changes', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000071', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000007', 'CC7.2', 'The entity monitors system components for anomalies indicative of malicious acts or natural disasters', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000072', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000007', 'CC7.3', 'The entity evaluates security events to determine whether they could or have resulted in incidents', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000073', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000007', 'CC7.4', 'The entity responds to identified security incidents by executing a defined incident response program', 4, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000074', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000007', 'CC7.5', 'The entity identifies, develops, and implements activities to recover from identified security incidents', 5, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000007', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC7', 'System Operations', 7, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000070', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000007', 'CC7.1', 'To meet its objectives, the entity uses detection and monitoring procedures to identify changes', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000071', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000007', 'CC7.2', 'The entity monitors system components for anomalies indicative of malicious acts or natural disasters', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000072', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000007', 'CC7.3', 'The entity evaluates security events to determine whether they could or have resulted in incidents', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000073', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000007', 'CC7.4', 'The entity responds to identified security incidents by executing a defined incident response program', 4, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000074', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000007', 'CC7.5', 'The entity identifies, develops, and implements activities to recover from identified security incidents', 5, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC8: Change Management
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000008', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC8', 'Change Management', 8, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000080', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000008', 'CC8.1', 'The entity authorizes, designs, develops, configures, documents, tests, approves, and implements changes', 1, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000008', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC8', 'Change Management', 8, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000080', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000008', 'CC8.1', 'The entity authorizes, designs, develops, configures, documents, tests, approves, and implements changes', 1, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — CC9: Risk Mitigation
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000009', 'v0000000-0000-0000-0000-000000000001', NULL, 'CC9', 'Risk Mitigation', 9, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000090', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000009', 'CC9.1', 'The entity identifies, selects, and develops risk mitigation activities for risks from business processes', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000091', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000009', 'CC9.2', 'The entity assesses and manages risks associated with vendors and business partners', 2, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000009', 'a1000000-0000-0000-0000-000000000001', NULL, 'CC9', 'Risk Mitigation', 9, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000090', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000009', 'CC9.1', 'The entity identifies, selects, and develops risk mitigation activities for risks from business processes', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000091', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000009', 'CC9.2', 'The entity assesses and manages risks associated with vendors and business partners', 2, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — A1: Availability
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000100', 'v0000000-0000-0000-0000-000000000001', NULL, 'A1', 'Additional Criteria for Availability', 10, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000101', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000100', 'A1.1', 'The entity maintains, monitors, and evaluates current processing capacity and availability', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000102', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000100', 'A1.2', 'The entity authorizes, designs, develops, and implements environmental protections and recovery infrastructure', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000103', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000100', 'A1.3', 'The entity tests recovery plan procedures supporting system recovery', 3, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000100', 'a1000000-0000-0000-0000-000000000001', NULL, 'A1', 'Additional Criteria for Availability', 10, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000101', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000100', 'A1.1', 'The entity maintains, monitors, and evaluates current processing capacity and availability', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000102', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000100', 'A1.2', 'The entity authorizes, designs, develops, and implements environmental protections and recovery infrastructure', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000103', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000100', 'A1.3', 'The entity tests recovery plan procedures supporting system recovery', 3, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — C1: Confidentiality
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000110', 'v0000000-0000-0000-0000-000000000001', NULL, 'C1', 'Additional Criteria for Confidentiality', 11, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000111', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000110', 'C1.1', 'The entity identifies and maintains confidential information to meet confidentiality commitments', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000112', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000110', 'C1.2', 'The entity disposes of confidential information to meet confidentiality commitments', 2, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000110', 'a1000000-0000-0000-0000-000000000001', NULL, 'C1', 'Additional Criteria for Confidentiality', 11, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000111', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000110', 'C1.1', 'The entity identifies and maintains confidential information to meet confidentiality commitments', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000112', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000110', 'C1.2', 'The entity disposes of confidential information to meet confidentiality commitments', 2, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — PI1: Processing Integrity
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000120', 'v0000000-0000-0000-0000-000000000001', NULL, 'PI1', 'Additional Criteria for Processing Integrity', 12, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000121', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000120', 'PI1.1', 'The entity obtains or generates, uses, and communicates relevant quality information about processing objectives', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000122', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000120', 'PI1.2', 'The entity implements policies and procedures over system inputs to result in complete, accurate, and timely processing', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000123', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000120', 'PI1.3', 'The entity implements policies and procedures over system processing to result in complete, accurate, and timely processing', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000124', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000120', 'PI1.4', 'The entity implements policies and procedures to make available or deliver output completely, accurately, and timely', 4, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000125', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000120', 'PI1.5', 'The entity implements policies and procedures to store inputs, items in processing, and outputs', 5, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000120', 'a1000000-0000-0000-0000-000000000001', NULL, 'PI1', 'Additional Criteria for Processing Integrity', 12, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000121', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000120', 'PI1.1', 'The entity obtains or generates, uses, and communicates relevant quality information about processing objectives', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000122', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000120', 'PI1.2', 'The entity implements policies and procedures over system inputs to result in complete, accurate, and timely processing', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000123', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000120', 'PI1.3', 'The entity implements policies and procedures over system processing to result in complete, accurate, and timely processing', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000124', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000120', 'PI1.4', 'The entity implements policies and procedures to make available or deliver output completely, accurately, and timely', 4, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000125', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000120', 'PI1.5', 'The entity implements policies and procedures to store inputs, items in processing, and outputs', 5, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- SOC 2 — P1: Privacy
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0100000-0000-0000-0000-000000000130', 'v0000000-0000-0000-0000-000000000001', NULL, 'P1', 'Additional Criteria for Privacy', 13, 0, FALSE),
-    ('r0100000-0000-0000-0000-000000000131', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.1', 'The entity provides notice about its privacy practices to meet privacy commitments', 1, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000132', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.2', 'The entity communicates choices available regarding the collection, use, and disclosure of personal information', 2, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000133', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.3', 'Personal information is collected consistent with the entity''s objectives and privacy commitments', 3, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000134', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.4', 'The entity limits the use of personal information to the purposes identified in the notice', 4, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000135', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.5', 'The entity retains personal information consistent with commitments and objectives', 5, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000136', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.6', 'The entity disposes of personal information to meet privacy commitments', 6, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000137', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.7', 'The entity discloses personal information to third parties consistent with privacy commitments', 7, 1, TRUE),
-    ('r0100000-0000-0000-0000-000000000138', 'v0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000130', 'P1.8', 'The entity provides data subjects the ability to access, correct, amend, or delete their personal information', 8, 1, TRUE)
+    ('e0100000-0000-0000-0000-000000000130', 'a1000000-0000-0000-0000-000000000001', NULL, 'P1', 'Additional Criteria for Privacy', 13, 0, FALSE),
+    ('e0100000-0000-0000-0000-000000000131', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.1', 'The entity provides notice about its privacy practices to meet privacy commitments', 1, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000132', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.2', 'The entity communicates choices available regarding the collection, use, and disclosure of personal information', 2, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000133', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.3', 'Personal information is collected consistent with the entity''s objectives and privacy commitments', 3, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000134', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.4', 'The entity limits the use of personal information to the purposes identified in the notice', 4, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000135', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.5', 'The entity retains personal information consistent with commitments and objectives', 5, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000136', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.6', 'The entity disposes of personal information to meet privacy commitments', 6, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000137', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.7', 'The entity discloses personal information to third parties consistent with privacy commitments', 7, 1, TRUE),
+    ('e0100000-0000-0000-0000-000000000138', 'a1000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000130', 'P1.8', 'The entity provides data subjects the ability to access, correct, amend, or delete their personal information', 8, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ============================================================================
@@ -240,115 +240,115 @@ ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ISO 27001 — A.5: Organizational Controls (37 controls)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0200000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000002', NULL, 'A.5', 'Organizational Controls', 1, 0, FALSE),
-    ('r0200000-0000-0000-0000-000000000010', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.1', 'Policies for information security', 1, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000011', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.2', 'Information security roles and responsibilities', 2, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000012', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.3', 'Segregation of duties', 3, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000013', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.4', 'Management responsibilities', 4, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000014', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.5', 'Contact with authorities', 5, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000015', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.6', 'Contact with special interest groups', 6, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000016', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.7', 'Threat intelligence', 7, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000017', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.8', 'Information security in project management', 8, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000018', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.9', 'Inventory of information and other associated assets', 9, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000019', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.10', 'Acceptable use of information and other associated assets', 10, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000020', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.11', 'Return of assets', 11, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000021', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.12', 'Classification of information', 12, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000022', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.13', 'Labelling of information', 13, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000023', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.14', 'Information transfer', 14, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000024', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.15', 'Access control', 15, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000025', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.16', 'Identity management', 16, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000026', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.17', 'Authentication information', 17, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000027', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.18', 'Access rights', 18, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000028', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.19', 'Information security in supplier relationships', 19, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000029', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.20', 'Addressing information security within supplier agreements', 20, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000030', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.21', 'Managing information security in the ICT supply chain', 21, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000031', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.22', 'Monitoring, review and change management of supplier services', 22, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000032', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.23', 'Information security for use of cloud services', 23, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000033', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.24', 'Information security incident management planning and preparation', 24, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000034', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.25', 'Assessment and decision on information security events', 25, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000035', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.26', 'Response to information security incidents', 26, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000036', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.27', 'Learning from information security incidents', 27, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000037', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.28', 'Collection of evidence', 28, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000038', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.29', 'Information security during disruption', 29, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000039', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.30', 'ICT readiness for business continuity', 30, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000040', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.31', 'Legal, statutory, regulatory and contractual requirements', 31, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000041', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.32', 'Intellectual property rights', 32, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000042', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.33', 'Protection of records', 33, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000043', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.34', 'Privacy and protection of PII', 34, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000044', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.35', 'Independent review of information security', 35, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000045', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.36', 'Compliance with policies, rules and standards for information security', 36, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000046', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000001', 'A.5.37', 'Documented operating procedures', 37, 1, TRUE)
+    ('e0200000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000002', NULL, 'A.5', 'Organizational Controls', 1, 0, FALSE),
+    ('e0200000-0000-0000-0000-000000000010', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.1', 'Policies for information security', 1, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000011', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.2', 'Information security roles and responsibilities', 2, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000012', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.3', 'Segregation of duties', 3, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000013', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.4', 'Management responsibilities', 4, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000014', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.5', 'Contact with authorities', 5, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000015', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.6', 'Contact with special interest groups', 6, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000016', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.7', 'Threat intelligence', 7, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000017', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.8', 'Information security in project management', 8, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000018', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.9', 'Inventory of information and other associated assets', 9, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000019', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.10', 'Acceptable use of information and other associated assets', 10, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000020', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.11', 'Return of assets', 11, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000021', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.12', 'Classification of information', 12, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000022', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.13', 'Labelling of information', 13, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000023', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.14', 'Information transfer', 14, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000024', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.15', 'Access control', 15, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000025', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.16', 'Identity management', 16, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000026', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.17', 'Authentication information', 17, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000027', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.18', 'Access rights', 18, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000028', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.19', 'Information security in supplier relationships', 19, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000029', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.20', 'Addressing information security within supplier agreements', 20, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000030', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.21', 'Managing information security in the ICT supply chain', 21, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000031', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.22', 'Monitoring, review and change management of supplier services', 22, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000032', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.23', 'Information security for use of cloud services', 23, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000033', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.24', 'Information security incident management planning and preparation', 24, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000034', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.25', 'Assessment and decision on information security events', 25, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000035', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.26', 'Response to information security incidents', 26, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000036', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.27', 'Learning from information security incidents', 27, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000037', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.28', 'Collection of evidence', 28, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000038', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.29', 'Information security during disruption', 29, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000039', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.30', 'ICT readiness for business continuity', 30, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000040', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.31', 'Legal, statutory, regulatory and contractual requirements', 31, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000041', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.32', 'Intellectual property rights', 32, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000042', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.33', 'Protection of records', 33, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000043', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.34', 'Privacy and protection of PII', 34, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000044', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.35', 'Independent review of information security', 35, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000045', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.36', 'Compliance with policies, rules and standards for information security', 36, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000046', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000001', 'A.5.37', 'Documented operating procedures', 37, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ISO 27001 — A.6: People Controls (8 controls)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0200000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000002', NULL, 'A.6', 'People Controls', 2, 0, FALSE),
-    ('r0200000-0000-0000-0000-000000000060', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.1', 'Screening', 1, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000061', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.2', 'Terms and conditions of employment', 2, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000062', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.3', 'Information security awareness, education and training', 3, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000063', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.4', 'Disciplinary process', 4, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000064', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.5', 'Responsibilities after termination or change of employment', 5, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000065', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.6', 'Confidentiality or non-disclosure agreements', 6, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000066', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.7', 'Remote working', 7, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000067', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000002', 'A.6.8', 'Information security event reporting', 8, 1, TRUE)
+    ('e0200000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000002', NULL, 'A.6', 'People Controls', 2, 0, FALSE),
+    ('e0200000-0000-0000-0000-000000000060', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.1', 'Screening', 1, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000061', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.2', 'Terms and conditions of employment', 2, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000062', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.3', 'Information security awareness, education and training', 3, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000063', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.4', 'Disciplinary process', 4, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000064', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.5', 'Responsibilities after termination or change of employment', 5, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000065', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.6', 'Confidentiality or non-disclosure agreements', 6, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000066', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.7', 'Remote working', 7, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000067', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000002', 'A.6.8', 'Information security event reporting', 8, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ISO 27001 — A.7: Physical Controls (14 controls)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0200000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000002', NULL, 'A.7', 'Physical Controls', 3, 0, FALSE),
-    ('r0200000-0000-0000-0000-000000000070', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.1', 'Physical security perimeters', 1, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000071', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.2', 'Physical entry', 2, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000072', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.3', 'Securing offices, rooms and facilities', 3, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000073', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.4', 'Physical security monitoring', 4, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000074', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.5', 'Protecting against physical and environmental threats', 5, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000075', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.6', 'Working in secure areas', 6, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000076', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.7', 'Clear desk and clear screen', 7, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000077', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.8', 'Equipment siting and protection', 8, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000078', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.9', 'Security of assets off-premises', 9, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000079', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.10', 'Storage media', 10, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000080', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.11', 'Supporting utilities', 11, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000081', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.12', 'Cabling security', 12, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000082', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.13', 'Equipment maintenance', 13, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000083', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000003', 'A.7.14', 'Secure disposal or re-use of equipment', 14, 1, TRUE)
+    ('e0200000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000002', NULL, 'A.7', 'Physical Controls', 3, 0, FALSE),
+    ('e0200000-0000-0000-0000-000000000070', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.1', 'Physical security perimeters', 1, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000071', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.2', 'Physical entry', 2, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000072', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.3', 'Securing offices, rooms and facilities', 3, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000073', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.4', 'Physical security monitoring', 4, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000074', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.5', 'Protecting against physical and environmental threats', 5, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000075', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.6', 'Working in secure areas', 6, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000076', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.7', 'Clear desk and clear screen', 7, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000077', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.8', 'Equipment siting and protection', 8, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000078', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.9', 'Security of assets off-premises', 9, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000079', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.10', 'Storage media', 10, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000080', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.11', 'Supporting utilities', 11, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000081', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.12', 'Cabling security', 12, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000082', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.13', 'Equipment maintenance', 13, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000083', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000003', 'A.7.14', 'Secure disposal or re-use of equipment', 14, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ISO 27001 — A.8: Technological Controls (34 controls)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0200000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000002', NULL, 'A.8', 'Technological Controls', 4, 0, FALSE),
-    ('r0200000-0000-0000-0000-000000000084', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.1', 'User endpoint devices', 1, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000085', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.2', 'Privileged access rights', 2, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000086', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.3', 'Information access restriction', 3, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000087', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.4', 'Access to source code', 4, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000088', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.5', 'Secure authentication', 5, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000089', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.6', 'Capacity management', 6, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000090', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.7', 'Protection against malware', 7, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000091', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.8', 'Management of technical vulnerabilities', 8, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000092', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.9', 'Configuration management', 9, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000093', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.10', 'Information deletion', 10, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000094', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.11', 'Data masking', 11, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000095', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.12', 'Data leakage prevention', 12, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000096', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.13', 'Information backup', 13, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000097', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.14', 'Redundancy of information processing facilities', 14, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000098', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.15', 'Logging', 15, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000099', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.16', 'Monitoring activities', 16, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000100', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.17', 'Clock synchronization', 17, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000101', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.18', 'Use of privileged utility programs', 18, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000102', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.19', 'Installation of software on operational systems', 19, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000103', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.20', 'Networks security', 20, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000104', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.21', 'Security of network services', 21, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000105', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.22', 'Segregation of networks', 22, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000106', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.23', 'Web filtering', 23, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000107', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.24', 'Use of cryptography', 24, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000108', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.25', 'Secure development life cycle', 25, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000109', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.26', 'Application security requirements', 26, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000110', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.27', 'Secure system architecture and engineering principles', 27, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000111', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.28', 'Secure coding', 28, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000112', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.29', 'Security testing in development and acceptance', 29, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000113', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.30', 'Outsourced development', 30, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000114', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.31', 'Separation of development, test and production environments', 31, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000115', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.32', 'Change management', 32, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000116', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.33', 'Test information', 33, 1, TRUE),
-    ('r0200000-0000-0000-0000-000000000117', 'v0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000004', 'A.8.34', 'Protection of information systems during audit testing', 34, 1, TRUE)
+    ('e0200000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000002', NULL, 'A.8', 'Technological Controls', 4, 0, FALSE),
+    ('e0200000-0000-0000-0000-000000000084', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.1', 'User endpoint devices', 1, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000085', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.2', 'Privileged access rights', 2, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000086', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.3', 'Information access restriction', 3, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000087', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.4', 'Access to source code', 4, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000088', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.5', 'Secure authentication', 5, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000089', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.6', 'Capacity management', 6, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000090', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.7', 'Protection against malware', 7, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000091', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.8', 'Management of technical vulnerabilities', 8, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000092', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.9', 'Configuration management', 9, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000093', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.10', 'Information deletion', 10, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000094', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.11', 'Data masking', 11, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000095', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.12', 'Data leakage prevention', 12, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000096', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.13', 'Information backup', 13, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000097', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.14', 'Redundancy of information processing facilities', 14, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000098', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.15', 'Logging', 15, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000099', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.16', 'Monitoring activities', 16, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000100', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.17', 'Clock synchronization', 17, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000101', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.18', 'Use of privileged utility programs', 18, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000102', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.19', 'Installation of software on operational systems', 19, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000103', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.20', 'Networks security', 20, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000104', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.21', 'Security of network services', 21, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000105', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.22', 'Segregation of networks', 22, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000106', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.23', 'Web filtering', 23, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000107', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.24', 'Use of cryptography', 24, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000108', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.25', 'Secure development life cycle', 25, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000109', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.26', 'Application security requirements', 26, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000110', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.27', 'Secure system architecture and engineering principles', 27, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000111', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.28', 'Secure coding', 28, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000112', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.29', 'Security testing in development and acceptance', 29, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000113', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.30', 'Outsourced development', 30, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000114', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.31', 'Separation of development, test and production environments', 31, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000115', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.32', 'Change management', 32, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000116', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.33', 'Test information', 33, 1, TRUE),
+    ('e0200000-0000-0000-0000-000000000117', 'a1000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000004', 'A.8.34', 'Protection of information systems during audit testing', 34, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ============================================================================
@@ -358,127 +358,127 @@ ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement families (top-level)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000003', NULL, '1', 'Install and Maintain Network Security Controls', 1, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000003', NULL, '2', 'Apply Secure Configurations to All System Components', 2, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000003', NULL, '3', 'Protect Stored Account Data', 3, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000003', NULL, '4', 'Protect Cardholder Data with Strong Cryptography During Transmission', 4, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000005', 'v0000000-0000-0000-0000-000000000003', NULL, '5', 'Protect All Systems and Networks from Malicious Software', 5, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000006', 'v0000000-0000-0000-0000-000000000003', NULL, '6', 'Develop and Maintain Secure Systems and Software', 6, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000007', 'v0000000-0000-0000-0000-000000000003', NULL, '7', 'Restrict Access to System Components and Cardholder Data by Business Need to Know', 7, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000008', 'v0000000-0000-0000-0000-000000000003', NULL, '8', 'Identify Users and Authenticate Access to System Components', 8, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000009', 'v0000000-0000-0000-0000-000000000003', NULL, '9', 'Restrict Physical Access to Cardholder Data', 9, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000010', 'v0000000-0000-0000-0000-000000000003', NULL, '10', 'Log and Monitor All Access to System Components and Cardholder Data', 10, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000011', 'v0000000-0000-0000-0000-000000000003', NULL, '11', 'Test Security of Systems and Networks Regularly', 11, 0, FALSE),
-    ('r0300000-0000-0000-0000-000000000012', 'v0000000-0000-0000-0000-000000000003', NULL, '12', 'Support Information Security with Organizational Policies and Programs', 12, 0, FALSE)
+    ('e0300000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000003', NULL, '1', 'Install and Maintain Network Security Controls', 1, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000003', NULL, '2', 'Apply Secure Configurations to All System Components', 2, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000003', NULL, '3', 'Protect Stored Account Data', 3, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000003', NULL, '4', 'Protect Cardholder Data with Strong Cryptography During Transmission', 4, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000005', 'a1000000-0000-0000-0000-000000000003', NULL, '5', 'Protect All Systems and Networks from Malicious Software', 5, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000006', 'a1000000-0000-0000-0000-000000000003', NULL, '6', 'Develop and Maintain Secure Systems and Software', 6, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000007', 'a1000000-0000-0000-0000-000000000003', NULL, '7', 'Restrict Access to System Components and Cardholder Data by Business Need to Know', 7, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000008', 'a1000000-0000-0000-0000-000000000003', NULL, '8', 'Identify Users and Authenticate Access to System Components', 8, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000009', 'a1000000-0000-0000-0000-000000000003', NULL, '9', 'Restrict Physical Access to Cardholder Data', 9, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000010', 'a1000000-0000-0000-0000-000000000003', NULL, '10', 'Log and Monitor All Access to System Components and Cardholder Data', 10, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000011', 'a1000000-0000-0000-0000-000000000003', NULL, '11', 'Test Security of Systems and Networks Regularly', 11, 0, FALSE),
+    ('e0300000-0000-0000-0000-000000000012', 'a1000000-0000-0000-0000-000000000003', NULL, '12', 'Support Information Security with Organizational Policies and Programs', 12, 0, FALSE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 1 sub-requirements
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000000101', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000001', '1.1', 'Processes and mechanisms for network security controls are defined and understood', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000102', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000101', '1.1.1', 'All security policies and operational procedures identified in Req 1 are documented and kept up to date', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000103', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000101', '1.1.2', 'Roles and responsibilities for performing activities in Req 1 are documented, assigned, and understood', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000110', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000001', '1.2', 'Network security controls are configured and maintained', 2, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000111', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000110', '1.2.1', 'Configuration standards for NSC rulesets are defined, implemented, and maintained', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000112', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000110', '1.2.5', 'All services, protocols, and ports allowed are identified, approved, and have a defined business need', 5, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000120', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000001', '1.3', 'Network access to and from the cardholder data environment is restricted', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000121', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000120', '1.3.1', 'Inbound traffic to the CDE is restricted to only necessary traffic', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000122', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000120', '1.3.2', 'Outbound traffic from the CDE is restricted to only necessary traffic', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000130', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000001', '1.4', 'Network connections between trusted and untrusted networks are controlled', 4, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000131', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000130', '1.4.1', 'NSCs are implemented between trusted and untrusted networks', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000132', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000130', '1.4.2', 'Inbound traffic from untrusted networks to trusted networks is restricted to authorized communications', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000150', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000001', '1.5', 'Risks to the CDE from computing devices connecting via untrusted networks are mitigated', 5, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000151', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000150', '1.5.1', 'Security controls are implemented on any computing device that connects to both untrusted and trusted networks', 1, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000000101', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000001', '1.1', 'Processes and mechanisms for network security controls are defined and understood', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000102', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000101', '1.1.1', 'All security policies and operational procedures identified in Req 1 are documented and kept up to date', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000103', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000101', '1.1.2', 'Roles and responsibilities for performing activities in Req 1 are documented, assigned, and understood', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000110', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000001', '1.2', 'Network security controls are configured and maintained', 2, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000111', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000110', '1.2.1', 'Configuration standards for NSC rulesets are defined, implemented, and maintained', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000112', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000110', '1.2.5', 'All services, protocols, and ports allowed are identified, approved, and have a defined business need', 5, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000120', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000001', '1.3', 'Network access to and from the cardholder data environment is restricted', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000121', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000120', '1.3.1', 'Inbound traffic to the CDE is restricted to only necessary traffic', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000122', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000120', '1.3.2', 'Outbound traffic from the CDE is restricted to only necessary traffic', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000130', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000001', '1.4', 'Network connections between trusted and untrusted networks are controlled', 4, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000131', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000130', '1.4.1', 'NSCs are implemented between trusted and untrusted networks', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000132', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000130', '1.4.2', 'Inbound traffic from untrusted networks to trusted networks is restricted to authorized communications', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000150', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000001', '1.5', 'Risks to the CDE from computing devices connecting via untrusted networks are mitigated', 5, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000151', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000150', '1.5.1', 'Security controls are implemented on any computing device that connects to both untrusted and trusted networks', 1, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 6 sub-requirements (critical: secure development)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000000601', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000006', '6.1', 'Processes and mechanisms for developing secure systems are defined and understood', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000602', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000601', '6.1.1', 'All security policies and operational procedures in Req 6 are documented and kept up to date', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000610', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000006', '6.2', 'Bespoke and custom software are developed securely', 2, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000611', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000610', '6.2.1', 'Bespoke and custom software is developed securely following industry best practices', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000612', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000610', '6.2.2', 'Software development personnel are trained at least once every 12 months', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000613', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000610', '6.2.3', 'Bespoke and custom software is reviewed prior to release to identify and correct potential coding vulnerabilities', 3, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000614', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000610', '6.2.4', 'Software engineering techniques prevent or mitigate common software attacks and related vulnerabilities', 4, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000620', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000006', '6.3', 'Security vulnerabilities are identified and addressed', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000621', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000620', '6.3.1', 'Security vulnerabilities are identified and managed via established process', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000622', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000620', '6.3.2', 'An inventory of bespoke and custom software is maintained to facilitate vulnerability management', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000623', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000620', '6.3.3', 'All system components are protected from known vulnerabilities by installing applicable patches', 3, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000630', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000006', '6.4', 'Public-facing web applications are protected against attacks', 4, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000631', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000630', '6.4.1', 'For public-facing web applications, new threats and vulnerabilities are addressed on an ongoing basis', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000632', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000630', '6.4.2', 'For public-facing web applications, an automated technical solution is deployed that detects and prevents web-based attacks', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000633', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000630', '6.4.3', 'All payment page scripts that are loaded and executed in the consumer browser are managed', 3, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000640', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000006', '6.5', 'Changes to all system components are managed securely', 5, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000641', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000640', '6.5.1', 'Changes are managed using established change control procedures', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000642', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000640', '6.5.2', 'Upon completion of a significant change, all applicable PCI DSS requirements are confirmed to be in place', 2, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000000601', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000006', '6.1', 'Processes and mechanisms for developing secure systems are defined and understood', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000602', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000601', '6.1.1', 'All security policies and operational procedures in Req 6 are documented and kept up to date', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000610', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000006', '6.2', 'Bespoke and custom software are developed securely', 2, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000611', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000610', '6.2.1', 'Bespoke and custom software is developed securely following industry best practices', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000612', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000610', '6.2.2', 'Software development personnel are trained at least once every 12 months', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000613', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000610', '6.2.3', 'Bespoke and custom software is reviewed prior to release to identify and correct potential coding vulnerabilities', 3, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000614', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000610', '6.2.4', 'Software engineering techniques prevent or mitigate common software attacks and related vulnerabilities', 4, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000620', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000006', '6.3', 'Security vulnerabilities are identified and addressed', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000621', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000620', '6.3.1', 'Security vulnerabilities are identified and managed via established process', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000622', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000620', '6.3.2', 'An inventory of bespoke and custom software is maintained to facilitate vulnerability management', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000623', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000620', '6.3.3', 'All system components are protected from known vulnerabilities by installing applicable patches', 3, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000630', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000006', '6.4', 'Public-facing web applications are protected against attacks', 4, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000631', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000630', '6.4.1', 'For public-facing web applications, new threats and vulnerabilities are addressed on an ongoing basis', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000632', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000630', '6.4.2', 'For public-facing web applications, an automated technical solution is deployed that detects and prevents web-based attacks', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000633', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000630', '6.4.3', 'All payment page scripts that are loaded and executed in the consumer browser are managed', 3, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000640', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000006', '6.5', 'Changes to all system components are managed securely', 5, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000641', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000640', '6.5.1', 'Changes are managed using established change control procedures', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000642', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000640', '6.5.2', 'Upon completion of a significant change, all applicable PCI DSS requirements are confirmed to be in place', 2, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 8 sub-requirements (authentication)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000000801', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.1', 'Processes and mechanisms for identification and authentication are defined and understood', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000802', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000801', '8.1.1', 'All security policies and procedures in Req 8 are documented and kept up to date', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000810', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.2', 'User identification and related accounts are strictly managed', 2, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000811', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000810', '8.2.1', 'All users are assigned a unique ID before access to system components', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000812', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000810', '8.2.2', 'Group, shared, or generic accounts are not used except where specifically allowed', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000820', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.3', 'Strong authentication is established and managed', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000821', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000820', '8.3.1', 'All user access to system components is authenticated via at least one factor', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000822', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000820', '8.3.2', 'Strong cryptography is used to render all authentication factors unreadable during transmission and storage', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000823', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000820', '8.3.6', 'If passwords/passphrases are used, they meet minimum complexity requirements', 6, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000824', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000820', '8.3.9', 'If passwords/passphrases are the only authentication factor, they are changed at least once every 90 days', 9, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000830', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.4', 'Multi-factor authentication is implemented to secure access', 4, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000831', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000830', '8.4.1', 'MFA is implemented for all non-console access into the CDE for personnel with administrative access', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000832', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000830', '8.4.2', 'MFA is implemented for all access into the CDE', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000833', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000830', '8.4.3', 'MFA is implemented for all remote network access originating from outside the entity network', 3, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000840', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.5', 'Multi-factor authentication systems are configured to prevent misuse', 5, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000841', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000840', '8.5.1', 'MFA systems are implemented with all authentication factors required', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000000850', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000008', '8.6', 'Use of application and system accounts is strictly managed', 6, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000000851', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000850', '8.6.1', 'If accounts used by systems or applications can be used for interactive login, they are managed as follows', 1, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000000801', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.1', 'Processes and mechanisms for identification and authentication are defined and understood', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000802', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000801', '8.1.1', 'All security policies and procedures in Req 8 are documented and kept up to date', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000810', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.2', 'User identification and related accounts are strictly managed', 2, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000811', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000810', '8.2.1', 'All users are assigned a unique ID before access to system components', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000812', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000810', '8.2.2', 'Group, shared, or generic accounts are not used except where specifically allowed', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000820', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.3', 'Strong authentication is established and managed', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000821', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000820', '8.3.1', 'All user access to system components is authenticated via at least one factor', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000822', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000820', '8.3.2', 'Strong cryptography is used to render all authentication factors unreadable during transmission and storage', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000823', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000820', '8.3.6', 'If passwords/passphrases are used, they meet minimum complexity requirements', 6, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000824', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000820', '8.3.9', 'If passwords/passphrases are the only authentication factor, they are changed at least once every 90 days', 9, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000830', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.4', 'Multi-factor authentication is implemented to secure access', 4, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000831', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000830', '8.4.1', 'MFA is implemented for all non-console access into the CDE for personnel with administrative access', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000832', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000830', '8.4.2', 'MFA is implemented for all access into the CDE', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000833', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000830', '8.4.3', 'MFA is implemented for all remote network access originating from outside the entity network', 3, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000840', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.5', 'Multi-factor authentication systems are configured to prevent misuse', 5, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000841', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000840', '8.5.1', 'MFA systems are implemented with all authentication factors required', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000000850', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000008', '8.6', 'Use of application and system accounts is strictly managed', 6, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000000851', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000850', '8.6.1', 'If accounts used by systems or applications can be used for interactive login, they are managed as follows', 1, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 10 sub-requirements (logging)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000001001', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000010', '10.1', 'Processes and mechanisms for logging and monitoring are defined and understood', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001002', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001001', '10.1.1', 'All security policies and procedures in Req 10 are documented and kept up to date', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001010', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000010', '10.2', 'Audit logs are implemented to support detection of anomalies', 2, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001011', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001010', '10.2.1', 'Audit logs are enabled and active for all system components and cardholder data', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001012', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001010', '10.2.2', 'Audit logs record all actions taken by any individual with administrative access', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001020', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000010', '10.3', 'Audit logs are protected from destruction and unauthorized modifications', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001021', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001020', '10.3.1', 'Read access to audit logs files is limited to those with a job-related need', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001022', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001020', '10.3.2', 'Audit log files are protected to prevent modifications by individuals', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001023', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001020', '10.3.3', 'Audit log files are promptly backed up to a secure, central, internal log server', 3, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001030', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000010', '10.4', 'Audit logs are reviewed to identify anomalies or suspicious activity', 4, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001031', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001030', '10.4.1', 'Security events are reviewed at least once daily', 1, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000001001', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000010', '10.1', 'Processes and mechanisms for logging and monitoring are defined and understood', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001002', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001001', '10.1.1', 'All security policies and procedures in Req 10 are documented and kept up to date', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001010', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000010', '10.2', 'Audit logs are implemented to support detection of anomalies', 2, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001011', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001010', '10.2.1', 'Audit logs are enabled and active for all system components and cardholder data', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001012', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001010', '10.2.2', 'Audit logs record all actions taken by any individual with administrative access', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001020', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000010', '10.3', 'Audit logs are protected from destruction and unauthorized modifications', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001021', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001020', '10.3.1', 'Read access to audit logs files is limited to those with a job-related need', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001022', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001020', '10.3.2', 'Audit log files are protected to prevent modifications by individuals', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001023', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001020', '10.3.3', 'Audit log files are promptly backed up to a secure, central, internal log server', 3, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001030', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000010', '10.4', 'Audit logs are reviewed to identify anomalies or suspicious activity', 4, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001031', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001030', '10.4.1', 'Security events are reviewed at least once daily', 1, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 11 sub-requirements (testing)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000001101', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000011', '11.1', 'Processes for security testing are defined and understood', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001102', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001101', '11.1.1', 'All security policies and procedures in Req 11 are documented and kept up to date', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001110', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000011', '11.3', 'External and internal vulnerabilities are regularly identified, prioritized, and addressed', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001111', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001110', '11.3.1', 'Internal vulnerability scans are performed at least once every three months', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001112', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001110', '11.3.2', 'External vulnerability scans are performed at least once every three months', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001120', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000011', '11.4', 'External and internal penetration testing is regularly performed', 4, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001121', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001120', '11.4.1', 'External penetration testing is performed at least once every 12 months', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001130', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000011', '11.5', 'Network intrusions and unexpected file changes are detected and responded to', 5, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001131', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001130', '11.5.1', 'Intrusion-detection/prevention techniques are used to detect and/or prevent intrusions into the network', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001132', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001130', '11.5.2', 'A change-detection mechanism is deployed to alert on unauthorized modification of critical files', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001140', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000011', '11.6', 'Unauthorized changes on payment pages are detected and responded to', 6, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001141', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001140', '11.6.1', 'A change- and tamper-detection mechanism is deployed to alert on unauthorized changes to HTTP headers and payment page content', 1, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000001101', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000011', '11.1', 'Processes for security testing are defined and understood', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001102', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001101', '11.1.1', 'All security policies and procedures in Req 11 are documented and kept up to date', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001110', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000011', '11.3', 'External and internal vulnerabilities are regularly identified, prioritized, and addressed', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001111', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001110', '11.3.1', 'Internal vulnerability scans are performed at least once every three months', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001112', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001110', '11.3.2', 'External vulnerability scans are performed at least once every three months', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001120', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000011', '11.4', 'External and internal penetration testing is regularly performed', 4, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001121', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001120', '11.4.1', 'External penetration testing is performed at least once every 12 months', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001130', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000011', '11.5', 'Network intrusions and unexpected file changes are detected and responded to', 5, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001131', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001130', '11.5.1', 'Intrusion-detection/prevention techniques are used to detect and/or prevent intrusions into the network', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001132', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001130', '11.5.2', 'A change-detection mechanism is deployed to alert on unauthorized modification of critical files', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001140', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000011', '11.6', 'Unauthorized changes on payment pages are detected and responded to', 6, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001141', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001140', '11.6.1', 'A change- and tamper-detection mechanism is deployed to alert on unauthorized changes to HTTP headers and payment page content', 1, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- PCI DSS — Requirement 12 sub-requirements (policies)
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0300000-0000-0000-0000-000000001201', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000012', '12.1', 'A comprehensive information security policy is established and maintained', 1, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001202', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001201', '12.1.1', 'An overall information security policy is established, published, and disseminated', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001203', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001201', '12.1.2', 'The information security policy is reviewed at least once every 12 months', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001210', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000012', '12.3', 'Risks to the cardholder data environment are formally identified, evaluated, and managed', 3, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001211', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001210', '12.3.1', 'A targeted risk analysis is performed for each PCI DSS requirement', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001220', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000012', '12.6', 'Security awareness education is an ongoing activity', 6, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001221', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001220', '12.6.1', 'A formal security awareness program is implemented', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001222', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001220', '12.6.2', 'The security awareness program is reviewed at least once every 12 months', 2, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001230', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000012', '12.8', 'Risk to information assets from relationships with third parties is managed', 8, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001231', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001230', '12.8.1', 'A list of all third-party service providers is maintained', 1, 2, TRUE),
-    ('r0300000-0000-0000-0000-000000001240', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000000012', '12.10', 'Security incidents and suspected security incidents are responded to immediately', 10, 1, FALSE),
-    ('r0300000-0000-0000-0000-000000001241', 'v0000000-0000-0000-0000-000000000003', 'r0300000-0000-0000-0000-000000001240', '12.10.1', 'An incident response plan exists to be initiated in the event of a suspected or confirmed security incident', 1, 2, TRUE)
+    ('e0300000-0000-0000-0000-000000001201', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000012', '12.1', 'A comprehensive information security policy is established and maintained', 1, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001202', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001201', '12.1.1', 'An overall information security policy is established, published, and disseminated', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001203', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001201', '12.1.2', 'The information security policy is reviewed at least once every 12 months', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001210', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000012', '12.3', 'Risks to the cardholder data environment are formally identified, evaluated, and managed', 3, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001211', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001210', '12.3.1', 'A targeted risk analysis is performed for each PCI DSS requirement', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001220', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000012', '12.6', 'Security awareness education is an ongoing activity', 6, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001221', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001220', '12.6.1', 'A formal security awareness program is implemented', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001222', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001220', '12.6.2', 'The security awareness program is reviewed at least once every 12 months', 2, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001230', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000012', '12.8', 'Risk to information assets from relationships with third parties is managed', 8, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001231', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001230', '12.8.1', 'A list of all third-party service providers is maintained', 1, 2, TRUE),
+    ('e0300000-0000-0000-0000-000000001240', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000000012', '12.10', 'Security incidents and suspected security incidents are responded to immediately', 10, 1, FALSE),
+    ('e0300000-0000-0000-0000-000000001241', 'a1000000-0000-0000-0000-000000000003', 'e0300000-0000-0000-0000-000000001240', '12.10.1', 'An incident response plan exists to be initiated in the event of a suspected or confirmed security incident', 1, 2, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ============================================================================
@@ -488,118 +488,118 @@ ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- GDPR — Chapter groups
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0400000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000004', NULL, 'Ch.II', 'Principles', 1, 0, FALSE),
-    ('r0400000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000004', NULL, 'Ch.III', 'Rights of the Data Subject', 2, 0, FALSE),
-    ('r0400000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000004', NULL, 'Ch.IV', 'Controller and Processor', 3, 0, FALSE),
-    ('r0400000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000004', NULL, 'Ch.V', 'Transfers of Personal Data to Third Countries', 4, 0, FALSE),
-    ('r0400000-0000-0000-0000-000000000005', 'v0000000-0000-0000-0000-000000000004', NULL, 'Ch.IX', 'Specific Processing Situations', 5, 0, FALSE)
+    ('e0400000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000004', NULL, 'Ch.II', 'Principles', 1, 0, FALSE),
+    ('e0400000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000004', NULL, 'Ch.III', 'Rights of the Data Subject', 2, 0, FALSE),
+    ('e0400000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000004', NULL, 'Ch.IV', 'Controller and Processor', 3, 0, FALSE),
+    ('e0400000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000004', NULL, 'Ch.V', 'Transfers of Personal Data to Third Countries', 4, 0, FALSE),
+    ('e0400000-0000-0000-0000-000000000005', 'a1000000-0000-0000-0000-000000000004', NULL, 'Ch.IX', 'Specific Processing Situations', 5, 0, FALSE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- GDPR — Chapter II: Principles
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0400000-0000-0000-0000-000000000010', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.5', 'Principles relating to processing of personal data', 1, 1, FALSE),
-    ('r0400000-0000-0000-0000-000000000011', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(a)', 'Lawfulness, fairness and transparency', 1, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000012', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(b)', 'Purpose limitation', 2, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000013', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(c)', 'Data minimisation', 3, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000014', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(d)', 'Accuracy', 4, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000015', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(e)', 'Storage limitation', 5, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000016', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(1)(f)', 'Integrity and confidentiality', 6, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000017', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000010', 'Art.5(2)', 'Accountability', 7, 2, TRUE),
-    ('r0400000-0000-0000-0000-000000000020', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.6', 'Lawfulness of processing', 2, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000021', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.7', 'Conditions for consent', 3, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000022', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.8', 'Conditions applicable to child''s consent', 4, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000023', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.9', 'Processing of special categories of personal data', 5, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000024', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.10', 'Processing of personal data relating to criminal convictions', 6, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000025', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000001', 'Art.11', 'Processing which does not require identification', 7, 1, TRUE)
+    ('e0400000-0000-0000-0000-000000000010', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.5', 'Principles relating to processing of personal data', 1, 1, FALSE),
+    ('e0400000-0000-0000-0000-000000000011', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(a)', 'Lawfulness, fairness and transparency', 1, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000012', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(b)', 'Purpose limitation', 2, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000013', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(c)', 'Data minimisation', 3, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000014', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(d)', 'Accuracy', 4, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000015', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(e)', 'Storage limitation', 5, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000016', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(1)(f)', 'Integrity and confidentiality', 6, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000017', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000010', 'Art.5(2)', 'Accountability', 7, 2, TRUE),
+    ('e0400000-0000-0000-0000-000000000020', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.6', 'Lawfulness of processing', 2, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000021', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.7', 'Conditions for consent', 3, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000022', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.8', 'Conditions applicable to child''s consent', 4, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000023', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.9', 'Processing of special categories of personal data', 5, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000024', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.10', 'Processing of personal data relating to criminal convictions', 6, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000025', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000001', 'Art.11', 'Processing which does not require identification', 7, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- GDPR — Chapter III: Rights of Data Subject
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0400000-0000-0000-0000-000000000030', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.12', 'Transparent information, communication and modalities', 1, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000031', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.13', 'Information to be provided where personal data are collected from the data subject', 2, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000032', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.14', 'Information to be provided where personal data have not been obtained from the data subject', 3, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000033', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.15', 'Right of access by the data subject', 4, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000034', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.16', 'Right to rectification', 5, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000035', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.17', 'Right to erasure (right to be forgotten)', 6, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000036', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.18', 'Right to restriction of processing', 7, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000037', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.19', 'Notification obligation regarding rectification or erasure', 8, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000038', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.20', 'Right to data portability', 9, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000039', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.21', 'Right to object', 10, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000040', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.22', 'Automated individual decision-making, including profiling', 11, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000041', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000002', 'Art.23', 'Restrictions on rights and obligations', 12, 1, TRUE)
+    ('e0400000-0000-0000-0000-000000000030', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.12', 'Transparent information, communication and modalities', 1, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000031', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.13', 'Information to be provided where personal data are collected from the data subject', 2, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000032', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.14', 'Information to be provided where personal data have not been obtained from the data subject', 3, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000033', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.15', 'Right of access by the data subject', 4, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000034', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.16', 'Right to rectification', 5, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000035', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.17', 'Right to erasure (right to be forgotten)', 6, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000036', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.18', 'Right to restriction of processing', 7, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000037', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.19', 'Notification obligation regarding rectification or erasure', 8, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000038', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.20', 'Right to data portability', 9, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000039', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.21', 'Right to object', 10, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000040', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.22', 'Automated individual decision-making, including profiling', 11, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000041', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000002', 'Art.23', 'Restrictions on rights and obligations', 12, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- GDPR — Chapter IV: Controller and Processor
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0400000-0000-0000-0000-000000000050', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.24', 'Responsibility of the controller', 1, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000051', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.25', 'Data protection by design and by default', 2, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000052', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.26', 'Joint controllers', 3, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000053', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.27', 'Representatives of controllers not established in the Union', 4, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000054', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.28', 'Processor', 5, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000055', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.29', 'Processing under the authority of the controller or processor', 6, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000056', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.30', 'Records of processing activities', 7, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000057', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.31', 'Cooperation with the supervisory authority', 8, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000058', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.32', 'Security of processing', 9, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000059', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.33', 'Notification of a personal data breach to the supervisory authority', 10, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000060', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.34', 'Communication of a personal data breach to the data subject', 11, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000061', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.35', 'Data protection impact assessment', 12, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000062', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.36', 'Prior consultation', 13, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000063', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.37', 'Designation of the data protection officer', 14, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000064', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.38', 'Position of the data protection officer', 15, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000065', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.39', 'Tasks of the data protection officer', 16, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000066', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.40', 'Codes of conduct', 17, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000067', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.41', 'Monitoring of approved codes of conduct', 18, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000068', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.42', 'Certification', 19, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000069', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000003', 'Art.43', 'Certification bodies', 20, 1, TRUE)
+    ('e0400000-0000-0000-0000-000000000050', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.24', 'Responsibility of the controller', 1, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000051', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.25', 'Data protection by design and by default', 2, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000052', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.26', 'Joint controllers', 3, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000053', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.27', 'Representatives of controllers not established in the Union', 4, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000054', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.28', 'Processor', 5, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000055', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.29', 'Processing under the authority of the controller or processor', 6, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000056', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.30', 'Records of processing activities', 7, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000057', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.31', 'Cooperation with the supervisory authority', 8, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000058', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.32', 'Security of processing', 9, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000059', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.33', 'Notification of a personal data breach to the supervisory authority', 10, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000060', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.34', 'Communication of a personal data breach to the data subject', 11, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000061', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.35', 'Data protection impact assessment', 12, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000062', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.36', 'Prior consultation', 13, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000063', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.37', 'Designation of the data protection officer', 14, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000064', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.38', 'Position of the data protection officer', 15, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000065', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.39', 'Tasks of the data protection officer', 16, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000066', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.40', 'Codes of conduct', 17, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000067', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.41', 'Monitoring of approved codes of conduct', 18, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000068', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.42', 'Certification', 19, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000069', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000003', 'Art.43', 'Certification bodies', 20, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- GDPR — Chapter V: Transfers
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0400000-0000-0000-0000-000000000070', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000004', 'Art.44', 'General principle for transfers', 1, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000071', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000004', 'Art.45', 'Transfers on the basis of an adequacy decision', 2, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000072', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000004', 'Art.46', 'Transfers subject to appropriate safeguards', 3, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000073', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000004', 'Art.47', 'Binding corporate rules', 4, 1, TRUE),
-    ('r0400000-0000-0000-0000-000000000074', 'v0000000-0000-0000-0000-000000000004', 'r0400000-0000-0000-0000-000000000004', 'Art.49', 'Derogations for specific situations', 5, 1, TRUE)
+    ('e0400000-0000-0000-0000-000000000070', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000004', 'Art.44', 'General principle for transfers', 1, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000071', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000004', 'Art.45', 'Transfers on the basis of an adequacy decision', 2, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000072', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000004', 'Art.46', 'Transfers subject to appropriate safeguards', 3, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000073', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000004', 'Art.47', 'Binding corporate rules', 4, 1, TRUE),
+    ('e0400000-0000-0000-0000-000000000074', 'a1000000-0000-0000-0000-000000000004', 'e0400000-0000-0000-0000-000000000004', 'Art.49', 'Derogations for specific situations', 5, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 -- ============================================================================
 -- SPRINT 2: REQUIREMENTS — CCPA/CPRA (2023)
 -- ============================================================================
 
 INSERT INTO requirements (id, framework_version_id, parent_id, identifier, title, section_order, depth, is_assessable) VALUES
-    ('r0500000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.100', 'Consumer Rights', 1, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000010', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000001', '1798.100(a)', 'Right to know what personal information is collected', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000011', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000001', '1798.100(b)', 'Right to know what personal information is sold or disclosed', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000012', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000001', '1798.100(d)', 'Right to delete personal information', 3, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000013', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000001', '1798.100(e)', 'Right to correct inaccurate personal information', 4, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.105', 'Right to Deletion', 2, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000020', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000002', '1798.105(a)', 'Consumer right to request deletion of personal information', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000021', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000002', '1798.105(b)', 'Business obligation to comply with deletion requests', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.106', 'Right to Correction', 3, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000030', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000003', '1798.106(a)', 'Consumer right to request correction of inaccurate personal information', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.110', 'Right to Know', 4, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000040', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000004', '1798.110(a)', 'Consumer right to request categories of personal information collected', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000041', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000004', '1798.110(b)', 'Consumer right to request specific pieces of personal information collected', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000005', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.115', 'Right to Know - Disclosure', 5, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000050', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000005', '1798.115(a)', 'Consumer right to know about disclosure for business purposes', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000006', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.120', 'Right to Opt-Out', 6, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000060', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000006', '1798.120(a)', 'Consumer right to opt-out of sale or sharing of personal information', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000061', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000006', '1798.120(b)', 'Business obligation to respect opt-out requests', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000007', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.121', 'Right to Limit Use of Sensitive Personal Information', 7, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000070', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000007', '1798.121(a)', 'Consumer right to limit use and disclosure of sensitive personal information', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000008', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.125', 'Non-Discrimination', 8, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000080', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000008', '1798.125(a)', 'Business shall not discriminate against consumer for exercising rights', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000009', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.130', 'Notice and Process Requirements', 9, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000090', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000009', '1798.130(a)(1)', 'Methods for submitting requests to know, delete, and correct', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000091', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000009', '1798.130(a)(2)', 'Verification of consumer requests', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000092', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000009', '1798.130(a)(5)', 'Disclosure of personal information within 45 days', 3, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000100', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.135', 'Opt-Out and Opt-In', 10, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000101', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000100', '1798.135(a)', 'Clear and conspicuous link on homepage titled Do Not Sell or Share My Personal Information', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000102', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000100', '1798.135(b)', 'Clear and conspicuous link titled Limit the Use of My Sensitive Personal Information', 2, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000110', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.140', 'Definitions and Categories', 11, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000111', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000110', '1798.140(v)', 'Categories of sensitive personal information defined and tracked', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000120', 'v0000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.185', 'Regulations', 12, 0, FALSE),
-    ('r0500000-0000-0000-0000-000000000121', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000120', '1798.185(a)(15)', 'Cybersecurity audit regulations for businesses with significant risk', 1, 1, TRUE),
-    ('r0500000-0000-0000-0000-000000000122', 'v0000000-0000-0000-0000-000000000005', 'r0500000-0000-0000-0000-000000000120', '1798.185(a)(16)', 'Risk assessment regulations for processing that presents significant risk', 2, 1, TRUE)
+    ('e0500000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.100', 'Consumer Rights', 1, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000010', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000001', '1798.100(a)', 'Right to know what personal information is collected', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000011', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000001', '1798.100(b)', 'Right to know what personal information is sold or disclosed', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000012', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000001', '1798.100(d)', 'Right to delete personal information', 3, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000013', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000001', '1798.100(e)', 'Right to correct inaccurate personal information', 4, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.105', 'Right to Deletion', 2, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000020', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000002', '1798.105(a)', 'Consumer right to request deletion of personal information', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000021', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000002', '1798.105(b)', 'Business obligation to comply with deletion requests', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.106', 'Right to Correction', 3, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000030', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000003', '1798.106(a)', 'Consumer right to request correction of inaccurate personal information', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.110', 'Right to Know', 4, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000040', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000004', '1798.110(a)', 'Consumer right to request categories of personal information collected', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000041', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000004', '1798.110(b)', 'Consumer right to request specific pieces of personal information collected', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000005', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.115', 'Right to Know - Disclosure', 5, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000050', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000005', '1798.115(a)', 'Consumer right to know about disclosure for business purposes', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000006', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.120', 'Right to Opt-Out', 6, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000060', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000006', '1798.120(a)', 'Consumer right to opt-out of sale or sharing of personal information', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000061', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000006', '1798.120(b)', 'Business obligation to respect opt-out requests', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000007', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.121', 'Right to Limit Use of Sensitive Personal Information', 7, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000070', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000007', '1798.121(a)', 'Consumer right to limit use and disclosure of sensitive personal information', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000008', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.125', 'Non-Discrimination', 8, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000080', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000008', '1798.125(a)', 'Business shall not discriminate against consumer for exercising rights', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000009', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.130', 'Notice and Process Requirements', 9, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000090', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000009', '1798.130(a)(1)', 'Methods for submitting requests to know, delete, and correct', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000091', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000009', '1798.130(a)(2)', 'Verification of consumer requests', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000092', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000009', '1798.130(a)(5)', 'Disclosure of personal information within 45 days', 3, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000100', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.135', 'Opt-Out and Opt-In', 10, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000101', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000100', '1798.135(a)', 'Clear and conspicuous link on homepage titled Do Not Sell or Share My Personal Information', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000102', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000100', '1798.135(b)', 'Clear and conspicuous link titled Limit the Use of My Sensitive Personal Information', 2, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000110', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.140', 'Definitions and Categories', 11, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000111', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000110', '1798.140(v)', 'Categories of sensitive personal information defined and tracked', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000120', 'a1000000-0000-0000-0000-000000000005', NULL, 'Sec.1798.185', 'Regulations', 12, 0, FALSE),
+    ('e0500000-0000-0000-0000-000000000121', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000120', '1798.185(a)(15)', 'Cybersecurity audit regulations for businesses with significant risk', 1, 1, TRUE),
+    ('e0500000-0000-0000-0000-000000000122', 'a1000000-0000-0000-0000-000000000005', 'e0500000-0000-0000-0000-000000000120', '1798.185(a)(16)', 'Risk assessment regulations for processing that presents significant risk', 2, 1, TRUE)
 ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 
 -- ============================================================================
@@ -607,11 +607,11 @@ ON CONFLICT (framework_version_id, identifier) DO NOTHING;
 -- ============================================================================
 
 INSERT INTO org_frameworks (id, org_id, framework_id, active_version_id, status, target_date, notes) VALUES
-    ('d0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'v0000000-0000-0000-0000-000000000001', 'active', '2026-06-30', 'Primary compliance target for Q2 2026'),
-    ('d0000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000002', 'v0000000-0000-0000-0000-000000000002', 'active', '2026-09-30', 'ISO certification planned for Q3 2026'),
-    ('d0000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000003', 'v0000000-0000-0000-0000-000000000003', 'active', '2026-12-31', 'Payment processing compliance — must be compliant by EOY'),
-    ('d0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000004', 'v0000000-0000-0000-0000-000000000004', 'active', NULL, 'GDPR compliance required for EU customer base'),
-    ('d0000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000005', 'v0000000-0000-0000-0000-000000000005', 'active', NULL, 'CCPA compliance required for California consumer data')
+    ('d0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000001', 'a1000000-0000-0000-0000-000000000001', 'active', '2026-06-30', 'Primary compliance target for Q2 2026'),
+    ('d0000000-0000-0000-0000-000000000002', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000002', 'a1000000-0000-0000-0000-000000000002', 'active', '2026-09-30', 'ISO certification planned for Q3 2026'),
+    ('d0000000-0000-0000-0000-000000000003', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000003', 'a1000000-0000-0000-0000-000000000003', 'active', '2026-12-31', 'Payment processing compliance — must be compliant by EOY'),
+    ('d0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000004', 'a1000000-0000-0000-0000-000000000004', 'active', NULL, 'GDPR compliance required for EU customer base'),
+    ('d0000000-0000-0000-0000-000000000005', 'a0000000-0000-0000-0000-000000000001', 'f0000000-0000-0000-0000-000000000005', 'a1000000-0000-0000-0000-000000000005', 'active', NULL, 'CCPA compliance required for California consumer data')
 ON CONFLICT (org_id, framework_id) DO NOTHING;
 
 -- ============================================================================
@@ -977,194 +977,194 @@ ON CONFLICT (org_id, identifier) DO NOTHING;
 
 INSERT INTO control_mappings (org_id, control_id, requirement_id, strength, mapped_by, notes) VALUES
 -- CTRL-AC-001 (MFA) → maps to 4 frameworks
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0100000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA directly addresses logical access security'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0200000-0000-0000-0000-000000000088', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA implements secure authentication'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0300000-0000-0000-0000-000000000831', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for CDE administrative access'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0300000-0000-0000-0000-000000000832', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for all CDE access'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0300000-0000-0000-0000-000000000833', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for remote network access'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'r0400000-0000-0000-0000-000000000058', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'MFA supports security of processing'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0100000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA directly addresses logical access security'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0200000-0000-0000-0000-000000000088', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA implements secure authentication'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0300000-0000-0000-0000-000000000831', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for CDE administrative access'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0300000-0000-0000-0000-000000000832', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for all CDE access'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0300000-0000-0000-0000-000000000833', 'primary', 'b0000000-0000-0000-0000-000000000001', 'MFA for remote network access'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'e0400000-0000-0000-0000-000000000058', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'MFA supports security of processing'),
 
 -- CTRL-AC-002 (RBAC) → maps to 4 frameworks
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'r0100000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC implements logical access security'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000024', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC implements access control'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'r0200000-0000-0000-0000-000000000086', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC enforces information access restriction'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'r0400000-0000-0000-0000-000000000058', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'RBAC supports security of processing'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0100000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC implements logical access security'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000024', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC implements access control'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0200000-0000-0000-0000-000000000086', 'primary', 'b0000000-0000-0000-0000-000000000001', 'RBAC enforces information access restriction'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'e0400000-0000-0000-0000-000000000058', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'RBAC supports security of processing'),
 
 -- CTRL-AC-003 (Access Reviews) → SOC 2, ISO, PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 'r0100000-0000-0000-0000-000000000062', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Reviews ensure access modification/removal'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 'r0200000-0000-0000-0000-000000000027', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Reviews manage access rights lifecycle'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 'e0100000-0000-0000-0000-000000000062', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Reviews ensure access modification/removal'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000003', 'e0200000-0000-0000-0000-000000000027', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Reviews manage access rights lifecycle'),
 
 -- CTRL-AC-006 (Password Policy) → PCI, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'r0300000-0000-0000-0000-000000000823', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password complexity meets PCI requirements'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'r0300000-0000-0000-0000-000000000824', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password rotation meets PCI requirements'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'r0200000-0000-0000-0000-000000000026', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password policy implements authentication information control'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'e0300000-0000-0000-0000-000000000823', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password complexity meets PCI requirements'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'e0300000-0000-0000-0000-000000000824', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password rotation meets PCI requirements'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006', 'e0200000-0000-0000-0000-000000000026', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Password policy implements authentication information control'),
 
 -- CTRL-AC-012 (Unique User ID) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'r0300000-0000-0000-0000-000000000811', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Unique IDs assigned to all users'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'r0300000-0000-0000-0000-000000000812', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Prohibits shared/group accounts'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'r0200000-0000-0000-0000-000000000025', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Identity management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'e0300000-0000-0000-0000-000000000811', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Unique IDs assigned to all users'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'e0300000-0000-0000-0000-000000000812', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Prohibits shared/group accounts'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000012', 'e0200000-0000-0000-0000-000000000025', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Identity management'),
 
 -- CTRL-AC-022 (Segregation of Duties) → ISO, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000022', 'r0200000-0000-0000-0000-000000000012', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Segregation of duties per ISO'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000022', 'r0100000-0000-0000-0000-000000000050', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Control activities for risk mitigation'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000022', 'e0200000-0000-0000-0000-000000000012', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Segregation of duties per ISO'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000022', 'e0100000-0000-0000-0000-000000000050', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Control activities for risk mitigation'),
 
 -- CTRL-DP-002 (Encryption at Rest) → SOC 2, ISO, PCI, GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'r0100000-0000-0000-0000-000000000111', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption maintains confidential information'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'r0200000-0000-0000-0000-000000000107', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Use of cryptography per ISO'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'r0400000-0000-0000-0000-000000000016', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption ensures integrity and confidentiality of data'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'r0400000-0000-0000-0000-000000000058', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption for security of processing'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'e0100000-0000-0000-0000-000000000111', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption maintains confidential information'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'e0200000-0000-0000-0000-000000000107', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Use of cryptography per ISO'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'e0400000-0000-0000-0000-000000000016', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption ensures integrity and confidentiality of data'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000057', 'e0400000-0000-0000-0000-000000000058', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Encryption for security of processing'),
 
 -- CTRL-DP-003 (Encryption in Transit) → same frameworks
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'r0100000-0000-0000-0000-000000000066', 'primary', 'b0000000-0000-0000-0000-000000000001', 'TLS protects data in transit'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'r0200000-0000-0000-0000-000000000107', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'TLS implements cryptography controls'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'r0300000-0000-0000-0000-000000000822', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Cryptography renders auth factors unreadable'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'e0100000-0000-0000-0000-000000000066', 'primary', 'b0000000-0000-0000-0000-000000000001', 'TLS protects data in transit'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'e0200000-0000-0000-0000-000000000107', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'TLS implements cryptography controls'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000058', 'e0300000-0000-0000-0000-000000000822', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Cryptography renders auth factors unreadable'),
 
 -- CTRL-DP-016 (Data Subject Rights) → GDPR, CCPA
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0400000-0000-0000-0000-000000000033', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right of access'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0400000-0000-0000-0000-000000000034', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to rectification'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0400000-0000-0000-0000-000000000035', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to erasure'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0400000-0000-0000-0000-000000000038', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to data portability'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0500000-0000-0000-0000-000000000010', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to know (CCPA)'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0500000-0000-0000-0000-000000000012', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to delete (CCPA)'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'r0500000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to correct (CCPA)'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0400000-0000-0000-0000-000000000033', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right of access'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0400000-0000-0000-0000-000000000034', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to rectification'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0400000-0000-0000-0000-000000000035', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to erasure'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0400000-0000-0000-0000-000000000038', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to data portability'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0500000-0000-0000-0000-000000000010', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to know (CCPA)'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0500000-0000-0000-0000-000000000012', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to delete (CCPA)'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000071', 'e0500000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to correct (CCPA)'),
 
 -- CTRL-DP-014 (Privacy Notice) → GDPR, CCPA
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'r0400000-0000-0000-0000-000000000030', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Transparent information and communication'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'r0400000-0000-0000-0000-000000000031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Information provided at collection'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'r0100000-0000-0000-0000-000000000131', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Privacy notice practices (SOC 2)'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'e0400000-0000-0000-0000-000000000030', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Transparent information and communication'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'e0400000-0000-0000-0000-000000000031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Information provided at collection'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000069', 'e0100000-0000-0000-0000-000000000131', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Privacy notice practices (SOC 2)'),
 
 -- CTRL-DP-015 (Consent Management) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000070', 'r0400000-0000-0000-0000-000000000021', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Conditions for consent'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000070', 'r0400000-0000-0000-0000-000000000011', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Lawfulness, fairness and transparency'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000070', 'e0400000-0000-0000-0000-000000000021', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Conditions for consent'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000070', 'e0400000-0000-0000-0000-000000000011', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Lawfulness, fairness and transparency'),
 
 -- CTRL-DP-017 (ROPA) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000072', 'r0400000-0000-0000-0000-000000000056', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Records of processing activities (Art 30)'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000072', 'e0400000-0000-0000-0000-000000000056', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Records of processing activities (Art 30)'),
 
 -- CTRL-DP-018 (DPIA) → GDPR, CCPA
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000073', 'r0400000-0000-0000-0000-000000000061', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data protection impact assessment'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000073', 'r0500000-0000-0000-0000-000000000122', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Risk assessment for significant risk processing'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000073', 'e0400000-0000-0000-0000-000000000061', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data protection impact assessment'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000073', 'e0500000-0000-0000-0000-000000000122', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Risk assessment for significant risk processing'),
 
 -- CTRL-DP-022 (Opt-Out) → CCPA
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000077', 'r0500000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to opt-out of sale/sharing'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000077', 'r0500000-0000-0000-0000-000000000101', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Do Not Sell link on homepage'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000077', 'e0500000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Right to opt-out of sale/sharing'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000077', 'e0500000-0000-0000-0000-000000000101', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Do Not Sell link on homepage'),
 
 -- CTRL-IR-001 (IRP) → SOC 2, ISO, PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'r0100000-0000-0000-0000-000000000073', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 incident response program'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'r0200000-0000-0000-0000-000000000033', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO incident management planning'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'r0300000-0000-0000-0000-000000001241', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI incident response plan'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'e0100000-0000-0000-0000-000000000073', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 incident response program'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'e0200000-0000-0000-0000-000000000033', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO incident management planning'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000081', 'e0300000-0000-0000-0000-000000001241', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI incident response plan'),
 
 -- CTRL-IR-005 (Breach Notification) → GDPR, CCPA
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000085', 'r0400000-0000-0000-0000-000000000059', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR breach notification to DPA'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000085', 'r0400000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR breach notification to data subject'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000085', 'e0400000-0000-0000-0000-000000000059', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR breach notification to DPA'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000085', 'e0400000-0000-0000-0000-000000000060', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR breach notification to data subject'),
 
 -- CTRL-LM-001 (Centralized Logging) → SOC 2, ISO, PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'r0100000-0000-0000-0000-000000000070', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 detection and monitoring'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'r0200000-0000-0000-0000-000000000098', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO logging control'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'r0300000-0000-0000-0000-000000001011', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI audit logs enabled and active'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'e0100000-0000-0000-0000-000000000070', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 detection and monitoring'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'e0200000-0000-0000-0000-000000000098', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO logging control'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000101', 'e0300000-0000-0000-0000-000000001011', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI audit logs enabled and active'),
 
 -- CTRL-LM-002 (Audit Log Integrity) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000102', 'r0300000-0000-0000-0000-000000001022', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Logs protected from modification'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000102', 'r0300000-0000-0000-0000-000000001023', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Logs backed up to central server'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000102', 'e0300000-0000-0000-0000-000000001022', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Logs protected from modification'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000102', 'e0300000-0000-0000-0000-000000001023', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Logs backed up to central server'),
 
 -- CTRL-LM-010 (Log Access Control) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000110', 'r0300000-0000-0000-0000-000000001021', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Read access to logs limited to need'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000110', 'e0300000-0000-0000-0000-000000001021', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Read access to logs limited to need'),
 
 -- CTRL-LM-013 (Daily Log Review) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000113', 'r0300000-0000-0000-0000-000000001031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Security events reviewed daily'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000113', 'e0300000-0000-0000-0000-000000001031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Security events reviewed daily'),
 
 -- CTRL-LM-015 (IDS/IPS) → PCI, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000115', 'r0300000-0000-0000-0000-000000001131', 'primary', 'b0000000-0000-0000-0000-000000000001', 'IDS/IPS for network intrusion detection'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000115', 'r0100000-0000-0000-0000-000000000071', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 monitoring for anomalies'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000115', 'e0300000-0000-0000-0000-000000001131', 'primary', 'b0000000-0000-0000-0000-000000000001', 'IDS/IPS for network intrusion detection'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000115', 'e0100000-0000-0000-0000-000000000071', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 monitoring for anomalies'),
 
 -- CTRL-LM-014 (FIM) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000114', 'r0300000-0000-0000-0000-000000001132', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Change detection for critical files'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000114', 'e0300000-0000-0000-0000-000000001132', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Change detection for critical files'),
 
 -- CTRL-LM-021 (Payment Page Monitoring) → PCI 11.6.1
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000121', 'r0300000-0000-0000-0000-000000001141', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page tamper detection'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000121', 'r0300000-0000-0000-0000-000000000633', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page script management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000121', 'e0300000-0000-0000-0000-000000001141', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page tamper detection'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000121', 'e0300000-0000-0000-0000-000000000633', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page script management'),
 
 -- CTRL-NW-001 (Segmentation) → PCI, SOC 2, ISO
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'r0300000-0000-0000-0000-000000000131', 'primary', 'b0000000-0000-0000-0000-000000000001', 'NSCs between trusted/untrusted'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'r0100000-0000-0000-0000-000000000065', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 logical access at boundaries'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'r0200000-0000-0000-0000-000000000105', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO network segregation'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'e0300000-0000-0000-0000-000000000131', 'primary', 'b0000000-0000-0000-0000-000000000001', 'NSCs between trusted/untrusted'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'e0100000-0000-0000-0000-000000000065', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 logical access at boundaries'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000126', 'e0200000-0000-0000-0000-000000000105', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO network segregation'),
 
 -- CTRL-NW-007 (Inbound CDE) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000132', 'r0300000-0000-0000-0000-000000000121', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Inbound CDE traffic restriction'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000132', 'e0300000-0000-0000-0000-000000000121', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Inbound CDE traffic restriction'),
 
 -- CTRL-NW-008 (Outbound CDE) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000133', 'r0300000-0000-0000-0000-000000000122', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Outbound CDE traffic restriction'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000133', 'e0300000-0000-0000-0000-000000000122', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Outbound CDE traffic restriction'),
 
 -- CTRL-PM-001 (InfoSec Policy) → SOC 2, ISO, PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'r0100000-0000-0000-0000-000000000051', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 control activities via policies'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'r0200000-0000-0000-0000-000000000010', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO information security policies'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'r0300000-0000-0000-0000-000000001202', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI security policy established'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'r0300000-0000-0000-0000-000000001203', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI policy reviewed annually'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'e0100000-0000-0000-0000-000000000051', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 control activities via policies'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'e0200000-0000-0000-0000-000000000010', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO information security policies'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'e0300000-0000-0000-0000-000000001202', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI security policy established'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000146', 'e0300000-0000-0000-0000-000000001203', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI policy reviewed annually'),
 
 -- CTRL-PM-019 (DPO) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'r0400000-0000-0000-0000-000000000063', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO designation'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'r0400000-0000-0000-0000-000000000064', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO position and resources'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'r0400000-0000-0000-0000-000000000065', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO tasks defined'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'e0400000-0000-0000-0000-000000000063', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO designation'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'e0400000-0000-0000-0000-000000000064', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO position and resources'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000164', 'e0400000-0000-0000-0000-000000000065', 'primary', 'b0000000-0000-0000-0000-000000000001', 'DPO tasks defined'),
 
 -- CTRL-PM-025 (Risk Assessment) → SOC 2, PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000170', 'r0100000-0000-0000-0000-000000000031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 risk identification and analysis'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000170', 'r0300000-0000-0000-0000-000000001211', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI targeted risk analysis'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000170', 'e0100000-0000-0000-0000-000000000031', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 risk identification and analysis'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000170', 'e0300000-0000-0000-0000-000000001211', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI targeted risk analysis'),
 
 -- CTRL-SA-001 (Awareness Training) → SOC 2, ISO, PCI, GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'r0100000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 commitment to competent individuals'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'r0200000-0000-0000-0000-000000000062', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO security awareness training'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'r0300000-0000-0000-0000-000000001221', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI security awareness program'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'e0100000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 commitment to competent individuals'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'e0200000-0000-0000-0000-000000000062', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO security awareness training'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000206', 'e0300000-0000-0000-0000-000000001221', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI security awareness program'),
 
 -- CTRL-SD-003 (SAST) + CTRL-SD-004 (DAST) → PCI, ISO
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000228', 'r0300000-0000-0000-0000-000000000613', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Code review for vulnerabilities'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000228', 'r0200000-0000-0000-0000-000000000112', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Security testing in dev and acceptance'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000229', 'r0300000-0000-0000-0000-000000000632', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Technical solution to detect web attacks'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000229', 'r0200000-0000-0000-0000-000000000112', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Security testing in dev and acceptance'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000228', 'e0300000-0000-0000-0000-000000000613', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Code review for vulnerabilities'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000228', 'e0200000-0000-0000-0000-000000000112', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Security testing in dev and acceptance'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000229', 'e0300000-0000-0000-0000-000000000632', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Technical solution to detect web attacks'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000229', 'e0200000-0000-0000-0000-000000000112', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'Security testing in dev and acceptance'),
 
 -- CTRL-SD-013 (Change Management) → PCI, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'r0100000-0000-0000-0000-000000000080', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 change authorization and management'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'r0300000-0000-0000-0000-000000000641', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI change control procedures'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'r0200000-0000-0000-0000-000000000115', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO change management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'e0100000-0000-0000-0000-000000000080', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 change authorization and management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'e0300000-0000-0000-0000-000000000641', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI change control procedures'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000238', 'e0200000-0000-0000-0000-000000000115', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO change management'),
 
 -- CTRL-SD-022 (Payment Page Scripts) → PCI 6.4.3
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000247', 'r0300000-0000-0000-0000-000000000633', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page script management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000247', 'e0300000-0000-0000-0000-000000000633', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Payment page script management'),
 
 -- CTRL-VM-001 (Internal Vuln Scan) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000251', 'r0300000-0000-0000-0000-000000001111', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Internal vulnerability scans quarterly'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000251', 'r0200000-0000-0000-0000-000000000091', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO tech vulnerability management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000251', 'e0300000-0000-0000-0000-000000001111', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Internal vulnerability scans quarterly'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000251', 'e0200000-0000-0000-0000-000000000091', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO tech vulnerability management'),
 
 -- CTRL-VM-002 (External Vuln Scan) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000252', 'r0300000-0000-0000-0000-000000001112', 'primary', 'b0000000-0000-0000-0000-000000000001', 'External vulnerability scans quarterly'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000252', 'e0300000-0000-0000-0000-000000001112', 'primary', 'b0000000-0000-0000-0000-000000000001', 'External vulnerability scans quarterly'),
 
 -- CTRL-VM-003 (External Pen Test) → PCI
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000253', 'r0300000-0000-0000-0000-000000001121', 'primary', 'b0000000-0000-0000-0000-000000000001', 'External pen testing annually'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000253', 'e0300000-0000-0000-0000-000000001121', 'primary', 'b0000000-0000-0000-0000-000000000001', 'External pen testing annually'),
 
 -- CTRL-VM-005 (Patching) → PCI, ISO, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'r0300000-0000-0000-0000-000000000623', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Install applicable patches'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'r0200000-0000-0000-0000-000000000091', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'ISO tech vulnerability management'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'r0100000-0000-0000-0000-000000000067', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 unauthorized software controls'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'e0300000-0000-0000-0000-000000000623', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Install applicable patches'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'e0200000-0000-0000-0000-000000000091', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'ISO tech vulnerability management'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000255', 'e0100000-0000-0000-0000-000000000067', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 unauthorized software controls'),
 
 -- CTRL-DP-013 (Cross-Border Transfers) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000068', 'r0400000-0000-0000-0000-000000000070', 'primary', 'b0000000-0000-0000-0000-000000000001', 'General transfer principles'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000068', 'r0400000-0000-0000-0000-000000000072', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Appropriate safeguards for transfers'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000068', 'e0400000-0000-0000-0000-000000000070', 'primary', 'b0000000-0000-0000-0000-000000000001', 'General transfer principles'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000068', 'e0400000-0000-0000-0000-000000000072', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Appropriate safeguards for transfers'),
 
 -- CTRL-DP-024 (Privacy by Design) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000079', 'r0400000-0000-0000-0000-000000000051', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data protection by design and default'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000079', 'e0400000-0000-0000-0000-000000000051', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data protection by design and default'),
 
 -- CTRL-DP-021 (Data Minimization) → GDPR
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000076', 'r0400000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data minimisation principle'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000076', 'e0400000-0000-0000-0000-000000000013', 'primary', 'b0000000-0000-0000-0000-000000000001', 'Data minimisation principle'),
 
 -- CTRL-RA-004 (Vendor Risk Assessment) → ISO, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000189', 'r0200000-0000-0000-0000-000000000028', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO supplier security'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000189', 'r0100000-0000-0000-0000-000000000091', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 vendor risk assessment'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000189', 'e0200000-0000-0000-0000-000000000028', 'primary', 'b0000000-0000-0000-0000-000000000001', 'ISO supplier security'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000189', 'e0100000-0000-0000-0000-000000000091', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 vendor risk assessment'),
 
 -- CTRL-RA-018 (Vendor Inventory) → PCI, ISO
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000203', 'r0300000-0000-0000-0000-000000001231', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI third-party service provider list'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000203', 'r0200000-0000-0000-0000-000000000028', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'ISO supplier relationships'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000203', 'e0300000-0000-0000-0000-000000001231', 'primary', 'b0000000-0000-0000-0000-000000000001', 'PCI third-party service provider list'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000203', 'e0200000-0000-0000-0000-000000000028', 'supporting', 'b0000000-0000-0000-0000-000000000001', 'ISO supplier relationships'),
 
 -- CTRL-DP-006 (Retention) → GDPR, SOC 2
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'r0400000-0000-0000-0000-000000000015', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR storage limitation'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'r0100000-0000-0000-0000-000000000135', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 PI retention'),
-('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'r0100000-0000-0000-0000-000000000136', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 PI disposal')
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'e0400000-0000-0000-0000-000000000015', 'primary', 'b0000000-0000-0000-0000-000000000001', 'GDPR storage limitation'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'e0100000-0000-0000-0000-000000000135', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 PI retention'),
+('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000061', 'e0100000-0000-0000-0000-000000000136', 'primary', 'b0000000-0000-0000-0000-000000000001', 'SOC 2 PI disposal')
 ON CONFLICT (org_id, control_id, requirement_id) DO NOTHING;
 
 -- ============================================================================
@@ -1172,7 +1172,7 @@ ON CONFLICT (org_id, control_id, requirement_id) DO NOTHING;
 -- ============================================================================
 
 INSERT INTO requirement_scopes (org_id, requirement_id, in_scope, justification, scoped_by) VALUES
-    ('a0000000-0000-0000-0000-000000000001', 'r0300000-0000-0000-0000-000000000151',
+    ('a0000000-0000-0000-0000-000000000001', 'e0300000-0000-0000-0000-000000000151',
      FALSE, 'Cloud-only company — no computing devices bridge trusted and untrusted networks simultaneously',
      'b0000000-0000-0000-0000-000000000001')
 ON CONFLICT (org_id, requirement_id) DO NOTHING;
@@ -1331,7 +1331,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, strength, notes, linked_by) VALUES
     -- MFA config → CTRL-AC-001 (Access Control: MFA)
     (
-        'l0000000-0000-0000-0000-000000000001',
+        '10000000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000001',
         'control',
@@ -1342,7 +1342,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
     ),
     -- Access review → CTRL-AC-003 (Access Review)
     (
-        'l0000000-0000-0000-0000-000000000002',
+        '10000000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000002',
         'control',
@@ -1353,7 +1353,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
     ),
     -- CloudTrail config → CTRL-LM-001 (Logging & Monitoring)
     (
-        'l0000000-0000-0000-0000-000000000003',
+        '10000000-0000-0000-0000-000000000003',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000005',
         'control',
@@ -1364,7 +1364,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
     ),
     -- Training completion → CTRL-SA-001 (Security Awareness Training)
     (
-        'l0000000-0000-0000-0000-000000000004',
+        '10000000-0000-0000-0000-000000000004',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000006',
         'control',
@@ -1375,7 +1375,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
     ),
     -- InfoSec policy → CTRL-PM-001 (Policy Management) as supporting evidence
     (
-        'l0000000-0000-0000-0000-000000000005',
+        '10000000-0000-0000-0000-000000000005',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000004',
         'control',
@@ -1386,7 +1386,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
     ),
     -- Vuln scan → CTRL-VM-001 (Vulnerability Management)
     (
-        'l0000000-0000-0000-0000-000000000006',
+        '10000000-0000-0000-0000-000000000006',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000003',
         'control',
@@ -1395,7 +1395,7 @@ INSERT INTO evidence_links (id, org_id, artifact_id, target_type, control_id, st
         'Qualys vulnerability scan results for February 2026 production environment assessment.',
         'b0000000-0000-0000-0000-000000000002'
     )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 -- ============================================================================
 -- SPRINT 3: EVIDENCE EVALUATIONS
@@ -1404,47 +1404,47 @@ ON CONFLICT DO NOTHING;
 INSERT INTO evidence_evaluations (id, org_id, artifact_id, evidence_link_id, verdict, confidence, comments, evaluated_by) VALUES
     -- MFA config evaluation: sufficient
     (
-        'ev000000-0000-0000-0000-000000000001',
+        'e4000000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000001',
-        'l0000000-0000-0000-0000-000000000001',
+        '10000000-0000-0000-0000-000000000001',
         'sufficient', 'high',
         'MFA is enforced for all user types. Configuration export shows Okta MFA policy is set to "Always" with no exceptions. Meets PCI DSS 8.3 and SOC 2 CC6.1 requirements.',
         'b0000000-0000-0000-0000-000000000001'
     ),
     -- Access review evaluation: sufficient
     (
-        'ev000000-0000-0000-0000-000000000002',
+        'e4000000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000002',
-        'l0000000-0000-0000-0000-000000000002',
+        '10000000-0000-0000-0000-000000000002',
         'sufficient', 'high',
         'Access review covers all production systems. Department managers signed off on all entries. Stale accounts identified and removed. Meets quarterly cadence requirement.',
         'b0000000-0000-0000-0000-000000000004'
     ),
     -- Training completion evaluation: sufficient
     (
-        'ev000000-0000-0000-0000-000000000003',
+        'e4000000-0000-0000-0000-000000000003',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000006',
-        'l0000000-0000-0000-0000-000000000004',
+        '10000000-0000-0000-0000-000000000004',
         'sufficient', 'high',
         '100% employee participation confirmed. Training content covers phishing, social engineering, data handling, and incident reporting. Annual cadence meets SOC 2 and ISO 27001 requirements.',
         'b0000000-0000-0000-0000-000000000001'
     ),
     -- CloudTrail evaluation: sufficient
     (
-        'ev000000-0000-0000-0000-000000000004',
+        'e4000000-0000-0000-0000-000000000004',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000005',
-        'l0000000-0000-0000-0000-000000000003',
+        '10000000-0000-0000-0000-000000000003',
         'sufficient', 'medium',
         'CloudTrail is enabled in all regions. S3 logging confirmed. However, screenshot alone does not show log retention policy — recommend supplementing with AWS Config export.',
         'b0000000-0000-0000-0000-000000000001'
     ),
     -- Pentest report evaluation: needs_update (still in draft)
     (
-        'ev000000-0000-0000-0000-000000000005',
+        'e4000000-0000-0000-0000-000000000005',
         'a0000000-0000-0000-0000-000000000001',
         'e0000000-0000-0000-0000-000000000007',
         NULL,
@@ -1467,13 +1467,13 @@ VALUES
      'evidence.uploaded', 'evidence_artifact', 'e0000000-0000-0000-0000-000000000002',
      '{"title": "Quarterly Access Review Report - Q1 2026", "type": "access_list", "file_size": 2456789}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'evidence.linked', 'evidence_link', 'l0000000-0000-0000-0000-000000000001',
+     'evidence.linked', 'evidence_link', '10000000-0000-0000-0000-000000000001',
      '{"artifact_title": "Okta MFA Configuration Export", "target_type": "control", "control": "CTRL-AC-001"}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'evidence.evaluated', 'evidence_evaluation', 'ev000000-0000-0000-0000-000000000001',
+     'evidence.evaluated', 'evidence_evaluation', 'e4000000-0000-0000-0000-000000000001',
      '{"artifact_title": "Okta MFA Configuration Export", "verdict": "sufficient", "confidence": "high"}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001',
-     'evidence.evaluated', 'evidence_evaluation', 'ev000000-0000-0000-0000-000000000002',
+     'evidence.evaluated', 'evidence_evaluation', 'e4000000-0000-0000-0000-000000000002',
      '{"artifact_title": "Quarterly Access Review Report", "verdict": "sufficient", "confidence": "high"}'::jsonb, '192.168.1.10'::inet)
 ON CONFLICT DO NOTHING;
 
@@ -1487,7 +1487,7 @@ INSERT INTO tests (
 ) VALUES
     -- MFA enforcement check
     (
-        't0000000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'TST-AC-001',
         'MFA Enforcement Verification',
@@ -1504,7 +1504,7 @@ INSERT INTO tests (
     ),
     -- Access review freshness check
     (
-        't0000000-0000-0000-0000-000000000002',
+        'de500000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
         'TST-AC-002',
         'Quarterly Access Review Completeness',
@@ -1521,7 +1521,7 @@ INSERT INTO tests (
     ),
     -- Encryption at rest check
     (
-        't0000000-0000-0000-0000-000000000003',
+        'de500000-0000-0000-0000-000000000003',
         'a0000000-0000-0000-0000-000000000001',
         'TST-DP-001',
         'Encryption at Rest — S3 Buckets',
@@ -1538,7 +1538,7 @@ INSERT INTO tests (
     ),
     -- CloudTrail logging enabled check
     (
-        't0000000-0000-0000-0000-000000000004',
+        'de500000-0000-0000-0000-000000000004',
         'a0000000-0000-0000-0000-000000000001',
         'TST-LM-001',
         'CloudTrail Multi-Region Logging',
@@ -1555,7 +1555,7 @@ INSERT INTO tests (
     ),
     -- Vulnerability scan age check
     (
-        't0000000-0000-0000-0000-000000000005',
+        'de500000-0000-0000-0000-000000000005',
         'a0000000-0000-0000-0000-000000000001',
         'TST-VM-001',
         'Monthly Vulnerability Scan Freshness',
@@ -1572,7 +1572,7 @@ INSERT INTO tests (
     ),
     -- Firewall rules audit
     (
-        't0000000-0000-0000-0000-000000000006',
+        'de500000-0000-0000-0000-000000000006',
         'a0000000-0000-0000-0000-000000000001',
         'TST-NW-001',
         'Security Group — No Open Inbound 0.0.0.0/0',
@@ -1589,7 +1589,7 @@ INSERT INTO tests (
     ),
     -- Endpoint compliance check (mapped to CTRL-SA-001 since CTRL-EP doesn't exist)
     (
-        't0000000-0000-0000-0000-000000000007',
+        'de500000-0000-0000-0000-000000000007',
         'a0000000-0000-0000-0000-000000000001',
         'TST-EP-001',
         'Endpoint Disk Encryption',
@@ -1606,7 +1606,7 @@ INSERT INTO tests (
     ),
     -- Configuration baseline check
     (
-        't0000000-0000-0000-0000-000000000008',
+        'de500000-0000-0000-0000-000000000008',
         'a0000000-0000-0000-0000-000000000001',
         'TST-CFG-001',
         'Password Policy — Minimum Complexity',
@@ -1633,7 +1633,7 @@ INSERT INTO test_runs (
     triggered_by, worker_id
 ) VALUES
     (
-        'tr000000-0000-0000-0000-000000000001',
+        'de600000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'completed',
         'scheduled',
@@ -1656,10 +1656,10 @@ INSERT INTO test_results (
 ) VALUES
     -- TST-AC-001: PASS
     (
-        'res00000-0000-0000-0000-000000000001',
+        '2e500000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000001',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000001',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-001' LIMIT 1),
         'pass', 'critical',
         'MFA is enforced for all 47 users. No exceptions found.',
@@ -1668,10 +1668,10 @@ INSERT INTO test_results (
     ),
     -- TST-AC-002: PASS
     (
-        'res00000-0000-0000-0000-000000000002',
+        '2e500000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000002',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000002',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-003' LIMIT 1),
         'pass', 'high',
         'Quarterly access review completed 12 days ago. Within 90-day cadence.',
@@ -1680,10 +1680,10 @@ INSERT INTO test_results (
     ),
     -- TST-DP-001: FAIL — 2 unencrypted S3 buckets
     (
-        'res00000-0000-0000-0000-000000000003',
+        '2e500000-0000-0000-0000-000000000003',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000003',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000003',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-DP-001' LIMIT 1),
         'fail', 'critical',
         '2 of 15 S3 buckets lack default encryption. Non-compliant with PCI DSS 3.4.',
@@ -1692,10 +1692,10 @@ INSERT INTO test_results (
     ),
     -- TST-LM-001: PASS
     (
-        'res00000-0000-0000-0000-000000000004',
+        '2e500000-0000-0000-0000-000000000004',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000004',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000004',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-LM-001' LIMIT 1),
         'pass', 'high',
         'CloudTrail enabled in all 4 active regions. S3 log delivery confirmed.',
@@ -1704,10 +1704,10 @@ INSERT INTO test_results (
     ),
     -- TST-VM-001: PASS
     (
-        'res00000-0000-0000-0000-000000000005',
+        '2e500000-0000-0000-0000-000000000005',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000005',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000005',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-VM-001' LIMIT 1),
         'pass', 'high',
         'Last vulnerability scan completed 5 days ago. Within 30-day cadence.',
@@ -1716,10 +1716,10 @@ INSERT INTO test_results (
     ),
     -- TST-NW-001: FAIL — open security group found
     (
-        'res00000-0000-0000-0000-000000000006',
+        '2e500000-0000-0000-0000-000000000006',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000006',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000006',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-NW-001' LIMIT 1),
         'fail', 'critical',
         '1 security group allows inbound 0.0.0.0/0 on port 22 (SSH). Immediate remediation required.',
@@ -1728,10 +1728,10 @@ INSERT INTO test_results (
     ),
     -- TST-EP-001: ERROR — integration timeout
     (
-        'res00000-0000-0000-0000-000000000007',
+        '2e500000-0000-0000-0000-000000000007',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000007',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000007',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-SA-001' LIMIT 1),
         'error', 'high',
         'Jamf API connection timed out after 180 seconds.',
@@ -1740,10 +1740,10 @@ INSERT INTO test_results (
     ),
     -- TST-CFG-001: PASS
     (
-        'res00000-0000-0000-0000-000000000008',
+        '2e500000-0000-0000-0000-000000000008',
         'a0000000-0000-0000-0000-000000000001',
-        'tr000000-0000-0000-0000-000000000001',
-        't0000000-0000-0000-0000-000000000008',
+        'de600000-0000-0000-0000-000000000001',
+        'de500000-0000-0000-0000-000000000008',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-AC-002' LIMIT 1),
         'pass', 'medium',
         'Password policy meets all minimum complexity requirements.',
@@ -1766,7 +1766,7 @@ INSERT INTO alert_rules (
 ) VALUES
     -- Critical failures → immediate alert, Slack + email
     (
-        'ar000000-0000-0000-0000-000000000001',
+        'a2e00000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'Critical Test Failures',
         'Alert immediately on any critical test failure. Delivered via Slack and email to security team.',
@@ -1783,7 +1783,7 @@ INSERT INTO alert_rules (
     ),
     -- High failures → alert after 2 consecutive, email
     (
-        'ar000000-0000-0000-0000-000000000002',
+        'a2e00000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
         'High Severity Failures',
         'Alert on high-severity test failures after 2 consecutive failures. Email notification to compliance team.',
@@ -1800,7 +1800,7 @@ INSERT INTO alert_rules (
     ),
     -- Medium failures → alert after 3 consecutive, in-app only
     (
-        'ar000000-0000-0000-0000-000000000003',
+        'a2e00000-0000-0000-0000-000000000003',
         'a0000000-0000-0000-0000-000000000001',
         'Medium Severity Findings',
         'Alert on medium-severity findings after 3 consecutive failures. In-app notification only.',
@@ -1817,7 +1817,7 @@ INSERT INTO alert_rules (
     ),
     -- Test execution errors → alert on infra issues
     (
-        'ar000000-0000-0000-0000-000000000004',
+        'a2e00000-0000-0000-0000-000000000004',
         'a0000000-0000-0000-0000-000000000001',
         'Test Execution Errors',
         'Alert when tests cannot execute (infrastructure issues, timeouts, connection failures).',
@@ -1847,16 +1847,16 @@ INSERT INTO alerts (
 ) VALUES
     -- Alert from S3 encryption failure (TST-DP-001)
     (
-        'alt00000-0000-0000-0000-000000000001',
+        'a1e00000-0000-0000-0000-000000000001',
         'a0000000-0000-0000-0000-000000000001',
         'Encryption at Rest — S3 Buckets FAILED',
         '2 of 15 S3 buckets lack default encryption. Non-compliant with PCI DSS 3.4. Buckets: staging-logs-2026, temp-upload-buffer.',
         'critical',
         'open',
-        't0000000-0000-0000-0000-000000000003',
-        'res00000-0000-0000-0000-000000000003',
+        'de500000-0000-0000-0000-000000000003',
+        '2e500000-0000-0000-0000-000000000003',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-DP-001' LIMIT 1),
-        'ar000000-0000-0000-0000-000000000001',
+        'a2e00000-0000-0000-0000-000000000001',
         (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1),
         '2026-02-20 16:00:45+00',
         (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1),
@@ -1867,16 +1867,16 @@ INSERT INTO alerts (
     ),
     -- Alert from open security group (TST-NW-001)
     (
-        'alt00000-0000-0000-0000-000000000002',
+        'a1e00000-0000-0000-0000-000000000002',
         'a0000000-0000-0000-0000-000000000001',
         'Security Group — No Open Inbound 0.0.0.0/0 FAILED',
         '1 security group (dev-bastion-sg) allows unrestricted SSH access from 0.0.0.0/0. Immediate remediation required.',
         'critical',
         'acknowledged',
-        't0000000-0000-0000-0000-000000000006',
-        'res00000-0000-0000-0000-000000000006',
+        'de500000-0000-0000-0000-000000000006',
+        '2e500000-0000-0000-0000-000000000006',
         (SELECT id FROM controls WHERE org_id = 'a0000000-0000-0000-0000-000000000001' AND identifier = 'CTRL-NW-001' LIMIT 1),
-        'ar000000-0000-0000-0000-000000000001',
+        'a2e00000-0000-0000-0000-000000000001',
         (SELECT id FROM users WHERE email = 'devops@acme.example.com' LIMIT 1),
         '2026-02-20 16:01:35+00',
         (SELECT id FROM users WHERE email = 'security@acme.example.com' LIMIT 1),
@@ -1888,11 +1888,11 @@ INSERT INTO alerts (
 ON CONFLICT DO NOTHING;
 
 -- Link test results back to their alerts
-UPDATE test_results SET alert_id = 'alt00000-0000-0000-0000-000000000001'
-WHERE id = 'res00000-0000-0000-0000-000000000003';
+UPDATE test_results SET alert_id = 'a1e00000-0000-0000-0000-000000000001'
+WHERE id = '2e500000-0000-0000-0000-000000000003';
 
-UPDATE test_results SET alert_id = 'alt00000-0000-0000-0000-000000000002'
-WHERE id = 'res00000-0000-0000-0000-000000000006';
+UPDATE test_results SET alert_id = 'a1e00000-0000-0000-0000-000000000002'
+WHERE id = '2e500000-0000-0000-0000-000000000006';
 
 -- ============================================================================
 -- SPRINT 4: AUDIT LOG ENTRIES (test and alert activity)
@@ -1901,28 +1901,28 @@ WHERE id = 'res00000-0000-0000-0000-000000000006';
 INSERT INTO audit_log (org_id, actor_id, action, resource_type, resource_id, metadata, ip_address)
 VALUES
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'test.created', 'test', 't0000000-0000-0000-0000-000000000001',
+     'test.created', 'test', 'de500000-0000-0000-0000-000000000001',
      '{"identifier": "TST-AC-001", "title": "MFA Enforcement Verification", "type": "access_control", "severity": "critical"}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', NULL,
-     'test_run.started', 'test_run', 'tr000000-0000-0000-0000-000000000001',
+     'test_run.started', 'test_run', 'de600000-0000-0000-0000-000000000001',
      '{"trigger": "scheduled", "total_tests": 8, "worker": "worker-1"}'::jsonb, '10.0.1.50'::inet),
     ('a0000000-0000-0000-0000-000000000001', NULL,
-     'test_run.completed', 'test_run', 'tr000000-0000-0000-0000-000000000001',
+     'test_run.completed', 'test_run', 'de600000-0000-0000-0000-000000000001',
      '{"passed": 5, "failed": 2, "errors": 1, "duration_ms": 222000}'::jsonb, '10.0.1.50'::inet),
     ('a0000000-0000-0000-0000-000000000001', NULL,
-     'alert.created', 'alert', 'alt00000-0000-0000-0000-000000000001',
+     'alert.created', 'alert', 'a1e00000-0000-0000-0000-000000000001',
      '{"title": "Encryption at Rest — S3 Buckets FAILED", "severity": "critical", "rule": "Critical Test Failures"}'::jsonb, '10.0.1.50'::inet),
     ('a0000000-0000-0000-0000-000000000001', NULL,
-     'alert.created', 'alert', 'alt00000-0000-0000-0000-000000000002',
+     'alert.created', 'alert', 'a1e00000-0000-0000-0000-000000000002',
      '{"title": "Security Group — No Open Inbound 0.0.0.0/0 FAILED", "severity": "critical", "rule": "Critical Test Failures"}'::jsonb, '10.0.1.50'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000002',
-     'alert.assigned', 'alert', 'alt00000-0000-0000-0000-000000000001',
+     'alert.assigned', 'alert', 'a1e00000-0000-0000-0000-000000000001',
      '{"assigned_to": "devops@acme.example.com", "severity": "critical"}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000005',
-     'alert.acknowledged', 'alert', 'alt00000-0000-0000-0000-000000000002',
+     'alert.acknowledged', 'alert', 'a1e00000-0000-0000-0000-000000000002',
      '{"title": "Security Group — No Open Inbound 0.0.0.0/0 FAILED", "previous_status": "open"}'::jsonb, '192.168.1.10'::inet),
     ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000004',
-     'alert_rule.created', 'alert_rule', 'ar000000-0000-0000-0000-000000000001',
+     'alert_rule.created', 'alert_rule', 'a2e00000-0000-0000-0000-000000000001',
      '{"name": "Critical Test Failures", "severity": "critical", "sla_hours": 4}'::jsonb, '192.168.1.10'::inet)
 ON CONFLICT DO NOTHING;
 

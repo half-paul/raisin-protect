@@ -80,3 +80,15 @@ func errorResponseWithDetails(code, message string, details []gin.H) gin.H {
 		},
 	}
 }
+
+// join helper function for string slices
+func join(strs []string, sep string) string {
+	if len(strs) == 0 {
+		return ""
+	}
+	res := strs[0]
+	for i := 1; i < len(strs); i++ {
+		res += sep + strs[i]
+	}
+	return res
+}

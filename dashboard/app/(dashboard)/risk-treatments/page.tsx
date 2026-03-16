@@ -15,6 +15,7 @@ import {
   TrendingDown, Calendar, Timer,
 } from 'lucide-react';
 import { RiskStats, Risk, getRiskStats, listRisks } from '@/lib/api';
+import { WikiHelpLink } from '@/components/wiki-help-link';
 import {
   TREATMENT_STATUS_LABELS, TREATMENT_STATUS_COLORS,
   TREATMENT_TYPE_LABELS,
@@ -76,6 +77,7 @@ export default function TreatmentProgressPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold">Treatment Progress</h1>
+          <WikiHelpLink path="risk-management/treatments/" />
           <p className="text-sm text-muted-foreground">Track risk treatment plans, timelines, and completion</p>
         </div>
       </div>

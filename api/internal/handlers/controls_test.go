@@ -155,6 +155,7 @@ func TestGetControl_Success(t *testing.T) {
 		"category", "status", "is_custom", "source_template_id",
 		"owner_id", "owner_name", "owner_email", "secondary_owner_id",
 		"evidence_requirements", "test_criteria", "metadata",
+		"is_compensating", "compensating_worksheet",
 		"created_at", "updated_at",
 	}).AddRow(
 		"c001", "CTRL-AC-001", "Multi-Factor Authentication",
@@ -162,6 +163,7 @@ func TestGetControl_Success(t *testing.T) {
 		"technical", "active", false, "TPL-AC-001",
 		nil, "", "", nil,
 		nil, nil, "{}",
+		false, nil,
 		now, now,
 	)
 	mock.ExpectQuery("SELECT c.id, c.identifier, c.title").WillReturnRows(row)

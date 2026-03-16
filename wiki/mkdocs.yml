@@ -1,0 +1,98 @@
+site_name: Raisin Protect Documentation
+site_description: User documentation for Raisin Protect — the AI-native GRC platform
+site_url: http://localhost:3020
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - toc.integrate
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    logo: material/shield-check
+
+extra_css:
+  - stylesheets/custom.css
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Creating an Account: getting-started/creating-account.md
+      - Signing In: getting-started/signing-in.md
+      - The Dashboard: getting-started/dashboard.md
+      - Navigation: getting-started/navigation.md
+      - Roles & Permissions: getting-started/roles.md
+  - Compliance:
+      - Frameworks: compliance/frameworks.md
+      - Controls: compliance/controls.md
+      - Mapping Matrix: compliance/mapping-matrix.md
+      - Coverage: compliance/coverage.md
+      - Evidence: compliance/evidence.md
+  - Monitoring:
+      - Dashboard: monitoring/dashboard.md
+      - Test Runs: monitoring/test-runs.md
+      - Alerts: monitoring/alerts.md
+      - Alert Rules: monitoring/alert-rules.md
+  - Policies:
+      - Overview: policies/overview.md
+      - Approval Workflow: policies/approval-workflow.md
+      - Templates: policies/templates.md
+      - Versions: policies/versions.md
+      - Gap Analysis: policies/gap-analysis.md
+  - Risk Management:
+      - Risk Register: risk-management/risk-register.md
+      - Assessments: risk-management/assessments.md
+      - Heat Map: risk-management/heat-map.md
+      - Treatments: risk-management/treatments.md
+      - Gap Analysis: risk-management/gap-analysis.md
+  - Audit Hub:
+      - Engagements: audit-hub/engagements.md
+      - Evidence Requests: audit-hub/evidence-requests.md
+      - Findings: audit-hub/findings.md
+      - Templates: audit-hub/templates.md
+      - Readiness: audit-hub/readiness.md
+      - Auditor Workspace: audit-hub/auditor-workspace.md
+  - Access Reviews:
+      - Overview: access-reviews/overview.md
+      - Identity Providers: access-reviews/identity-providers.md
+      - Campaigns: access-reviews/campaigns.md
+      - Review Decisions: access-reviews/review-decisions.md
+  - Administration:
+      - Users: administration/users.md
+      - Organization: administration/organization.md
+      - Password: administration/password.md
+  - Posture: posture.md
+  - Tips & Best Practices: tips.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
