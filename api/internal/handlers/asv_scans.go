@@ -54,19 +54,20 @@ func scanASVRow(row interface {
 // insertASVScan executes the INSERT and returns the created ASVScan.
 // Columns: id, org_id, asv_vendor, scan_type, quarter, year, scan_date, status,
 //
-//	remediation_deadline, import_notes, created_by
+//	remediation_deadline, import_notes, created_by, import_format, raw_findings
 func insertASVScan(id, orgID, asvVendor, scanType string, quarter, year int,
 	scanDate time.Time, status string, remediationDeadline *time.Time,
 	importNotes *string, createdBy string,
+	importFormat *string, rawFindings *string,
 ) (*models.ASVScan, error) {
 	row := database.DB.QueryRow(
 		fmt.Sprintf(`INSERT INTO asv_scans
 			(id, org_id, asv_vendor, scan_type, quarter, year, scan_date, status,
-			 remediation_deadline, import_notes, created_by)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+			 remediation_deadline, import_notes, created_by, import_format, raw_findings)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 			RETURNING %s`, asvSelectCols),
 		id, orgID, asvVendor, scanType, quarter, year, scanDate, status,
-		remediationDeadline, importNotes, createdBy,
+		remediationDeadline, importNotes, createdBy, importFormat, rawFindings,
 	)
 	return scanASVRow(row)
 }
@@ -227,7 +228,7 @@ func CreateASVScan(c *gin.Context) {
 
 	id := uuid.New().String()
 	scan, err := insertASVScan(id, orgID, req.ASVVendor, scanType, req.Quarter, req.Year,
-		scanDate, status, remediationDeadline, req.ImportNotes, userID)
+		scanDate, status, remediationDeadline, req.ImportNotes, userID, nil, nil)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to insert asv_scan")
 		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to create scan"))
@@ -561,6 +562,7 @@ type importASVScanRequest struct {
 	Quarter             int     `json:"quarter"      binding:"required"`
 	Year                int     `json:"year"         binding:"required"`
 	ScanDate            string  `json:"scan_date"    binding:"required"`
+	Status              *string `json:"status"`
 	ImportFormat        *string `json:"import_format"`
 	RawFindings         *string `json:"raw_findings"`
 	RemediationDeadline *string `json:"remediation_deadline"`
@@ -612,8 +614,16 @@ func ImportASVScan(c *gin.Context) {
 		scanType = *req.ScanType
 	}
 
-	// Imported scans default to "pass" (scan result already completed by ASV)
-	status := models.ASVStatusPass
+	// Default to in_progress; caller must explicitly promote to pass/fail
+	// after verifying the scan evidence (M6: prevents fake-pass backdating).
+	status := models.ASVStatusInProgress
+	if req.Status != nil && *req.Status != "" {
+		if !models.IsValidASVStatus(*req.Status) {
+			c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "Invalid status value"))
+			return
+		}
+		status = *req.Status
+	}
 
 	var exists bool
 	err = database.DB.QueryRow(
@@ -642,7 +652,8 @@ func ImportASVScan(c *gin.Context) {
 
 	id := uuid.New().String()
 	scan, err := insertASVScan(id, orgID, req.ASVVendor, scanType, req.Quarter, req.Year,
-		scanDate, status, remediationDeadline, req.ImportNotes, userID)
+		scanDate, status, remediationDeadline, req.ImportNotes, userID,
+		req.ImportFormat, req.RawFindings)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to insert imported asv_scan")
 		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to import scan"))

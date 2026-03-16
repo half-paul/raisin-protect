@@ -220,6 +220,8 @@ func TestCreateASVScan_Success(t *testing.T) {
 			sqlmock.AnyArg(),    // remediation_deadline (nil)
 			sqlmock.AnyArg(),    // import_notes (nil)
 			"user-001",
+			nil, // import_format (nil for non-import creates)
+			nil, // raw_findings (nil for non-import creates)
 		).
 		WillReturnRows(sqlmock.NewRows(asvCols).
 			AddRow("new-scan", "org-001", "Trustwave", "external", 1, 2026, asvNow,
@@ -562,14 +564,20 @@ func TestImportASVScan_CSV_Success(t *testing.T) {
 		WithArgs("org-001", "external", 2, 2026).
 		WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(false))
 
+	csvFormat := "csv"
+	rawFindings := "[{\"severity\":\"high\",\"host\":\"10.0.0.1\"}]"
+
 	mock.ExpectQuery(`INSERT INTO asv_scans`).
 		WithArgs(
 			sqlmock.AnyArg(), "org-001", "Qualys", "external", 2, 2026,
-			sqlmock.AnyArg(), "pass", sqlmock.AnyArg(), nil, "user-001",
+			sqlmock.AnyArg(), "in_progress", // default status (not hardcoded pass)
+			sqlmock.AnyArg(), nil, "user-001",
+			&csvFormat,    // import_format stored (M5 fix)
+			&rawFindings,  // raw_findings stored (M5 fix)
 		).
 		WillReturnRows(sqlmock.NewRows(asvCols).
 			AddRow("import-001", "org-001", "Qualys", "external", 2, 2026, asvNow,
-				"pass", 8, 0, 1, 3, 4, 0, nil, nil, "csv", nil, nil, "user-001", nil, "user-001", asvNow, asvNow))
+				"in_progress", 8, 0, 1, 3, 4, 0, nil, nil, "csv", rawFindings, nil, "user-001", nil, "user-001", asvNow, asvNow))
 
 	body := fmt.Sprintf(`{
 		"asv_vendor": "Qualys",
