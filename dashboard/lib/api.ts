@@ -3043,14 +3043,13 @@ export type EncryptionStatus = 'encrypted' | 'unencrypted' | 'partial';
 
 export interface DataFlow {
   id: string;
-  name: string;
-  source: string;
-  destination: string;
-  protocol: DataFlowProtocol;
-  encryption_status: EncryptionStatus;
-  port?: string;
-  data_classification?: string;
-  notes?: string;
+  org_id: string;
+  source_asset_id: string;
+  dest_asset_id: string;
+  protocol?: DataFlowProtocol;
+  port?: number;
+  data_type?: string;
+  encryption_method?: string;
   created_at: string;
   updated_at: string;
 }
@@ -3162,27 +3161,23 @@ export function listDataFlows(params?: Record<string, string>) {
 }
 
 export function createDataFlow(body: {
-  name: string;
-  source: string;
-  destination: string;
-  protocol: DataFlowProtocol;
-  encryption_status: EncryptionStatus;
-  port?: string;
-  data_classification?: string;
-  notes?: string;
+  source_asset_id: string;
+  dest_asset_id: string;
+  protocol?: DataFlowProtocol;
+  port?: number;
+  data_type?: string;
+  encryption_method?: string;
 }) {
   return apiPost<DataFlow>('/api/v1/cde/data-flows', body);
 }
 
 export function updateDataFlow(id: string, body: Partial<{
-  name: string;
-  source: string;
-  destination: string;
+  source_asset_id: string;
+  dest_asset_id: string;
   protocol: DataFlowProtocol;
-  encryption_status: EncryptionStatus;
-  port: string;
-  data_classification: string;
-  notes: string;
+  port: number;
+  data_type: string;
+  encryption_method: string;
 }>) {
   return apiPut<DataFlow>(`/api/v1/cde/data-flows/${id}`, body);
 }

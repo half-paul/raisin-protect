@@ -39,33 +39,27 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import {
+  CdeAsset,
   DataFlow,
   DataFlowProtocol,
-  EncryptionStatus,
+  listCdeAssets,
   listDataFlows,
   createDataFlow,
   updateDataFlow,
   deleteDataFlow,
 } from '@/lib/api';
-import {
-  PROTOCOL_LABELS,
-  ENCRYPTION_LABELS,
-  ENCRYPTION_COLORS,
-} from '@/components/cde/constants';
+import { PROTOCOL_LABELS } from '@/components/cde/constants';
 import { useAuth } from '@/lib/auth-context';
 
 const PROTOCOLS: DataFlowProtocol[] = ['https', 'http', 'tls', 'ssh', 'sftp', 'smb', 'ftp', 'other'];
-const ENCRYPTION_STATUSES: EncryptionStatus[] = ['encrypted', 'unencrypted', 'partial'];
 
 const emptyForm = {
-  name: '',
-  source: '',
-  destination: '',
+  source_asset_id: '',
+  dest_asset_id: '',
   protocol: 'https' as DataFlowProtocol,
-  encryption_status: 'encrypted' as EncryptionStatus,
   port: '',
-  data_classification: '',
-  notes: '',
+  data_type: '',
+  encryption_method: '',
 };
 
 export default function DataFlowsPage() {
@@ -73,6 +67,7 @@ export default function DataFlowsPage() {
   const canWrite = hasRole('ciso', 'compliance_manager', 'security_engineer', 'it_admin');
 
   const [flows, setFlows] = useState<DataFlow[]>([]);
+  const [assets, setAssets] = useState<CdeAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -81,7 +76,6 @@ export default function DataFlowsPage() {
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [protocolFilter, setProtocolFilter] = useState('');
-  const [encryptionFilter, setEncryptionFilter] = useState('');
 
   const [showDialog, setShowDialog] = useState(false);
   const [editingFlow, setEditingFlow] = useState<DataFlow | null>(null);
@@ -92,13 +86,15 @@ export default function DataFlowsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // Build a map for quick asset name lookup
+  const assetMap = Object.fromEntries(assets.map((a) => [a.id, a]));
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const params: Record<string, string> = { page: String(page), per_page: String(perPage) };
       if (search) params.search = search;
       if (protocolFilter) params.protocol = protocolFilter;
-      if (encryptionFilter) params.encryption_status = encryptionFilter;
       const res = await listDataFlows(params);
       setFlows(res.data);
       setTotal(res.meta?.total ?? res.data.length);
@@ -107,9 +103,16 @@ export default function DataFlowsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, protocolFilter, encryptionFilter]);
+  }, [page, search, protocolFilter]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // Load all assets once for the pickers
+  useEffect(() => {
+    listCdeAssets({ per_page: '500' })
+      .then((res) => setAssets(res.data))
+      .catch((err) => console.error('Failed to fetch assets:', err));
+  }, []);
 
   function openCreate() {
     setEditingFlow(null);
@@ -121,14 +124,12 @@ export default function DataFlowsPage() {
   function openEdit(flow: DataFlow) {
     setEditingFlow(flow);
     setForm({
-      name: flow.name,
-      source: flow.source,
-      destination: flow.destination,
-      protocol: flow.protocol,
-      encryption_status: flow.encryption_status,
-      port: flow.port ?? '',
-      data_classification: flow.data_classification ?? '',
-      notes: flow.notes ?? '',
+      source_asset_id: flow.source_asset_id,
+      dest_asset_id: flow.dest_asset_id,
+      protocol: flow.protocol ?? 'https',
+      port: flow.port != null ? String(flow.port) : '',
+      data_type: flow.data_type ?? '',
+      encryption_method: flow.encryption_method ?? '',
     });
     setFormError('');
     setShowDialog(true);
@@ -138,10 +139,19 @@ export default function DataFlowsPage() {
     setFormError('');
     setFormLoading(true);
     try {
+      const portNum = form.port ? parseInt(form.port, 10) : undefined;
+      const payload = {
+        source_asset_id: form.source_asset_id,
+        dest_asset_id: form.dest_asset_id,
+        protocol: form.protocol || undefined,
+        port: Number.isFinite(portNum) ? portNum : undefined,
+        data_type: form.data_type || undefined,
+        encryption_method: form.encryption_method || undefined,
+      };
       if (editingFlow) {
-        await updateDataFlow(editingFlow.id, form);
+        await updateDataFlow(editingFlow.id, payload);
       } else {
-        await createDataFlow(form);
+        await createDataFlow(payload);
       }
       setShowDialog(false);
       fetchData();
@@ -166,8 +176,8 @@ export default function DataFlowsPage() {
     }
   }
 
-  const unencryptedCount = flows.filter((f) => f.encryption_status === 'unencrypted').length;
-  const partialCount = flows.filter((f) => f.encryption_status === 'partial').length;
+  const encryptedCount = flows.filter((f) => !!f.encryption_method).length;
+  const unencryptedCount = flows.filter((f) => !f.encryption_method).length;
   const totalPages = Math.ceil(total / perPage);
 
   return (
@@ -197,18 +207,18 @@ export default function DataFlowsPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className={`text-2xl font-bold ${unencryptedCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {unencryptedCount}
+            <div className={`text-2xl font-bold ${encryptedCount === total && total > 0 ? 'text-green-600' : 'text-muted-foreground'}`}>
+              {encryptedCount}
             </div>
-            <p className="text-xs text-muted-foreground">Unencrypted Flows</p>
+            <p className="text-xs text-muted-foreground">Flows with Encryption Method</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className={`text-2xl font-bold ${partialCount > 0 ? 'text-yellow-600' : 'text-muted-foreground'}`}>
-              {partialCount}
+            <div className={`text-2xl font-bold ${unencryptedCount > 0 ? 'text-yellow-600' : 'text-muted-foreground'}`}>
+              {unencryptedCount}
             </div>
-            <p className="text-xs text-muted-foreground">Partially Encrypted</p>
+            <p className="text-xs text-muted-foreground">Flows without Encryption Method</p>
           </CardContent>
         </Card>
       </div>
@@ -242,18 +252,6 @@ export default function DataFlowsPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="w-[160px]">
-              <Label className="text-xs">Encryption</Label>
-              <Select value={encryptionFilter || 'all'} onValueChange={(v) => { setEncryptionFilter(v === 'all' ? '' : v); setPage(1); }}>
-                <SelectTrigger><SelectValue placeholder="All" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  {ENCRYPTION_STATUSES.map((e) => (
-                    <SelectItem key={e} value={e}>{ENCRYPTION_LABELS[e]}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
             <Button variant="outline" size="sm" onClick={() => { setSearch(searchInput); setPage(1); }}>
               Search
             </Button>
@@ -267,26 +265,25 @@ export default function DataFlowsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Destination</TableHead>
+                <TableHead>Source Asset</TableHead>
+                <TableHead>Destination Asset</TableHead>
                 <TableHead>Protocol</TableHead>
                 <TableHead>Port</TableHead>
-                <TableHead>Encryption</TableHead>
-                <TableHead>Classification</TableHead>
+                <TableHead>Data Type</TableHead>
+                <TableHead>Encryption Method</TableHead>
                 {canWrite && <TableHead className="w-[50px]" />}
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={canWrite ? 8 : 7} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={canWrite ? 7 : 6} className="text-center py-8 text-muted-foreground">
                     Loading data flows...
                   </TableCell>
                 </TableRow>
               ) : flows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={canWrite ? 8 : 7} className="text-center py-8">
+                  <TableCell colSpan={canWrite ? 7 : 6} className="text-center py-8">
                     <ArrowRightLeft className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                     <p className="text-muted-foreground text-sm">No data flows documented</p>
                   </TableCell>
@@ -294,28 +291,31 @@ export default function DataFlowsPage() {
               ) : (
                 flows.map((flow) => (
                   <TableRow key={flow.id}>
-                    <TableCell className="font-medium">{flow.name}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground max-w-[120px] truncate">
-                      {flow.source}
+                    <TableCell className="text-sm font-medium max-w-[140px] truncate">
+                      {assetMap[flow.source_asset_id]?.name ?? flow.source_asset_id}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground max-w-[120px] truncate">
-                      {flow.destination}
+                    <TableCell className="text-sm font-medium max-w-[140px] truncate">
+                      {assetMap[flow.dest_asset_id]?.name ?? flow.dest_asset_id}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="text-xs font-mono">
-                        {PROTOCOL_LABELS[flow.protocol]}
-                      </Badge>
+                      {flow.protocol ? (
+                        <Badge variant="outline" className="text-xs font-mono">
+                          {PROTOCOL_LABELS[flow.protocol]}
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground text-sm">—</span>
+                      )}
                     </TableCell>
                     <TableCell className="text-sm font-mono text-muted-foreground">
-                      {flow.port || '—'}
-                    </TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ENCRYPTION_COLORS[flow.encryption_status]}`}>
-                        {ENCRYPTION_LABELS[flow.encryption_status]}
-                      </span>
+                      {flow.port ?? '—'}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {flow.data_classification || '—'}
+                      {flow.data_type || '—'}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {flow.encryption_method || (
+                        <span className="text-yellow-600 font-medium">None</span>
+                      )}
                     </TableCell>
                     {canWrite && (
                       <TableCell>
@@ -369,7 +369,7 @@ export default function DataFlowsPage() {
           <DialogHeader>
             <DialogTitle>{editingFlow ? 'Edit Data Flow' : 'Add Data Flow'}</DialogTitle>
             <DialogDescription>
-              Document a cardholder data flow between systems.
+              Document a cardholder data flow between two CDE assets.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -379,35 +379,49 @@ export default function DataFlowsPage() {
                 {formError}
               </div>
             )}
-            <div className="space-y-2">
-              <Label>Name <span className="text-destructive">*</span></Label>
-              <Input
-                placeholder="e.g. POS to Payment Gateway"
-                value={form.name}
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Source Asset <span className="text-destructive">*</span></Label>
+                <Select
+                  value={form.source_asset_id || 'none'}
+                  onValueChange={(v) => setForm((f) => ({ ...f, source_asset_id: v === 'none' ? '' : v }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select source asset" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {assets.length === 0 && (
+                      <SelectItem value="none" disabled>No assets available</SelectItem>
+                    )}
+                    {assets.map((a) => (
+                      <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Destination Asset <span className="text-destructive">*</span></Label>
+                <Select
+                  value={form.dest_asset_id || 'none'}
+                  onValueChange={(v) => setForm((f) => ({ ...f, dest_asset_id: v === 'none' ? '' : v }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select destination asset" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {assets.length === 0 && (
+                      <SelectItem value="none" disabled>No assets available</SelectItem>
+                    )}
+                    {assets.map((a) => (
+                      <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Source <span className="text-destructive">*</span></Label>
-                <Input
-                  placeholder="e.g. POS Terminal"
-                  value={form.source}
-                  onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Destination <span className="text-destructive">*</span></Label>
-                <Input
-                  placeholder="e.g. Payment Gateway"
-                  value={form.destination}
-                  onChange={(e) => setForm((f) => ({ ...f, destination: e.target.value }))}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>Protocol <span className="text-destructive">*</span></Label>
+                <Label>Protocol</Label>
                 <Select value={form.protocol} onValueChange={(v) => setForm((f) => ({ ...f, protocol: v as DataFlowProtocol }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -420,44 +434,36 @@ export default function DataFlowsPage() {
               <div className="space-y-2">
                 <Label>Port</Label>
                 <Input
+                  type="number"
                   placeholder="443"
                   value={form.port}
                   onChange={(e) => setForm((f) => ({ ...f, port: e.target.value }))}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Encryption <span className="text-destructive">*</span></Label>
-                <Select value={form.encryption_status} onValueChange={(v) => setForm((f) => ({ ...f, encryption_status: v as EncryptionStatus }))}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {ENCRYPTION_STATUSES.map((e) => (
-                      <SelectItem key={e} value={e}>{ENCRYPTION_LABELS[e]}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
             </div>
             <div className="space-y-2">
-              <Label>Data Classification</Label>
+              <Label>Data Type</Label>
               <Input
                 placeholder="e.g. PAN, SAD, Cardholder Data"
-                value={form.data_classification}
-                onChange={(e) => setForm((f) => ({ ...f, data_classification: e.target.value }))}
+                value={form.data_type}
+                onChange={(e) => setForm((f) => ({ ...f, data_type: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
-              <Label>Notes</Label>
-              <Textarea
-                placeholder="Any additional notes for QSA review..."
-                value={form.notes}
-                onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-                rows={2}
+              <Label>Encryption Method</Label>
+              <Input
+                placeholder="e.g. TLS 1.3, AES-256"
+                value={form.encryption_method}
+                onChange={(e) => setForm((f) => ({ ...f, encryption_method: e.target.value }))}
               />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDialog(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={formLoading || !form.name || !form.source || !form.destination}>
+            <Button
+              onClick={handleSubmit}
+              disabled={formLoading || !form.source_asset_id || !form.dest_asset_id}
+            >
               {formLoading ? 'Saving...' : editingFlow ? 'Save Changes' : 'Add Flow'}
             </Button>
           </DialogFooter>
