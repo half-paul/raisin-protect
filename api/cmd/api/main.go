@@ -192,6 +192,10 @@ func main() {
 				ctrl.GET("/:id/mappings", handlers.ListControlMappings)
 				ctrl.POST("/:id/mappings", middleware.RequireRoles(models.ControlMappingRoles...), handlers.CreateControlMappings)
 				ctrl.DELETE("/:id/mappings/:mid", middleware.RequireRoles(models.ControlMappingRoles...), handlers.DeleteControlMapping)
+
+			// Compensating Controls Worksheet (PCI DSS Appendix B)
+			ctrl.GET("/:id/compensating-worksheet", handlers.GetCompensatingWorksheet)
+			ctrl.PUT("/:id/compensating-worksheet", middleware.RequireRoles(models.ControlCreateRoles...), handlers.UpdateCompensatingWorksheet)
 			}
 
 			// Mapping matrix
@@ -626,6 +630,22 @@ func main() {
 				spResp.PUT("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.UpsertSPResponsibility)
 				spResp.DELETE("/:reqCode", middleware.RequireRoles(models.SPManageRoles...), handlers.DeleteSPResponsibility)
 			}
+		}
+
+		// AOC/ROC Compliance Documents (PCI DSS Req 12.4) — Sprint 12
+		docs := protected.Group("/documents")
+		{
+			docs.GET("", middleware.RequireRoles(models.DocumentViewRoles...), handlers.ListComplianceDocuments)
+			docs.POST("", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.CreateComplianceDocument)
+			docs.GET("/:id", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetComplianceDocument)
+			docs.PUT("/:id", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpdateComplianceDocument)
+			docs.POST("/:id/generate", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.GenerateDocument)
+			docs.POST("/:id/finalize", middleware.RequireRoles(models.DocumentFinalizeRoles...), handlers.FinalizeDocument)
+			docs.GET("/:id/sections/:key", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentSection)
+			docs.PUT("/:id/sections/:key", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpsertDocumentSection)
+			docs.GET("/:id/attestations", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentAttestations)
+			docs.PUT("/:id/attestations/:role", middleware.RequireRoles(models.DocumentCreateRoles...), handlers.UpsertDocumentAttestation)
+			docs.GET("/:id/requirements", middleware.RequireRoles(models.DocumentViewRoles...), handlers.GetDocumentRequirements)
 		}
 
 		// ASV Scan Management (PCI DSS Req 11.3.2) — Sprint 12
