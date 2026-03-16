@@ -174,17 +174,28 @@ func SetScope(c *gin.Context) {
 		SELECT id FROM requirement_scopes WHERE org_id = $1 AND requirement_id = $2
 	`, orgID, reqID).Scan(&scopeID)
 
+	customizedApproach := false
+	if req.CustomizedApproach != nil {
+		customizedApproach = *req.CustomizedApproach
+	}
+
 	if err == sql.ErrNoRows {
 		scopeID = uuid.New().String()
 		_, err = database.Exec(`
-			INSERT INTO requirement_scopes (id, org_id, requirement_id, in_scope, justification, scoped_by)
-			VALUES ($1, $2, $3, $4, $5, $6)
-		`, scopeID, orgID, reqID, req.InScope, req.Justification, userID)
+			INSERT INTO requirement_scopes
+				(id, org_id, requirement_id, in_scope, justification, scoped_by,
+				 customized_approach, customized_approach_description)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		`, scopeID, orgID, reqID, req.InScope, req.Justification, userID,
+			customizedApproach, req.CustomizedApproachDescription)
 	} else {
 		_, err = database.Exec(`
-			UPDATE requirement_scopes SET in_scope = $1, justification = $2, scoped_by = $3
-			WHERE id = $4
-		`, req.InScope, req.Justification, userID, scopeID)
+			UPDATE requirement_scopes
+			SET in_scope = $1, justification = $2, scoped_by = $3,
+			    customized_approach = $4, customized_approach_description = $5
+			WHERE id = $6
+		`, req.InScope, req.Justification, userID,
+			customizedApproach, req.CustomizedApproachDescription, scopeID)
 	}
 
 	if err != nil {
@@ -202,11 +213,13 @@ func SetScope(c *gin.Context) {
 	database.QueryRow("SELECT first_name || ' ' || last_name FROM users WHERE id = $1", userID).Scan(&userName)
 
 	c.JSON(http.StatusOK, successResponse(c, gin.H{
-		"id":                     scopeID,
-		"requirement_id":         reqID,
-		"requirement_identifier": rIdentifier,
-		"in_scope":               req.InScope,
-		"justification":          req.Justification,
+		"id":                             scopeID,
+		"requirement_id":                 reqID,
+		"requirement_identifier":         rIdentifier,
+		"in_scope":                       req.InScope,
+		"justification":                  req.Justification,
+		"customized_approach":            customizedApproach,
+		"customized_approach_description": req.CustomizedApproachDescription,
 		"scoped_by": gin.H{
 			"id":   userID,
 			"name": userName,
@@ -255,4 +268,154 @@ func ResetScope(c *gin.Context) {
 	c.JSON(http.StatusOK, successResponse(c, gin.H{
 		"message": "Scoping decision removed. Requirement is now implicitly in-scope.",
 	}))
+}
+
+// SetScopeByRequirement sets a scoping decision directly by requirement ID (no org-framework ID required).
+// PUT /requirements/:id/scope
+func SetScopeByRequirement(c *gin.Context) {
+	orgID := middleware.GetOrgID(c)
+	userID := middleware.GetUserID(c)
+	reqID := c.Param("id")
+
+	// Verify requirement exists and get its identifier
+	var rIdentifier string
+	err := database.QueryRow(`
+		SELECT identifier FROM requirements WHERE id = $1
+	`, reqID).Scan(&rIdentifier)
+	if err == sql.ErrNoRows {
+		c.JSON(http.StatusNotFound, errorResponse("NOT_FOUND", "Requirement not found"))
+		return
+	}
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get requirement")
+		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Internal server error"))
+		return
+	}
+
+	var req models.SetScopeRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "Invalid request body"))
+		return
+	}
+
+	if !req.InScope && (req.Justification == nil || *req.Justification == "") {
+		c.JSON(http.StatusUnprocessableEntity, errorResponse("UNPROCESSABLE", "Justification required when marking out-of-scope"))
+		return
+	}
+	if req.Justification != nil && len(*req.Justification) > 2000 {
+		c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "Justification must be at most 2000 characters"))
+		return
+	}
+
+	customizedApproach := false
+	if req.CustomizedApproach != nil {
+		customizedApproach = *req.CustomizedApproach
+	}
+
+	var scopeID string
+	err = database.QueryRow(`
+		SELECT id FROM requirement_scopes WHERE org_id = $1 AND requirement_id = $2
+	`, orgID, reqID).Scan(&scopeID)
+
+	if err == sql.ErrNoRows {
+		scopeID = uuid.New().String()
+		_, err = database.Exec(`
+			INSERT INTO requirement_scopes
+				(id, org_id, requirement_id, in_scope, justification, scoped_by,
+				 customized_approach, customized_approach_description)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		`, scopeID, orgID, reqID, req.InScope, req.Justification, userID,
+			customizedApproach, req.CustomizedApproachDescription)
+	} else {
+		_, err = database.Exec(`
+			UPDATE requirement_scopes
+			SET in_scope = $1, justification = $2, scoped_by = $3,
+			    customized_approach = $4, customized_approach_description = $5
+			WHERE id = $6
+		`, req.InScope, req.Justification, userID,
+			customizedApproach, req.CustomizedApproachDescription, scopeID)
+	}
+
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to set scope")
+		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Internal server error"))
+		return
+	}
+
+	middleware.LogAudit(c, "requirement.scoped", "requirement_scope", &scopeID, map[string]interface{}{
+		"requirement": rIdentifier, "in_scope": req.InScope,
+	})
+
+	var userName string
+	database.QueryRow("SELECT first_name || ' ' || last_name FROM users WHERE id = $1", userID).Scan(&userName)
+
+	c.JSON(http.StatusOK, successResponse(c, gin.H{
+		"id":                              scopeID,
+		"requirement_id":                  reqID,
+		"requirement_identifier":          rIdentifier,
+		"in_scope":                        req.InScope,
+		"justification":                   req.Justification,
+		"customized_approach":             customizedApproach,
+		"customized_approach_description": req.CustomizedApproachDescription,
+		"scoped_by": gin.H{
+			"id":   userID,
+			"name": userName,
+		},
+	}))
+}
+
+// ListAllScopes lists all scoping decisions for an org across all frameworks.
+// GET /requirement-scopes
+func ListAllScopes(c *gin.Context) {
+	orgID := middleware.GetOrgID(c)
+
+	rows, err := database.Query(`
+		SELECT rs.id, r.id, r.identifier, r.title,
+		       rs.in_scope, rs.justification,
+		       rs.customized_approach, rs.customized_approach_description,
+		       rs.updated_at
+		FROM requirement_scopes rs
+		JOIN requirements r ON r.id = rs.requirement_id
+		WHERE rs.org_id = $1
+		ORDER BY rs.updated_at DESC
+	`, orgID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to list all scoping decisions")
+		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Internal server error"))
+		return
+	}
+	defer rows.Close()
+
+	results := []gin.H{}
+	for rows.Next() {
+		var (
+			rsID, rID, rIdentifier, rTitle string
+			inScope, customizedApproach    bool
+			justification                  *string
+			customizedApproachDescription  *string
+			updatedAt                      interface{}
+		)
+		if err := rows.Scan(&rsID, &rID, &rIdentifier, &rTitle,
+			&inScope, &justification,
+			&customizedApproach, &customizedApproachDescription,
+			&updatedAt); err != nil {
+			log.Error().Err(err).Msg("Failed to scan scope row")
+			continue
+		}
+		results = append(results, gin.H{
+			"id": rsID,
+			"requirement": gin.H{
+				"id":         rID,
+				"identifier": rIdentifier,
+				"title":      rTitle,
+			},
+			"in_scope":                        inScope,
+			"justification":                   justification,
+			"customized_approach":             customizedApproach,
+			"customized_approach_description": customizedApproachDescription,
+			"updated_at":                      updatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, successResponse(c, results))
 }

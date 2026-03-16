@@ -238,11 +238,15 @@ func main() {
 			// Evidence on existing resources
 			ctrl.GET("/:id/evidence", handlers.ListControlEvidence)
 
-			// Requirements evidence
+			// Requirements evidence + direct scope management
 			req := protected.Group("/requirements")
 			{
 				req.GET("/:id/evidence", handlers.ListRequirementEvidence)
+				req.PUT("/:id/scope", middleware.RequireRoles(models.OrgFrameworkRoles...), handlers.SetScopeByRequirement)
 			}
+
+			// Requirement scopes listing (org-wide, used by PCI regression tests)
+			protected.GET("/requirement-scopes", handlers.ListAllScopes)
 
 			// === Sprint 4: Continuous Monitoring Engine ===
 
