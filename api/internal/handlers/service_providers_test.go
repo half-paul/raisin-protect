@@ -570,6 +570,67 @@ func TestCreateSPComplianceDoc_InvalidDocType(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
+func TestCreateSPComplianceDoc_PathTraversal(t *testing.T) {
+	cases := []struct {
+		name     string
+		body     string
+		wantCode int
+	}{
+		{
+			name:     "dotdot traversal",
+			body:     `{"document_type":"aoc","title":"T","upload_path":"../../etc/passwd"}`,
+			wantCode: http.StatusBadRequest,
+		},
+		{
+			name:     "nested dotdot traversal",
+			body:     `{"document_type":"aoc","title":"T","upload_path":"docs/../../../etc/passwd"}`,
+			wantCode: http.StatusBadRequest,
+		},
+		{
+			name:     "absolute path",
+			body:     `{"document_type":"aoc","title":"T","upload_path":"/etc/passwd"}`,
+			wantCode: http.StatusBadRequest,
+		},
+		{
+			name:     "legitimate relative path",
+			body:     `{"document_type":"aoc","title":"T","upload_path":"org-001/docs/aoc-2025.pdf"}`,
+			wantCode: http.StatusCreated,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			router, mock := setupSPRouter()
+
+			mock.ExpectQuery(`SELECT EXISTS.*service_providers`).
+				WithArgs("sp-001", "org-001").
+				WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(true))
+
+			if tc.wantCode == http.StatusCreated {
+				uploadPath := "org-001/docs/aoc-2025.pdf"
+				mock.ExpectQuery(`INSERT INTO sp_compliance_documents`).
+					WithArgs(
+						sqlmock.AnyArg(), "sp-001", "org-001",
+						"aoc", "T", sqlmock.AnyArg(),
+						&uploadPath,
+						sqlmock.AnyArg(), sqlmock.AnyArg(),
+						nil, "user-001",
+					).
+					WillReturnRows(sqlmock.NewRows(spDocCols).
+						AddRow("new-doc", "sp-001", "org-001", "aoc", "T", "", &uploadPath,
+							nil, nil, nil, nil, true, "user-001", spNow, spNow))
+			}
+
+			w := httptest.NewRecorder()
+			req, _ := http.NewRequest("POST", "/api/v1/service-providers/sp-001/documents", bytes.NewBufferString(tc.body))
+			req.Header.Set("Content-Type", "application/json")
+			router.ServeHTTP(w, req)
+
+			assert.Equal(t, tc.wantCode, w.Code, "body: %s", w.Body.String())
+		})
+	}
+}
+
 func TestDeleteSPComplianceDoc_Success(t *testing.T) {
 	router, mock := setupSPRouter()
 

@@ -751,15 +751,22 @@ func CreateSPComplianceDoc(c *gin.Context) {
 	}
 
 	// Validate upload_path to prevent path traversal (CWE-22).
-	// Object storage paths must not contain ".." segments or absolute paths.
+	// Reject on the raw input before any normalization: ".." segments and
+	// absolute paths must be rejected, not silently rewritten.
 	if req.UploadPath != nil {
-		cleaned := path.Clean("/" + strings.TrimLeft(*req.UploadPath, "/"))
-		if strings.Contains(cleaned, "..") {
-			c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "invalid upload_path: path traversal not allowed"))
+		raw := *req.UploadPath
+		if strings.HasPrefix(raw, "/") {
+			c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "invalid upload_path: absolute paths are not allowed"))
 			return
 		}
-		// Strip the leading "/" added for Clean; store the normalized relative path.
-		normalized := strings.TrimPrefix(cleaned, "/")
+		for _, seg := range strings.Split(raw, "/") {
+			if seg == ".." {
+				c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "invalid upload_path: path traversal not allowed"))
+				return
+			}
+		}
+		// Normalize the validated path (collapses redundant slashes/dots).
+		normalized := path.Clean(raw)
 		req.UploadPath = &normalized
 	}
 
