@@ -979,7 +979,7 @@ func ListCDESegmentationTests(c *gin.Context) {
 
 	var total int
 	if err := database.DB.QueryRow(
-		fmt.Sprintf(`SELECT COUNT(*) FROM segmentation_tests WHERE %s`, whereClause), args...,
+		fmt.Sprintf(`SELECT COUNT(*) FROM cde_segmentation_tests WHERE %s`, whereClause), args...,
 	).Scan(&total); err != nil {
 		log.Error().Err(err).Msg("cde: failed to count segmentation tests")
 		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to list segmentation tests"))
@@ -990,7 +990,7 @@ func ListCDESegmentationTests(c *gin.Context) {
 	query := fmt.Sprintf(`
 		SELECT id, org_id, test_date, tester, methodology, segment_id,
 		       result, findings, next_test_date, created_at, updated_at
-		FROM segmentation_tests
+		FROM cde_segmentation_tests
 		WHERE %s
 		ORDER BY test_date DESC
 		LIMIT $%d OFFSET $%d
@@ -1037,7 +1037,7 @@ func GetCDESegmentationTest(c *gin.Context) {
 	err := database.DB.QueryRow(`
 		SELECT id, org_id, test_date, tester, methodology, segment_id,
 		       result, findings, next_test_date, created_at, updated_at
-		FROM segmentation_tests
+		FROM cde_segmentation_tests
 		WHERE id = $1 AND org_id = $2
 	`, id, orgID).Scan(
 		&t.ID, &t.OrgID, &t.TestDate, &t.Tester, &t.Methodology, &t.SegmentID,
@@ -1110,7 +1110,7 @@ func CreateCDESegmentationTest(c *gin.Context) {
 	id := uuid.New().String()
 	var t models.CDESegmentationTest
 	err = database.DB.QueryRow(`
-		INSERT INTO segmentation_tests
+		INSERT INTO cde_segmentation_tests
 		    (id, org_id, test_date, tester, methodology, segment_id, result, findings, next_test_date)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 		RETURNING id, org_id, test_date, tester, methodology, segment_id,
@@ -1141,7 +1141,7 @@ func UpdateCDESegmentationTest(c *gin.Context) {
 
 	var exists bool
 	if err := database.DB.QueryRow(
-		`SELECT EXISTS(SELECT 1 FROM segmentation_tests WHERE id = $1 AND org_id = $2)`, id, orgID,
+		`SELECT EXISTS(SELECT 1 FROM cde_segmentation_tests WHERE id = $1 AND org_id = $2)`, id, orgID,
 	).Scan(&exists); err != nil {
 		log.Error().Err(err).Str("id", id).Msg("cde: failed to check seg test existence")
 		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to update segmentation test"))
@@ -1213,7 +1213,7 @@ func UpdateCDESegmentationTest(c *gin.Context) {
 
 	setArgs = append(setArgs, id, orgID)
 	query := fmt.Sprintf(`
-		UPDATE segmentation_tests SET %s
+		UPDATE cde_segmentation_tests SET %s
 		WHERE id = $%d AND org_id = $%d
 		RETURNING id, org_id, test_date, tester, methodology, segment_id,
 		          result, findings, next_test_date, created_at, updated_at
@@ -1240,7 +1240,7 @@ func DeleteCDESegmentationTest(c *gin.Context) {
 	id := c.Param("id")
 
 	res, err := database.DB.Exec(
-		`DELETE FROM segmentation_tests WHERE id = $1 AND org_id = $2`, id, orgID,
+		`DELETE FROM cde_segmentation_tests WHERE id = $1 AND org_id = $2`, id, orgID,
 	)
 	if err != nil {
 		log.Error().Err(err).Str("id", id).Msg("cde: failed to delete segmentation test")
@@ -1357,7 +1357,7 @@ func GetCDEScopeSummary(c *gin.Context) {
 			COUNT(*) FILTER (WHERE next_test_date IS NOT NULL AND next_test_date < NOW()),
 			COUNT(*) FILTER (WHERE result = 'pass'),
 			COUNT(*) FILTER (WHERE result = 'fail')
-		FROM segmentation_tests
+		FROM cde_segmentation_tests
 		WHERE org_id = $1
 	`, orgID).Scan(
 		&summary.SegmentationTests.Total,

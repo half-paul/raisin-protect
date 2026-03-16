@@ -552,7 +552,7 @@ func TestDeleteCDEDataFlow_Success(t *testing.T) {
 func TestCreateCDESegmentationTest_Success(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	mock.ExpectQuery(`INSERT INTO segmentation_tests`).
+	mock.ExpectQuery(`INSERT INTO cde_segmentation_tests`).
 		WithArgs(
 			sqlmock.AnyArg(), // id
 			"org-001",
@@ -610,11 +610,11 @@ func TestCreateCDESegmentationTest_InvalidDate(t *testing.T) {
 func TestListCDESegmentationTests_Success(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	mock.ExpectQuery(`SELECT COUNT\(\*\) FROM segmentation_tests`).
+	mock.ExpectQuery(`SELECT COUNT\(\*\) FROM cde_segmentation_tests`).
 		WithArgs("org-001").
 		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(0))
 
-	mock.ExpectQuery(`SELECT .* FROM segmentation_tests`).
+	mock.ExpectQuery(`SELECT .* FROM cde_segmentation_tests`).
 		WithArgs("org-001", 20, 0).
 		WillReturnRows(sqlmock.NewRows(segTestCols))
 
@@ -628,7 +628,7 @@ func TestListCDESegmentationTests_Success(t *testing.T) {
 func TestGetCDESegmentationTest_NotFound(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	mock.ExpectQuery(`SELECT .* FROM segmentation_tests WHERE id`).
+	mock.ExpectQuery(`SELECT .* FROM cde_segmentation_tests WHERE id`).
 		WithArgs("missing", "org-001").
 		WillReturnRows(sqlmock.NewRows(segTestCols))
 
@@ -642,7 +642,7 @@ func TestGetCDESegmentationTest_NotFound(t *testing.T) {
 func TestDeleteCDESegmentationTest_Success(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	mock.ExpectExec(`DELETE FROM segmentation_tests`).
+	mock.ExpectExec(`DELETE FROM cde_segmentation_tests`).
 		WithArgs("test-001", "org-001").
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
@@ -681,7 +681,7 @@ func TestGetCDEScopeSummary_Success(t *testing.T) {
 		WillReturnRows(sqlmock.NewRows([]string{"total", "encrypted"}).AddRow(10, 8))
 
 	// Segmentation test stats.
-	mock.ExpectQuery(`SELECT.*COUNT\(\*\).*FROM segmentation_tests`).
+	mock.ExpectQuery(`SELECT.*COUNT\(\*\).*FROM cde_segmentation_tests`).
 		WithArgs("org-001").
 		WillReturnRows(sqlmock.NewRows([]string{
 			"total", "last_test_date", "next_test_date",
