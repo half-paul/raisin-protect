@@ -194,7 +194,7 @@ func main() {
 				ctrl.DELETE("/:id/mappings/:mid", middleware.RequireRoles(models.ControlMappingRoles...), handlers.DeleteControlMapping)
 
 			// Compensating Controls Worksheet (PCI DSS Appendix B)
-			ctrl.GET("/:id/compensating-worksheet", handlers.GetCompensatingWorksheet)
+			ctrl.GET("/:id/compensating-worksheet", middleware.RequireRoles(models.ControlReadRoles...), handlers.GetCompensatingWorksheet)
 			ctrl.PUT("/:id/compensating-worksheet", middleware.RequireRoles(models.ControlCreateRoles...), handlers.UpdateCompensatingWorksheet)
 			}
 

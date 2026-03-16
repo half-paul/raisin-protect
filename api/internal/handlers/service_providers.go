@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -747,6 +748,19 @@ func CreateSPComplianceDoc(c *gin.Context) {
 	if validFrom != nil && validUntil != nil && validUntil.Before(*validFrom) {
 		c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "valid_until must be on or after valid_from"))
 		return
+	}
+
+	// Validate upload_path to prevent path traversal (CWE-22).
+	// Object storage paths must not contain ".." segments or absolute paths.
+	if req.UploadPath != nil {
+		cleaned := path.Clean("/" + strings.TrimLeft(*req.UploadPath, "/"))
+		if strings.Contains(cleaned, "..") {
+			c.JSON(http.StatusBadRequest, errorResponse("VALIDATION_ERROR", "invalid upload_path: path traversal not allowed"))
+			return
+		}
+		// Strip the leading "/" added for Clean; store the normalized relative path.
+		normalized := strings.TrimPrefix(cleaned, "/")
+		req.UploadPath = &normalized
 	}
 
 	var uploadedByPtr *string

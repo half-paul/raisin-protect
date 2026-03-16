@@ -32,6 +32,10 @@ var ValidControlCategories = []string{"technical", "administrative", "physical",
 // Valid control statuses.
 var ValidControlStatuses = []string{"draft", "active", "under_review", "deprecated"}
 
+// ControlReadRoles can read sensitive control data (e.g. compensating worksheets).
+// Includes auditor alongside write-capable roles.
+var ControlReadRoles = []string{RoleCISO, RoleComplianceManager, RoleSecurityEngineer, RoleAuditor}
+
 // ControlCreateRoles can create controls.
 var ControlCreateRoles = []string{RoleCISO, RoleComplianceManager, RoleSecurityEngineer}
 
@@ -109,6 +113,17 @@ type UpdateControlRequest struct {
 	IsCompensating         *bool                   `json:"is_compensating"`
 	CompensatingWorksheet  map[string]interface{}  `json:"compensating_worksheet"`
 	Metadata               map[string]interface{}  `json:"metadata"`
+}
+
+// CompensatingWorksheetData holds the PCI DSS Appendix B compensating control worksheet fields.
+type CompensatingWorksheetData struct {
+	OriginalRequirement  *string `json:"original_requirement"`
+	Constraint           *string `json:"constraint"`
+	Objective            *string `json:"objective"`
+	CompensatingControl  *string `json:"compensating_control"`
+	Validation           *string `json:"validation"`
+	RiskAssessment       *string `json:"risk_assessment"`
+	MaintenancePlan      *string `json:"maintenance_plan"`
 }
 
 // ChangeOwnerRequest is the request for changing control ownership.

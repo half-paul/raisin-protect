@@ -196,6 +196,10 @@ func TestCreateCDEAsset_Success(t *testing.T) {
 			"new-asset", "org-001", "Web App Server", "server", nil, nil,
 			"production", "in_scope", nil, "chd", now, now,
 		))
+	// Scope history insert (initial classification).
+	mock.ExpectExec(`INSERT INTO cde_scope_history`).
+		WithArgs("org-001", "new-asset", "in_scope", nil, sqlmock.AnyArg()).
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	body := `{
 		"name": "Web App Server",
@@ -257,10 +261,10 @@ func TestCreateCDEAsset_ValidationError_MissingRequired(t *testing.T) {
 func TestUpdateCDEAsset_Success(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	// Existence check.
-	mock.ExpectQuery(`SELECT EXISTS`).
+	// Fetch current scope_status (replaces old EXISTS check).
+	mock.ExpectQuery(`SELECT scope_status, scope_justification FROM cde_assets`).
 		WithArgs("asset-001", "org-001").
-		WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(true))
+		WillReturnRows(sqlmock.NewRows([]string{"scope_status", "scope_justification"}).AddRow("in_scope", nil))
 
 	// Update query.
 	mock.ExpectQuery(`UPDATE cde_assets SET`).
@@ -269,6 +273,11 @@ func TestUpdateCDEAsset_Success(t *testing.T) {
 			"asset-001", "org-001", "DB Server", "database", nil, nil,
 			"production", "out_of_scope", nil, "pan", now, now,
 		))
+
+	// Scope history insert (scope changed: in_scope -> out_of_scope).
+	mock.ExpectExec(`INSERT INTO cde_scope_history`).
+		WithArgs("org-001", "asset-001", "in_scope", "out_of_scope", nil, sqlmock.AnyArg()).
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	body := `{"scope_status": "out_of_scope"}`
 	w := httptest.NewRecorder()
@@ -286,9 +295,9 @@ func TestUpdateCDEAsset_Success(t *testing.T) {
 func TestUpdateCDEAsset_NotFound(t *testing.T) {
 	router, mock := setupCDERouter()
 
-	mock.ExpectQuery(`SELECT EXISTS`).
+	mock.ExpectQuery(`SELECT scope_status, scope_justification FROM cde_assets`).
 		WithArgs("missing", "org-001").
-		WillReturnRows(sqlmock.NewRows([]string{"exists"}).AddRow(false))
+		WillReturnRows(sqlmock.NewRows([]string{"scope_status", "scope_justification"}))
 
 	body := `{"scope_status": "out_of_scope"}`
 	w := httptest.NewRecorder()

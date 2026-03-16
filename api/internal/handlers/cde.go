@@ -214,6 +214,15 @@ func CreateCDEAsset(c *gin.Context) {
 		"name": a.Name, "type": a.Type, "scope_status": a.ScopeStatus,
 	})
 
+	// Record initial scope classification in the immutable audit trail.
+	changedBy := middleware.GetUserID(c)
+	if _, histErr := database.DB.Exec(`
+		INSERT INTO cde_scope_history (org_id, asset_id, previous_status, new_status, justification, changed_by)
+		VALUES ($1, $2, NULL, $3, $4, $5)
+	`, orgID, a.ID, a.ScopeStatus, a.ScopeJustification, changedBy); histErr != nil {
+		log.Warn().Err(histErr).Str("asset_id", a.ID).Msg("cde: failed to write initial scope history — asset created successfully")
+	}
+
 	c.JSON(http.StatusCreated, successResponse(c, a))
 }
 
@@ -223,17 +232,17 @@ func UpdateCDEAsset(c *gin.Context) {
 	orgID := middleware.GetOrgID(c)
 	id := c.Param("id")
 
-	// Verify exists and belongs to org.
-	var exists bool
+	// Fetch current asset to verify existence and capture scope_status for history.
+	var previousScopeStatus string
+	var previousScopeJustification *string
 	if err := database.DB.QueryRow(
-		`SELECT EXISTS(SELECT 1 FROM cde_assets WHERE id = $1 AND org_id = $2)`, id, orgID,
-	).Scan(&exists); err != nil {
-		log.Error().Err(err).Str("id", id).Msg("cde: failed to check asset existence")
-		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to update CDE asset"))
-		return
-	}
-	if !exists {
+		`SELECT scope_status, scope_justification FROM cde_assets WHERE id = $1 AND org_id = $2`, id, orgID,
+	).Scan(&previousScopeStatus, &previousScopeJustification); err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, errorResponse("NOT_FOUND", "CDE asset not found"))
+		return
+	} else if err != nil {
+		log.Error().Err(err).Str("id", id).Msg("cde: failed to fetch asset for update")
+		c.JSON(http.StatusInternalServerError, errorResponse("INTERNAL_ERROR", "Failed to update CDE asset"))
 		return
 	}
 
@@ -323,6 +332,21 @@ func UpdateCDEAsset(c *gin.Context) {
 	middleware.LogAudit(c, "cde_asset.updated", "cde_asset", &a.ID, map[string]interface{}{
 		"name": a.Name,
 	})
+
+	// Record scope classification change in the immutable audit trail when scope_status changed.
+	if req.ScopeStatus != nil && *req.ScopeStatus != previousScopeStatus {
+		changedBy := middleware.GetUserID(c)
+		justification := a.ScopeJustification
+		if req.ScopeJustification != nil {
+			justification = req.ScopeJustification
+		}
+		if _, histErr := database.DB.Exec(`
+			INSERT INTO cde_scope_history (org_id, asset_id, previous_status, new_status, justification, changed_by)
+			VALUES ($1, $2, $3, $4, $5, $6)
+		`, orgID, a.ID, previousScopeStatus, *req.ScopeStatus, justification, changedBy); histErr != nil {
+			log.Warn().Err(histErr).Str("asset_id", a.ID).Msg("cde: failed to write scope history — asset updated successfully")
+		}
+	}
 
 	c.JSON(http.StatusOK, successResponse(c, a))
 }

@@ -50,6 +50,15 @@ var ValidSPComplianceStatuses = []string{
 	SPComplianceNonCompliant, SPComplianceNotApplicable, SPComplianceUnknown,
 }
 
+func IsValidSPComplianceStatus(s string) bool {
+	for _, v := range ValidSPComplianceStatuses {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
 // --- Risk level constants ---
 
 const (
@@ -60,6 +69,15 @@ const (
 )
 
 var ValidSPRiskLevels = []string{SPRiskCritical, SPRiskHigh, SPRiskMedium, SPRiskLow}
+
+func IsValidSPRiskLevel(s string) bool {
+	for _, v := range ValidSPRiskLevels {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
 
 // RBAC roles for service provider management.
 var (
@@ -146,6 +164,15 @@ var ValidSPDocTypes = []string{
 	SPDocTypeCSAStar, SPDocTypePentest, SPDocTypeQuestionnaire, SPDocTypeOther,
 }
 
+func IsValidSPDocType(s string) bool {
+	for _, v := range ValidSPDocTypes {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
 // SPComplianceDocument represents a compliance document received from a service provider.
 type SPComplianceDocument struct {
 	ID              string     `json:"id"`
@@ -186,6 +213,15 @@ const (
 )
 
 var ValidResponsibleParties = []string{ResPartyMerchant, ResPartyProvider, ResPartyShared}
+
+func IsValidResponsibleParty(s string) bool {
+	for _, v := range ValidResponsibleParties {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
 
 // SPResponsibilityMatrix documents which party handles a PCI DSS requirement for an SP.
 type SPResponsibilityMatrix struct {
